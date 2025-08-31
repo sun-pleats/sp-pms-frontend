@@ -91,6 +91,26 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
     >
       <Column field="id" header="#" />
       <Column
+        field="roll_number"
+        header="Roll No."
+        body={(_row: any, options: { rowIndex: number }) => (
+          <Controller
+            control={control}
+            name={`bundles.${options.rowIndex}.roll_number` as const}
+            rules={{ required: 'Roll number is required' }}
+            render={({ field, fieldState }) => (
+              <FormInputNumber
+                value={field.value as number | null}
+                onValueChange={(e) => field.onChange(e.value ?? null)}
+                placeholder="Number"
+                errorMessage={fieldState.error?.message}
+                isError={fieldState.error ? true : false}
+              />
+            )}
+          />
+        )}
+      />
+      <Column
         field="style_planned_fabric_id"
         header="Color"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -148,7 +168,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
               <FormInputNumber
                 value={field.value as number | null}
                 onValueChange={(e) => field.onChange(e.value ?? null)}
-                placeholder="Number"
+                placeholder="Qty"
                 errorMessage={fieldState.error?.message}
                 isError={fieldState.error ? true : false}
               />

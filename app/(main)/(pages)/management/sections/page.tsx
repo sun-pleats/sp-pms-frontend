@@ -3,20 +3,19 @@
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import { InputText } from 'primereact/inputtext';
+import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import { formatDate } from '@/app/utils';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ROUTES } from '@/app/constants/routes';
 import { Section } from '@/app/types/section';
 import { SectionService } from '@/app/services/SectionService';
 import { useRouter } from 'next/navigation';
 import Modal from '@/app/components/modal/component';
-import PageCard from '@/app/components/page-card/component';
-import React, { useContext, useCallback, useEffect, useState } from 'react';
-import { LayoutContext } from '@/layout/context/layoutcontext';
-import PageHeader from '@/app/components/page-header/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
-import TableHeader from '@/app/components/table-header/component';
-import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
+import React, { useContext, useCallback, useEffect, useState } from 'react';
+import TableHeader from '@/app/components/table-header/component';
 
 interface SectionPageState {
   deleteModalShow?: boolean;
@@ -118,7 +117,10 @@ const SectionsPage = () => {
         <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
         <Column field="department.name" header="Department" style={{ minWidth: '12rem' }} />
-        <Column field="created_at" header="Created" style={{ minWidth: '12rem' }} />
+        <Column field="break_time" header="Break Time" style={{ minWidth: '12rem' }} />
+        <Column field="shift_start" header="Shift Start" style={{ minWidth: '12rem' }} />
+        <Column field="shift_end" header="Shift End" style={{ minWidth: '12rem' }} />
+        <Column field="created_at" header="Created" body={(data: Section) => formatDate(data.created_at)} />
         <Column header="Actions" body={actionBodyTemplate}></Column>
       </DataTable>
       <Modal

@@ -10,6 +10,7 @@ import FormDropdown from '../form/dropdown/component';
 import { SelectItem } from 'primereact/selectitem';
 import { DefaultFormData } from '@/app/types/form';
 import { get } from 'http';
+import FormTime from '../form/time/component';
 
 interface FormSectionProps {
   value?: SectionForm;
@@ -59,6 +60,7 @@ const FormSection = ({ onSubmit, children, departments, value, loading }: FormSe
           />
         )}
       />
+
       <Controller
         name="department_id"
         control={control}
@@ -70,6 +72,47 @@ const FormSection = ({ onSubmit, children, departments, value, loading }: FormSe
             placeholder="Select"
             loading={loading?.deparmentField}
             options={departments}
+            errorMessage={fieldState.error?.message}
+            isError={fieldState.error ? true : false}
+          />
+        )}
+      />
+
+      <Controller
+        name="break_time"
+        control={control}
+        rules={{ required: 'Break time is required' }}
+        render={({ fieldState, field }) => (
+          <FormTime
+            {...field}
+            label="Break Time"
+            errorMessage={fieldState.error?.message}
+            isError={fieldState.error ? true : false}
+          />
+        )}
+      />
+
+      <Controller
+        name="shift_start"
+        control={control}
+        rules={{ required: 'Shift start is required' }}
+        render={({ fieldState, field }) => (
+          <FormTime
+            {...field}
+            label="Shift Start"
+            errorMessage={fieldState.error?.message}
+            isError={fieldState.error ? true : false}
+          />
+        )}
+      />
+      <Controller
+        name="shift_end"
+        control={control}
+        rules={{ required: 'Shift end is required' }}
+        render={({ fieldState, field }) => (
+          <FormTime
+            {...field}
+            label="Shift End"
             errorMessage={fieldState.error?.message}
             isError={fieldState.error ? true : false}
           />

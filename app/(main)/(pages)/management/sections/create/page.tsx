@@ -1,6 +1,5 @@
 'use client';
 
-import { DefaultFormData } from '@/app/types/form';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
@@ -12,6 +11,7 @@ import PageAction, { PageActions } from '@/app/components/page-action/component'
 import PageCard from '@/app/components/page-card/component';
 import React, { useContext, useEffect, useState } from 'react';
 import useUtilityData from '@/app/hooks/useUtilityData';
+import { SectionForm } from '@/app/types/section';
 
 const CreateSectionPage = () => {
   const router = useRouter();
@@ -21,7 +21,7 @@ const CreateSectionPage = () => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const { fetchDepartmentOptions, isDepartmentLoading } = useUtilityData();
 
-  const handleSubmit = async (data: DefaultFormData) => {
+  const handleSubmit = async (data: SectionForm) => {
     try {
       await saveSection(data);
       showSuccess('Section offset successfully created.');

@@ -12,7 +12,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" style={{ fontSize: '13px' }} suppressHydrationWarning>
+    <html lang="en" style={{ fontSize: '15px' }} suppressHydrationWarning>
       <head>
         <link id="theme-css" href={`/themes/mira/theme.css`} rel="stylesheet"></link>
       </head>
