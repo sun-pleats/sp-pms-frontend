@@ -4,21 +4,23 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Operator } from '@/app/types/operator';
 import { OperatorService } from '@/app/services/OperatorService';
 import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
 import DataStatusIcon from '@/app/components/data-status-icon/component';
 import Modal from '@/app/components/modal/component';
+import OperatorPrintBarcode from '@/app/components/operators/OperatorPrintBarcode';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import PageHeader from '@/app/components/page-header/component';
-import React, { useCallback, useEffect, useState } from 'react';
-import TableHeader from '@/app/components/table-header/component';
 import PageTile from '@/app/components/page-title/component';
-import OperatorPrintBarcode from '@/app/components/operators/OperatorPrintBarcode';
+import React, { useContext, useCallback, useEffect, useState } from 'react';
+import TableHeader from '@/app/components/table-header/component';
 
 interface OperatorPageState {
   deleteModalShow?: boolean;
+  deleteId?: string | number;
 }
 
 interface SearchFilter {
@@ -32,6 +34,7 @@ const OperatorsPage = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<SearchFilter>({});
   const [showPrint, setShowPrint] = useState<boolean>(false);
+  const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
 
@@ -83,10 +86,11 @@ const OperatorsPage = () => {
     router.push(`${ROUTES.OPERATORS.EDIT}/${id}`);
   };
 
-  const onActionDeleteClick = () => {
+  const onActionDeleteClick = (id: string | number) => {
     setPageState({
       ...pageState,
-      deleteModalShow: true
+      deleteModalShow: true,
+      deleteId: id
     });
   };
 
@@ -105,9 +109,20 @@ const OperatorsPage = () => {
           className="mr-2"
         />
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size="small" severity="danger" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} size="small" severity="danger" />
       </>
     );
+  };
+    
+  const handleDelete = async () => {
+    try {
+      await OperatorService.deleteOperator(pageState.deleteId as string);
+      showSuccess('Department successfully deleted.');
+      setPageState({ ...pageState, deleteModalShow: false });
+      fetchOperators();
+    } catch (error: any) {
+      showApiError(error, 'Failed to delete Department.');
+    }
   };
 
   return (
@@ -141,6 +156,7 @@ const OperatorsPage = () => {
         visible={pageState.deleteModalShow}
         onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
         confirmSeverity="danger"
+        onConfirm={handleDelete}
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>

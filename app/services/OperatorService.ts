@@ -13,8 +13,12 @@ export const OperatorService = {
     return apiClient.post(`${BASE_URL}`, payload);
   },
   getOperator(id: string) {
-    return fetch('/demo/data/operators.json', { headers: { 'Cache-Control': 'no-cache' } })
-      .then((res) => res.json())
-      .then((d) => d.data.find((r: Operator) => r.id == id));
+    return apiClient.get(`${BASE_URL}/${id}`);
+  },
+  updateOperator(id: string, payload: OperatorCreatePayload) {
+    return apiClient.put(`${BASE_URL}/${id}`, payload);
+  },
+  deleteOperator(id: string) {
+    return apiClient.delete(`${BASE_URL}/${id}`);
   }
 };

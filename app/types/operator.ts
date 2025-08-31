@@ -18,6 +18,9 @@ export interface OperatorForm {
   id?: string;
   name?: string;
   section_id?: string;
+  section?: Section;
+  operator_processes?: Process[];
+  process_ids?: string[]; // Array of process IDs
   created_by?: string;
   created_at?: string;
   updated_at?: string;

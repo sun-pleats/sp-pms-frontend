@@ -1,14 +1,17 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
-import PageCard from '@/app/components/page-card/component';
-import PageAction, { PageActions } from '@/app/components/page-action/component';
-import { ROUTES } from '@/app/constants/routes';
-import { useRouter } from 'next/navigation';
-import FormAction, { FormActions } from '@/app/components/form-action/component';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { OperatorForm } from '@/app/types/operator';
 import { OperatorService } from '@/app/services/OperatorService';
+import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
+import { useOperatorPage } from '../../hooks/useOperatorPage';
+import { useRouter } from 'next/navigation';
+import FormAction, { FormActions } from '@/app/components/form-action/component';
 import FormOperator from '@/app/components/operators/FormOperator';
+import PageAction, { PageActions } from '@/app/components/page-action/component';
+import PageCard from '@/app/components/page-card/component';
+import React, { useContext, useCallback, useEffect, useState } from 'react';
+import useUtilityData from '@/app/hooks/useUtilityData';
 
 interface EditOperatorPageProps {
   params?: { id: any };
@@ -16,16 +19,25 @@ interface EditOperatorPageProps {
 
 const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
   const router = useRouter();
+  const [lines, setLines] = useState<SelectItem[]>([]);
+  const [processes, setProcesses] = useState<SelectItem[]>([]);
+  const { updateOperator, isSaveLoading } = useOperatorPage();
+  const { showApiError, showSuccess } = useContext(LayoutContext);
   const [operator, setOperator] = useState<OperatorForm | undefined>();
 
-  const lines: SelectItem[] = [
-    { label: 'Line 1', value: '1' },
-    { label: 'Line 3', value: '2' },
-    { label: 'Line 4', value: '3' }
-  ];
+  const { isSectionLoading, fetchSectionOptions, isProcessLoading, fetchProcessOptions } = useUtilityData();
+
+   useEffect(() => {
+     initData();
+   }, []);
+ 
+   const initData = () => {
+     fetchSectionOptions().then((data: SelectItem[]) => setLines(data));
+     fetchProcessOptions().then((data: SelectItem[]) => setProcesses(data));
+   };
 
   const getOperator = useCallback(async () => {
-    setOperator((await OperatorService.getOperator(params?.id)) as OperatorForm);
+    setOperator((await OperatorService.getOperator(params?.id)).data as OperatorForm);
   }, [params?.id]);
 
   useEffect(() => {
@@ -33,6 +45,16 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
       getOperator();
     }
   }, [params?.id, getOperator]);
+  
+  const handleSubmit = async (data: OperatorForm) => {
+    try {
+      await updateOperator(params?.id as string, data);
+      showSuccess('Operator successfully created.');
+    } catch (error: any) {
+      showApiError(error, 'Failed to save operator.');
+    }
+    console.log('handleSubmit', data);
+  };
 
   return (
     <div className="grid">
@@ -41,7 +63,12 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormOperator lines={lines} value={operator} onSubmit={() => {}}>
+                <FormOperator 
+                  processesOptions={processes} 
+                  lines={lines} 
+                  value={operator} 
+                  onSubmit={handleSubmit}
+                >
                   <FormAction actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
                 </FormOperator>
               </div>
