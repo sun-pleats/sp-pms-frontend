@@ -15,7 +15,7 @@ export const useSectionPage = () => {
         department_id: e.department_id,
         break_time: format24Hour(e.break_time),
         shift_end: format24Hour(e.shift_end),
-        shift_start: format24Hour(e.shift_start),
+        shift_start: format24Hour(e.shift_start)
       });
       return response;
     } catch (error) {
@@ -32,7 +32,7 @@ export const useSectionPage = () => {
         department_id: e.department_id,
         break_time: format24Hour(e.break_time),
         shift_end: format24Hour(e.shift_end),
-        shift_start: format24Hour(e.shift_start),
+        shift_start: format24Hour(e.shift_start)
       });
       return response;
     } catch (error) {

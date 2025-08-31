@@ -83,12 +83,7 @@ const FormSection = ({ onSubmit, children, departments, value, loading }: FormSe
         control={control}
         rules={{ required: 'Break time is required' }}
         render={({ fieldState, field }) => (
-          <FormTime
-            {...field}
-            label="Break Time"
-            errorMessage={fieldState.error?.message}
-            isError={fieldState.error ? true : false}
-          />
+          <FormTime {...field} label="Break Time" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
         )}
       />
 
@@ -97,12 +92,7 @@ const FormSection = ({ onSubmit, children, departments, value, loading }: FormSe
         control={control}
         rules={{ required: 'Shift start is required' }}
         render={({ fieldState, field }) => (
-          <FormTime
-            {...field}
-            label="Shift Start"
-            errorMessage={fieldState.error?.message}
-            isError={fieldState.error ? true : false}
-          />
+          <FormTime {...field} label="Shift Start" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
         )}
       />
       <Controller
@@ -110,12 +100,7 @@ const FormSection = ({ onSubmit, children, departments, value, loading }: FormSe
         control={control}
         rules={{ required: 'Shift end is required' }}
         render={({ fieldState, field }) => (
-          <FormTime
-            {...field}
-            label="Shift End"
-            errorMessage={fieldState.error?.message}
-            isError={fieldState.error ? true : false}
-          />
+          <FormTime {...field} label="Shift End" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
         )}
       />
       {children}

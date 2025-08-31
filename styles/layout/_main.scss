@@ -25,3 +25,15 @@ a {
 .layout-wrapper {
     min-height: 100vh;
 }
+
+.sticky-banner {
+  position: fixed;
+
+  top: 65px;
+  left: 0;
+  width: 100%;
+  z-index: 1100; /* make sure it’s above header/navbar */
+  .p-inline-message .p-inline-message-text {
+  font-size: 14px !important;
+  }
+}

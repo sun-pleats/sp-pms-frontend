@@ -37,7 +37,7 @@ const LoginPage = () => {
   });
 
   const onSubmit = async (e: { username: string; password: string }) => {
-    await login(e.password, e.password, checked);
+    await login(e.username, e.password, checked);
   };
 
   return (

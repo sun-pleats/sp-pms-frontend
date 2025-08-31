@@ -11,6 +11,7 @@ import { LayoutContext } from './context/layoutcontext';
 import { PrimeReactContext } from 'primereact/api';
 import { ChildContainerProps, LayoutState, AppTopbarRef } from '@/types';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { Message } from 'primereact/message';
 
 const Layout = ({ children }: ChildContainerProps) => {
   const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
@@ -124,6 +125,10 @@ const Layout = ({ children }: ChildContainerProps) => {
     <React.Fragment>
       <div className={containerClass}>
         <AppTopbar ref={topbarRef} />
+
+        <div className="sticky-banner">
+          <Message className="w-full" severity="warn" text="This system is still ongoing development, you may experience issues." />
+        </div>
         <div ref={sidebarRef} className="layout-sidebar">
           <AppSidebar />
         </div>
