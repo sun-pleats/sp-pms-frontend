@@ -18,8 +18,22 @@ export const useDepartmentPage = () => {
     }
   };
 
+  const updateDepartment = async (id: string, e: DefaultFormData) => {
+    try {
+      setIsSaveLoading(true);      
+      const response = await DepartmentService.updateDepartment(id, {
+        name: e.name
+      });
+      return response;
+    } catch (error) {
+      setIsSaveLoading(false);
+      throw error;
+    }
+  };
+
   return {
     saveDepartment,
+    updateDepartment,
     isSaveLoading
   };
 };

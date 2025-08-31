@@ -1,14 +1,16 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
-import PageCard from '@/app/components/page-card/component';
-import PageAction, { PageActions } from '@/app/components/page-action/component';
-import { ROUTES } from '@/app/constants/routes';
-import { useRouter } from 'next/navigation';
-import FormAction, { FormActions } from '@/app/components/form-action/component';
-import { SelectItem } from 'primereact/selectitem';
 import { DepartmentForm } from '@/app/types/department';
 import { DepartmentService } from '@/app/services/DepartmentService';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { ROUTES } from '@/app/constants/routes';
+import { SelectItem } from 'primereact/selectitem';
+import { useRouter } from 'next/navigation';
+import FormAction, { FormActions } from '@/app/components/form-action/component';
 import FormDepartment from '@/app/components/departments/FormDepartment';
+import PageAction, { PageActions } from '@/app/components/page-action/component';
+import PageCard from '@/app/components/page-card/component';
+import React, { useContext, useCallback, useEffect, useState } from 'react';
+import { useDepartmentPage } from '../../hooks/useDepartmentPage';
 
 interface EditDepartmentPageProps {
   params?: { id: any };
@@ -16,10 +18,12 @@ interface EditDepartmentPageProps {
 
 const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
   const router = useRouter();
+  const { updateDepartment, isSaveLoading } = useDepartmentPage();
+  const { showApiError, showSuccess } = useContext(LayoutContext);
   const [department, setDepartment] = useState<DepartmentForm | undefined>();
 
   const getDepartment = useCallback(async () => {
-    setDepartment((await DepartmentService.getDepartment(params?.id)) as DepartmentForm);
+    setDepartment((await DepartmentService.getDepartment(params?.id)).data as DepartmentForm);
   }, [params?.id]);
 
   useEffect(() => {
@@ -27,6 +31,16 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
       getDepartment();
     }
   }, [params?.id, getDepartment]);
+  
+  const handleSubmit = async (data: DepartmentForm) => {
+    try {
+      await updateDepartment(params?.id as string, data);
+      showSuccess('Department successfully created.');
+    } catch (error: any) {
+      showApiError(error, 'Failed to save department.');
+    }
+    console.log('handleSubmit', data);
+  };
 
   return (
     <div className="grid">
@@ -38,8 +52,8 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormDepartment value={department} onSubmit={() => {}}>
-                  <FormAction actionCancel={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                <FormDepartment value={department} onSubmit={handleSubmit}>
+                  <FormAction  loadingSave={isSaveLoading}  actionCancel={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
                 </FormDepartment>
               </div>
             </div>
