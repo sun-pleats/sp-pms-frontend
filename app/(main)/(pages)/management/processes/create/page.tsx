@@ -36,7 +36,7 @@ const CreateProcessPage = () => {
             <div className="col-12">
               <div className="p-fluid">
                 <FormProcess onSubmit={handleSubmit}>
-                  <div className="grid">
+                  <div className="flex">
                     <div className="ml-auto">
                       <FormAction
                         loadingSave={isSaveLoading}

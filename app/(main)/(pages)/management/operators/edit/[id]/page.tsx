@@ -50,6 +50,9 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
     try {
       await updateOperator(params?.id as string, data);
       showSuccess('Operator successfully created.');
+      setTimeout(() => {
+        router.push(ROUTES.OPERATORS.INDEX);
+      }, 2000);
     } catch (error: any) {
       showApiError(error, 'Failed to save operator.');
     }
@@ -69,7 +72,11 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
                   value={operator} 
                   onSubmit={handleSubmit}
                 >
-                  <FormAction actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                  <div className="flex mt-2">
+                    <div className="ml-auto">
+                      <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                    </div>
+                  </div>
                 </FormOperator>
               </div>
             </div>

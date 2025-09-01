@@ -10,27 +10,27 @@ import FormAction, { FormActions } from '@/app/components/form-action/component'
 import UserService from '@/app/services/UserService';
 import { LayoutContext, LayoutProvider } from '@/layout/context/layoutcontext';
 import type { AxiosError } from 'axios';
+import { useUserPage } from '../hooks/useUserPage';
 
 const CreateUserPage = () => {
   const router = useRouter();
   const userTypes: SelectItem[] = [
     { label: 'Operator', value: 'operator' },
     { label: 'Administrator', value: 'administrator' },
-    { label: 'Administrator', value: 'manager' }
+    { label: 'Manager', value: 'manager' }
   ];
 
-  const { showApiError } = useContext(LayoutContext);
+  
+  const { saveUser, isSaveLoading } = useUserPage();
+  const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const handleSubmit = async (payload: any) => {
     try {
-      const data = await UserService.createUser({
-        email: payload.email,
-        name: payload.name,
-        password: payload.password,
-        role: payload.user_type,
-        username: payload.username,
-        status: 'active'
-      });
+      await saveUser(payload);
+      showSuccess('User successfully created.');
+      setTimeout(() => {
+        router.push(ROUTES.USERS.INDEX);
+      }, 2000);
     } catch (error: any) {
       showApiError(error, 'Failed to create user');
     }
@@ -44,7 +44,11 @@ const CreateUserPage = () => {
             <div className="col-12">
               <div className="p-fluid">
                 <FormUser userTypes={userTypes} onSubmit={handleSubmit}>
-                  <FormAction actionCancel={() => router.push(ROUTES.USERS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
+                  <div className="flex">
+                    <div className="ml-auto">
+                      <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.USERS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
+                    </div>
+                  </div>
                 </FormUser>
               </div>
             </div>

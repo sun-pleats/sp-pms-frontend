@@ -30,6 +30,9 @@ const EditProcessOffsetPage = ({ params }: EditProcessOffsetPageProps) => {
     try {
       await updateProcessOffset(params?.id as string, data);
       showSuccess('Process offset successfully created.');
+      setTimeout(() => {
+        router.push(ROUTES.PROCESS_OFFSETS.INDEX);
+      }, 2000);
     } catch (error: any) {
       showApiError(error, 'Failed to save process offset.');
     }
@@ -53,7 +56,15 @@ const EditProcessOffsetPage = ({ params }: EditProcessOffsetPageProps) => {
             <div className="col-12">
               <div className="p-fluid">
                 <FormProcessOffset value={processOffset} onSubmit={handleSubmit}>
-                  <FormAction actionCancel={() => router.push(ROUTES.PROCESS_OFFSETS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                  <div className="flex mt-2">
+                    <div className="ml-auto">
+                      <FormAction
+                        loadingSave={isSaveLoading}
+                        actionCancel={() => router.push(ROUTES.PROCESS_OFFSETS.INDEX)}
+                        actions={[FormActions.CANCEL, FormActions.UPDATE]}
+                      />
+                    </div>
+                  </div>
                 </FormProcessOffset>
               </div>
             </div>

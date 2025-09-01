@@ -12,13 +12,19 @@ class UserService {
   }
 
   getUser(id: string) {
-    return fetch('/demo/data/users.json', { headers: { 'Cache-Control': 'no-cache' } })
-      .then((res) => res.json())
-      .then((d) => d.data.find((r: User) => r.id == id));
+    return apiClient.get(`${BASE_URL}/${id}`);
   }
 
   createUser(payload: UserCreatePayload) {
     return apiClient.post(`${BASE_URL}`, payload);
+  }
+
+  updateUser(id: string, payload: UserCreatePayload) {
+    return apiClient.put(`${BASE_URL}/${id}`, payload);
+  }
+
+  deleteUser(id: string) {
+    return apiClient.delete(`${BASE_URL}/${id}`);
   }
 }
 

@@ -25,18 +25,27 @@ type FormData = {
 };
 
 const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) => {
-  const { control, handleSubmit, reset } = useForm<FormData>();
+  const { control, handleSubmit, reset } = useForm<FormData>({
+    defaultValues: {
+      name: '',
+      username: '',
+      email: '',
+      password: '',
+      user_type: ''
+    }
+  });
 
   useEffect(() => {
     if (value) {
       reset({
         name: value?.name,
+        email: value?.email,
         username: value?.username,
         password: '',
-        user_type: value?.type
+        user_type: value?.role
       });
     }
-  }, [value]);
+  }, [value, reset]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -44,8 +53,13 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
         name="name"
         control={control}
         rules={{ required: 'Name is required' }}
-        render={({ fieldState }) => (
-          <FormInputText label="Employee Name" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+        render={({ field, fieldState }) => (
+          <FormInputText
+            {...field}
+            label="Employee Name"
+            errorMessage={fieldState.error?.message}
+            isError={!!fieldState.error}
+          />
         )}
       />
 
@@ -53,25 +67,41 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
         name="email"
         control={control}
         rules={{ required: 'Email is required' }}
-        render={({ fieldState }) => (
-          <FormInputText label="Email" type="email" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+        render={({ field, fieldState }) => (
+          <FormInputText
+            {...field}
+            label="Email"
+            type="email"
+            errorMessage={fieldState.error?.message}
+            isError={!!fieldState.error}
+          />
         )}
       />
-
       <Controller
         name="username"
         control={control}
         rules={{ required: 'Username is required' }}
-        render={({ fieldState }) => (
-          <FormInputText label="Username" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+        render={({ field, fieldState }) => (
+          <FormInputText
+            {...field}
+            label="Username"
+            errorMessage={fieldState.error?.message}
+            isError={!!fieldState.error}
+          />
         )}
       />
       <Controller
         name="password"
         control={control}
         rules={{ required: 'Password is required' }}
-        render={({ fieldState }) => (
-          <FormInputText label="Password" type="password" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+        render={({ field, fieldState }) => (
+          <FormInputText
+            {...field}
+            label="Password"
+            type="password"
+            errorMessage={fieldState.error?.message}
+            isError={!!fieldState.error}
+          />
         )}
       />
       <Controller
@@ -80,11 +110,12 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
         rules={{ required: 'Role is required' }}
         render={({ field, fieldState }) => (
           <FormDropdown
+            {...field}
             value={field.value}
             onChange={(e: any) => field.onChange(e.value)}
             label="User Type"
             errorMessage={fieldState.error?.message}
-            isError={fieldState.error ? true : false}
+            isError={!!fieldState.error}
             options={userTypes}
           />
         )}

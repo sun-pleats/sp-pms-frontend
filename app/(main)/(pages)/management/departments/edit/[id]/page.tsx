@@ -36,6 +36,9 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
     try {
       await updateDepartment(params?.id as string, data);
       showSuccess('Department successfully created.');
+      setTimeout(() => {
+        router.push(ROUTES.DEPARTMENTS.INDEX);
+      }, 2000);
     } catch (error: any) {
       showApiError(error, 'Failed to save department.');
     }
@@ -53,7 +56,11 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
             <div className="col-12">
               <div className="p-fluid">
                 <FormDepartment value={department} onSubmit={handleSubmit}>
-                  <FormAction  loadingSave={isSaveLoading}  actionCancel={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                  <div className="flex">
+                    <div className="ml-auto">
+                      <FormAction  loadingSave={isSaveLoading}  actionCancel={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                    </div>
+                  </div>
                 </FormDepartment>
               </div>
             </div>
