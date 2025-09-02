@@ -7,14 +7,18 @@ const BASE_URL = '/api/departments';
 
 export const DepartmentService = {
   getDepartment(id: string) {
-    return fetch('/demo/data/processes.json', { headers: { 'Cache-Control': 'no-cache' } })
-      .then((res) => res.json())
-      .then((d) => d.data.find((r: Department) => r.id == id));
+    return apiClient.get(`${BASE_URL}/${id}`);
   },
   getDepartmentes(params?: Record<string, any>): AxiosPromise<DepartmentPaginatedResponse> {
     return apiClient.get(`${BASE_URL}`, { params });
   },
   createDepartment(payload: DepartmentCreatePayload) {
     return apiClient.post(`${BASE_URL}`, payload);
+  },
+  updateDepartment(id: string, payload: DepartmentCreatePayload) {
+    return apiClient.put(`${BASE_URL}/${id}`, payload);
+  },
+  deleteDepartment(id: string) {
+    return apiClient.delete(`${BASE_URL}/${id}`);
   }
 };

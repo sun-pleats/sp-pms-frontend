@@ -34,6 +34,9 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
     try {
       await updateSection(params?.id as string, data);
       showSuccess('Section successfully created.');
+      setTimeout(() => {
+        router.push(ROUTES.SECTION.INDEX);
+      }, 2000);
     } catch (error: any) {
       showApiError(error, 'Failed to process section.');
     }
@@ -61,11 +64,15 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
             <div className="col-12">
               <div className="p-fluid">
                 <FormSection value={section} onSubmit={handleSubmit} loading={{ deparmentField: isDepartmentLoading }} departments={departmentOption}>
-                  <FormAction
-                    loadingSave={isSaveLoading}
-                    actionCancel={() => router.push(ROUTES.SECTION.INDEX)}
-                    actions={[FormActions.CANCEL, FormActions.UPDATE]}
-                  />
+                  <div className="flex mt-2">
+                    <div className="ml-auto">
+                      <FormAction
+                        loadingSave={isSaveLoading}
+                        actionCancel={() => router.push(ROUTES.SECTION.INDEX)}
+                        actions={[FormActions.CANCEL, FormActions.UPDATE]}
+                      />
+                    </div>
+                  </div>
                 </FormSection>
               </div>
             </div>

@@ -29,6 +29,9 @@ const EditProcessPage = ({ params }: EditProcessPageProps) => {
     try {
       await updateProcess(params?.id as string, data);
       showSuccess('Process successfully created.');
+      setTimeout(() => {
+        router.push(ROUTES.PROCESS.INDEX);
+      }, 2000);
     } catch (error: any) {
       showApiError(error, 'Failed to save process.');
     }
@@ -49,11 +52,15 @@ const EditProcessPage = ({ params }: EditProcessPageProps) => {
             <div className="col-12">
               <div className="p-fluid">
                 <FormProcess value={process} onSubmit={handleSubmit}>
-                  <FormAction
-                    loadingSave={isSaveLoading}
-                    actionCancel={() => router.push(ROUTES.PROCESS.INDEX)}
-                    actions={[FormActions.CANCEL, FormActions.UPDATE]}
-                  />
+                  <div className="flex">
+                    <div className="ml-auto">
+                      <FormAction
+                        loadingSave={isSaveLoading}
+                        actionCancel={() => router.push(ROUTES.PROCESS.INDEX)}
+                        actions={[FormActions.CANCEL, FormActions.UPDATE]}
+                      />
+                    </div>
+                  </div>
                 </FormProcess>
               </div>
             </div>

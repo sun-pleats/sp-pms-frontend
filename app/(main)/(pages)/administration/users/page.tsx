@@ -3,22 +3,24 @@
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import { InputText } from 'primereact/inputtext';
-import React, { useCallback, useEffect, useState } from 'react';
-import type { Demo } from '@/types';
-import PageCard from '@/app/components/page-card/component';
-import { useRouter } from 'next/navigation';
-import { ROUTES } from '@/app/constants/routes';
-import Modal from '@/app/components/modal/component';
-import { User } from '@/app/types/users';
-import UserService from '@/app/services/UserService';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
-import PageHeader from '@/app/components/page-header/component';
+import { InputText } from 'primereact/inputtext';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { ROUTES } from '@/app/constants/routes';
+import { User } from '@/app/types/users';
+import { useRouter } from 'next/navigation';
+import Modal from '@/app/components/modal/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
+import PageCard from '@/app/components/page-card/component';
+import PageHeader from '@/app/components/page-header/component';
+import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
+import type { Demo } from '@/types';
+import UserService from '@/app/services/UserService';
 
 interface UserPageState {
   deleteModalShow?: boolean;
+  deleteId?: string | number;
 }
 
 interface SearchFilter {
@@ -30,6 +32,7 @@ const UsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<SearchFilter>({});
+  const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
 
@@ -87,10 +90,11 @@ const UsersPage = () => {
     router.push(`${ROUTES.USERS.EDIT}/${id}`);
   };
 
-  const onActionDeleteClick = () => {
+  const onActionDeleteClick = (id: string | number) => {
     setPageState({
       ...pageState,
-      deleteModalShow: true
+      deleteModalShow: true,
+      deleteId: id
     });
   };
 
@@ -98,9 +102,20 @@ const UsersPage = () => {
     return (
       <>
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} severity="danger" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} severity="danger" />
       </>
     );
+  };
+    
+  const handleDelete = async () => {
+    try {
+      await UserService.deleteUser(pageState.deleteId as string);
+      showSuccess('Department successfully deleted.');
+      setPageState({ ...pageState, deleteModalShow: false });
+      fetchUsers();
+    } catch (error: any) {
+      showApiError(error, 'Failed to delete Department.');
+    }
   };
 
   return (
@@ -134,6 +149,7 @@ const UsersPage = () => {
         visible={pageState.deleteModalShow}
         onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
         confirmSeverity="danger"
+        onConfirm={handleDelete}
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>

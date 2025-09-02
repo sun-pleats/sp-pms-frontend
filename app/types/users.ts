@@ -6,6 +6,7 @@ export enum UserRole {
 export interface User {
   id: string;
   name: string;
+  email: string;
   username: string;
   password: string;
   role: UserRole;
@@ -17,10 +18,11 @@ export interface User {
 
 export interface UserForm {
   id: string;
+  email: string;
   name: string;
   username: string;
   password: string;
-  type: UserRole;
+  role: UserRole;
   created_by?: string;
   created_at: string;
   updated_at: string;

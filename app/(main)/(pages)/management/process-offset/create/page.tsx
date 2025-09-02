@@ -38,7 +38,7 @@ const CreateProcessOffsetPage = () => {
             <div className="col-12">
               <div className="p-fluid">
                 <FormProcessOffset onSubmit={handleSubmit}>
-                  <div className="grid">
+                  <div className="flex mt-2">
                     <div className="ml-auto">
                       <FormAction
                         loadingSave={isSaveLoading}

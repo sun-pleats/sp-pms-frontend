@@ -3,23 +3,25 @@
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import { InputText } from 'primereact/inputtext';
-import React, { useCallback, useEffect, useState } from 'react';
-import type { Demo } from '@/types';
-import PageCard from '@/app/components/page-card/component';
-import { useRouter } from 'next/navigation';
-import { ROUTES } from '@/app/constants/routes';
-import Modal from '@/app/components/modal/component';
 import { Department } from '@/app/types/department';
 import { DepartmentService } from '@/app/services/DepartmentService';
-import PageHeader from '@/app/components/page-header/component';
-import PageAction, { PageActions } from '@/app/components/page-action/component';
-import TableHeader from '@/app/components/table-header/component';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import { InputText } from 'primereact/inputtext';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { ROUTES } from '@/app/constants/routes';
+import { useRouter } from 'next/navigation';
+import Modal from '@/app/components/modal/component';
+import PageAction, { PageActions } from '@/app/components/page-action/component';
+import PageCard from '@/app/components/page-card/component';
+import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
+import React, { useContext, useCallback, useEffect, useState } from 'react';
+import TableHeader from '@/app/components/table-header/component';
+import type { Demo } from '@/types';
 
 interface DepartmentPageState {
   deleteModalShow?: boolean;
+  deleteId?: string | number;
 }
 
 interface SearchFilter {
@@ -31,6 +33,7 @@ const DepartmentsPage = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<SearchFilter>({});
+  const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
 
@@ -78,10 +81,11 @@ const DepartmentsPage = () => {
     router.push(`${ROUTES.DEPARTMENTS.EDIT}/${id}`);
   };
 
-  const onActionDeleteClick = () => {
+  const onActionDeleteClick = (id: string | number) => {
     setPageState({
       ...pageState,
-      deleteModalShow: true
+      deleteModalShow: true,
+      deleteId: id
     });
   };
 
@@ -89,9 +93,20 @@ const DepartmentsPage = () => {
     return (
       <>
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size="small" severity="danger" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} size="small" severity="danger" />
       </>
     );
+  };
+  
+  const handleDelete = async () => {
+    try {
+      await DepartmentService.deleteDepartment(pageState.deleteId as string);
+      showSuccess('Department successfully deleted.');
+      setPageState({ ...pageState, deleteModalShow: false });
+      fetchDepartments();
+    } catch (error: any) {
+      showApiError(error, 'Failed to delete Department.');
+    }
   };
 
   return (
@@ -122,6 +137,7 @@ const DepartmentsPage = () => {
         visible={pageState.deleteModalShow}
         onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
         confirmSeverity="danger"
+        onConfirm={() => handleDelete()}
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>
