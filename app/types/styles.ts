@@ -59,6 +59,7 @@ export interface FormStyleFabric {
 
 export interface FormReleaseBundle {
   id?: string | number;
+  roll_number?: number;
   style_planned_fabric_id?: string;
   style_planned_fabric_size_id?: string;
   quantity?: number;
@@ -70,6 +71,7 @@ export interface StyleBundle {
   style_id: number;
   style_planned_fabric_id: number;
   style_planned_fabric_size_id: number;
+  roll_number?: number;
   bundle_number: string; // change to number if your DB uses int
   quantity: number;
   remarks?: string | null;

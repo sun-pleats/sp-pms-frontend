@@ -7,9 +7,10 @@ import { DataTable } from 'primereact/datatable';
 import { FormReleaseBundle, StylePlannedFabricSize } from '@/app/types/styles';
 import FormInputNumber from '../form/input-number/component';
 import FormInputText from '../form/input-text/component';
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { SelectItem } from 'primereact/selectitem';
 import FormDropdown from '../form/dropdown/component';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 
 interface FormStyleProps {
   control?: any;
@@ -21,8 +22,8 @@ interface FormStyleProps {
 
 const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], sizesOptions = [] }: FormStyleProps) => {
   const items = useWatch({ control, name: 'bundles' }) || [];
-
   const colors = React.useMemo(() => colorOptions, [colorOptions]);
+  const { showError } = useContext(LayoutContext);
 
   const getSizeOptions = (rowIndex: number): SelectItem[] => {
     const option = items[rowIndex];
@@ -30,7 +31,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
       sizesOptions
         ?.filter((s) => s.style_planned_fabric_id == option.style_planned_fabric_id)
         ?.map((r) => ({
-          label: `${r.size_number.toString()} - ${r.quantity.toString()}`,
+          label: `#${r.size_number.toString()} - Qty: ${r.quantity.toString()}`,
           value: r.id
         })) ?? []
     );
@@ -68,6 +69,19 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
     );
   };
 
+  const handleBundleFabricSizeSelect = (field: any, e: any, index: number) => {
+    const item = items[index];
+    let filterdItem = [...items];
+    filterdItem.splice(index, 1);
+    const find = filterdItem.find((i: any) => i.roll_number == item.roll_number && i.style_planned_fabric_size_id == e);
+    if (find && find.style_planned_fabric_size_id) {
+      field.onChange(undefined);
+      showError(`Size already selected by bundle no. ${item.roll_number}`);
+      return;
+    }
+    field.onChange(e);
+  }
+
   const onAddOperatorClick = () => {
     addNewItem();
   };
@@ -102,7 +116,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
               <FormInputNumber
                 value={field.value as number | null}
                 onValueChange={(e) => field.onChange(e.value ?? null)}
-                placeholder="Number"
+                placeholder="Roll"
                 errorMessage={fieldState.error?.message}
                 isError={fieldState.error ? true : false}
               />
@@ -146,7 +160,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
                 {...field}
                 value={field.value}
                 filter
-                onChange={(e: any) => field.onChange(e.value)}
+                onChange={(e: any) => handleBundleFabricSizeSelect(field, e.value, options.rowIndex)}
                 placeholder="Select"
                 errorMessage={fieldState.error?.message}
                 isError={fieldState.error ? true : false}
@@ -184,7 +198,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
             control={control}
             name={`bundles.${options.rowIndex}.remarks` as const}
             render={({ field, fieldState }) => (
-              <FormInputText {...field} placeholder="Text" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+              <FormInputText {...field} placeholder="e.g. Notes" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
             )}
           />
         )}

@@ -48,11 +48,11 @@ const BundleSinglePrintBarcode = ({ bundle, visible, onHide }: BundleSinglePrint
       setDetails([
         { name: 'Style', value: bundle?.style?.style_number ?? '' },
         { name: 'Buyer', value: bundle?.style?.buyer_name ?? '' },
-        { name: 'Bundle', value: bundle.bundle_number },
+        { name: 'Roll No.', value: bundle.roll_number?.toString() ?? '' },
         { name: 'Size', value: bundle.style_planned_fabric_size?.size_number.toString() ?? '' },
         { name: 'Release Quantity', value: bundle.quantity.toString() ?? '' }
       ]);
-      setBarcode(`${bundle?.style?.style_number ?? ''}-${bundle?.style_planned_fabric_size?.size_number}-${bundle?.bundle_number}`);
+      setBarcode(`${bundle?.bundle_number}`);
     }
   }, [bundle]);
 

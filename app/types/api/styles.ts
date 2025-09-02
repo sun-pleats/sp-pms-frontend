@@ -54,6 +54,7 @@ export interface StyleReleaseFabricPayload {
 }
 
 export interface SaveStyleFabricPayload {
+  roll_number?: number;
   style_planned_fabric_id?: string;
   style_planned_fabric_size_id?: string;
   quantity?: number;

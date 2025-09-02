@@ -92,6 +92,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
       const { data: fabrics } = await StyleBundleService.releaseFabrics(
         {
           bundles: e.bundles?.map((r) => ({
+            roll_number: r.roll_number,
             style_planned_fabric_id: r.style_planned_fabric_id,
             style_planned_fabric_size_id: r.style_planned_fabric_size_id,
             quantity: r.quantity,
