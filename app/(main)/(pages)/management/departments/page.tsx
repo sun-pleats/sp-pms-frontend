@@ -37,26 +37,33 @@ const DepartmentsPage = () => {
 
   const router = useRouter();
 
-  const clearFilter1 = () => {
-    setFilter({
-      keyword: ''
-    });
-    fetchDepartments();
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter({ keyword: e.target.value });
+  };
+
+  const clearFilter = () => {
+    setFilter({ keyword: '' });
+    fetchDepartments('');
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter1} />;
+    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchDepartments = useCallback(async () => {
-    setLoading(true);
-    const { data } = await DepartmentService.getDepartmentes();
-    setDepartments(getDepartments(data.data ?? []));
-    setLoading(false);
-  }, []);
+  const fetchDepartments = useCallback(
+    async (keyword?: string) => {
+      setLoading(true);
+      const search = keyword?.trim() || filter.keyword?.trim() || '';
+      // Pass keyword to service if available
+      const { data } = await DepartmentService.getDepartmentes(search ? { search } : {});
+      setDepartments(getDepartments(data.data ?? []));
+      setLoading(false);
+    },
+    [filter.keyword]
+  );
 
   useEffect(() => {
-    fetchDepartments();
+    fetchDepartments('');
   }, [fetchDepartments]);
 
   const getDepartments = (data: Department[]) => {

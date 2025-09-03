@@ -34,8 +34,12 @@ const SectionsPage = () => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
+     
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter({ keyword: e.target.value });
+  };
 
-  const clearFilter1 = () => {
+  const clearFilter = () => {
     setFilter({
       keyword: ''
     });
@@ -43,15 +47,16 @@ const SectionsPage = () => {
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter1} />;
+    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchSections = useCallback(async () => {
+  const fetchSections = useCallback(async (keyword?: string) => {
     setLoading(true);
-    const data = await SectionService.getSections();
+    const search = keyword?.trim() || filter.keyword?.trim() || '';
+    const data = await SectionService.getSections(search ? { search } : {});
     setSections(getSections(data.data.data ?? []));
     setLoading(false);
-  }, []);
+  }, [filter.keyword]);
 
   useEffect(() => {
     fetchSections();

@@ -35,8 +35,12 @@ const ProcessesPage = () => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
+      
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter({ keyword: e.target.value });
+  };
 
-  const clearFilter1 = () => {
+  const clearFilter = () => {
     setFilter({
       keyword: ''
     });
@@ -53,15 +57,16 @@ const ProcessesPage = () => {
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter1} />;
+    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchProcesses = useCallback(async () => {
+  const fetchProcesses = useCallback(async (keyword?: string) => {
     setLoading(true);
-    const data = await ProcessService.getProcesses();
+    const search = keyword?.trim() || filter.keyword?.trim() || '';
+    const data = await ProcessService.getProcesses(search ? { search } : {});
     setProcesses(getProcesses(data.data.data ?? []));
     setLoading(false);
-  }, []);
+  }, [filter.keyword]);
 
   useEffect(() => {
     fetchProcesses();

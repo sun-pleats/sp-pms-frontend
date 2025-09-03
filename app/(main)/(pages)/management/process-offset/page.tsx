@@ -36,8 +36,12 @@ const ProcessOffsetsPage = () => {
   const [filter, setFilter] = useState<SearchFilter>({});
   const router = useRouter();
   const { showApiError, showSuccess } = useContext(LayoutContext);
+    
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter({ keyword: e.target.value });
+  };
 
-  const clearFilter1 = () => {
+  const clearFilter = () => {
     setFilter({
       keyword: ''
     });
@@ -45,15 +49,16 @@ const ProcessOffsetsPage = () => {
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter1} />;
+    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchProcessOffsets = useCallback(async () => {
+  const fetchProcessOffsets = useCallback(async (keyword?: string) => {
     setLoading(true);
-    const { data } = await ProcessOffsetService.getProcessOffsets();
+    const search = keyword?.trim() || filter.keyword?.trim() || '';
+    const { data } = await ProcessOffsetService.getProcessOffsets(search ? { search } : {});
     setProcessOffsets(getProcessOffsets(data.data ?? []));
     setLoading(false);
-  }, []);
+  }, [filter.keyword]);
 
   useEffect(() => {
     fetchProcessOffsets();
