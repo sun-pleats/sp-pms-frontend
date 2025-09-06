@@ -45,7 +45,7 @@ export const useProductionOperations = () => {
   const [productionTracks, setProductionTracks] = useState<ProductionTrack[]>([]);
   const [operators, setOperators] = useState<Operator[]>([]);
   const [processOptions, setProcessOptions] = useState<SelectItem[]>();
-  const [sewingLineOptions, setSewingLineOptions] = useState<SelectItem[]>();
+  const [sectionOptions, setSectionOptions] = useState<SelectItem[]>();
   const [tracksToDelete, setTracksToDelete] = useState<string[]>([]);
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const { fetchProcessOptions, fetchOperators, fetchSectionSelectOption } = useUtilityData();
@@ -200,7 +200,7 @@ export const useProductionOperations = () => {
     // Fetch sections
     fetchSectionSelectOption()
       .then((data) => {
-        setSewingLineOptions(data);
+        setSectionOptions(data);
       })
       .finally(() =>
         setTimeout(() => {
@@ -246,7 +246,7 @@ export const useProductionOperations = () => {
     storeTracks,
     fetchTracks,
     operatorsOption,
-    sewingLineOptions,
+    sectionOptions,
     processOptions,
     productionTracks,
     selectedOperatorProcess,

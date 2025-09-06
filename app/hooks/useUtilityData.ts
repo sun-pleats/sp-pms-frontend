@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Section } from '../types/section';
 import { Process } from '../types/process';
 import { Operator } from '../types/operator';
+import { format24Hour, formatDate } from '../utils';
 
 export default function useUtilityData() {
   const [isDepartmentLoading, setIsDepartmentLoading] = useState<boolean>(false);
@@ -72,7 +73,7 @@ export default function useUtilityData() {
 
   const fetchSectionSelectOption = async (): Promise<SelectItem[]> => {
     const data = await fetchSections();
-    return data.map((b: Section) => ({ value: b.id, label: b.name }));
+    return data.map((b: Section) => ({ value: b.id, label: `${b.name} | ${format24Hour(b.shift_start)}` }));
   };
 
   const fetchBuyersSelectOption = async (): Promise<SelectItem[]> => {

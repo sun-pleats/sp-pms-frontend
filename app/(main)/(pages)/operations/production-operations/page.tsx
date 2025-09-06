@@ -38,7 +38,7 @@ const ProductionOperationPage = () => {
     addNewItem,
     control,
     items,
-    sewingLineOptions,
+    sectionOptions,
     trackFilter,
     setTrackFilter,
     processOptions,
@@ -110,7 +110,7 @@ const ProductionOperationPage = () => {
                 onChange={handleSectionChange}
                 filter={true}
                 placeholder="Select"
-                options={sewingLineOptions}
+                options={sectionOptions}
               />
               <FormMultiDropdown
                 loading={loadings.fetchingProcesses}

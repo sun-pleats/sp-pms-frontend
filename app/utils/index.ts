@@ -5,7 +5,7 @@ export function generateSimpleId() {
 }
 
 export function format24Hour(date: any) {
-  return moment(date).format('HH:mm');
+  return moment(date, "HH:mm:ss").format('HH:mm');
 }
 
 export function formatDate(date: any) {
