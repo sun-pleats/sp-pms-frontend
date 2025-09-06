@@ -1,4 +1,5 @@
 import { AxiosPromise } from 'axios';
+import { formatDbDate } from '../utils';
 import { GetProductionTrackPayload, StoreProductionTrackPayload } from '../types/api/production-track';
 import { ProductionTrack } from '../types/production-track';
 import apiClient from '../api/http-common';
@@ -11,5 +12,11 @@ export const ProductionTrackService = {
   },
   storeTracks(payload: StoreProductionTrackPayload) {
     return apiClient.post(`${BASE_URL}`, payload);
+  },
+  duplicate(section_id: string, date_from: Date, date_to: Date): AxiosPromise<ProductionTrack[]>  {
+    return apiClient.post(`${BASE_URL}/duplicate/${section_id}`, {
+      date_from: formatDbDate(date_from),
+      date_to: formatDbDate(date_to),
+    });
   }
 };

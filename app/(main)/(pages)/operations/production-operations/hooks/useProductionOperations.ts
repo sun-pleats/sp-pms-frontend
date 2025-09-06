@@ -27,12 +27,14 @@ export const useProductionOperations = () => {
     fetchingOperator: boolean;
     fetchingSections: boolean;
     storingTracks: boolean;
+    duplicatingTracks: boolean;
     fetchingTracks: boolean;
   }>({
     fetchingProcesses: false,
     fetchingOperator: false,
     fetchingSections: false,
     storingTracks: false,
+    duplicatingTracks: false,
     fetchingTracks: false
   });
 
@@ -126,6 +128,20 @@ export const useProductionOperations = () => {
       showApiError(e, 'Error saving production process.');
     } finally {
       setLoading({ storingTracks: false });
+    }
+  };
+
+  const duplicateTracks = async () => {
+    try {
+      setLoading({ duplicatingTracks: true });
+      const dateNow = moment(trackFilter.date);
+      const dateNext = dateNow.clone().add('day', 1);
+      await ProductionTrackService.duplicate(trackFilter.section_id,dateNow.toDate(), dateNext.toDate());
+      showSuccess('Production processes duplicated successfully.');
+    } catch (e: any) {
+      showApiError(e, 'Error duplicating production process.');
+    } finally {
+      setLoading({ duplicatingTracks: false });
     }
   };
 
@@ -240,6 +256,7 @@ export const useProductionOperations = () => {
     control,
     trackFilter,
     setTrackFilter,
-    updateOperatorTime
+    updateOperatorTime,
+    duplicateTracks
   };
 };

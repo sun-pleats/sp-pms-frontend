@@ -11,3 +11,7 @@ export function format24Hour(date: any) {
 export function formatDate(date: any) {
   return moment(date).format('YYYY/MM/DD');
 }
+
+export function formatDbDate(date: any) {
+  return moment(date).format('YYYY-MM-DD');
+}

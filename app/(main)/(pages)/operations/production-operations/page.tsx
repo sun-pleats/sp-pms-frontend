@@ -5,20 +5,19 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { Controller } from 'react-hook-form';
 import { DataTable } from 'primereact/datatable';
-import { OperatorProcess } from '@/app/types/operator';
-import { useEffect, useState } from 'react';
 import { FormData, useProductionOperations } from './hooks/useProductionOperations';
+import { ProductionTrack } from '@/app/types/production-track';
+import { ROUTES } from '@/app/constants/routes';
+import { useEffect, useState } from 'react';
 import FormCalendar from '@/app/components/form/calendar/component';
 import FormDropdown from '@/app/components/form/dropdown/component';
 import FormInputNumber from '@/app/components/form/input-number/component';
 import FormInputText from '@/app/components/form/input-text/component';
+import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
 import moment from 'moment';
 import OperatorOutput from './components/operator-output';
-import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
 import PageHeader from '@/app/components/page-header/component';
-import { ProductionTrack } from '@/app/types/production-track';
 import PageTile from '@/app/components/page-title/component';
-import { ROUTES } from '@/app/constants/routes';
 
 interface ProductionOperationPageState {
   showOperatorOutput?: boolean;
@@ -45,7 +44,8 @@ const ProductionOperationPage = () => {
     processOptions,
     storeTracks,
     fetchTracks,
-    updateOperatorTime
+    updateOperatorTime,
+    duplicateTracks,
   } = useProductionOperations();
 
   useEffect(() => {
@@ -168,8 +168,8 @@ const ProductionOperationPage = () => {
               type="button"
               size="small"
               className="mt-2"
-              icon="pi pi-plus"
-              label="Add Process"
+               title="Add Process"
+              icon="pi pi-plus" 
             />
             <Button
               disabled={!trackFilter.section_id}
@@ -178,8 +178,19 @@ const ProductionOperationPage = () => {
               size="small"
               type="submit"
               className="mt-2"
-              icon="pi pi-save"
-              label="Save"
+              title="Save"
+              icon="pi pi-save" 
+            />
+            <Button
+              disabled={!trackFilter.section_id}
+              loading={loadings.fetchingOperator || loadings.duplicatingTracks}
+              severity="success"
+              size="small"
+              type="button"
+              onClick={duplicateTracks}
+              className="mt-2"
+              icon="pi pi-clone"
+              title="Duplicate to next day"
             />
           </div>
         </div>
