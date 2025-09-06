@@ -6,6 +6,7 @@ export interface StoreProductionTrackPayload {
     operator_id: string;
     process_id: string;
     target: number | string;
+    time: number | string;
     remarks: string;
   }[];
   delete_tracks?: string[];

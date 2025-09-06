@@ -16,7 +16,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import ReleaseBundleTable from '@/app/components/style/ReleaseBundleTable';
 import RemoteStyleDropdown from '@/app/components/remote/style-dropdown/component';
 import useBarcodePrinting from '@/app/hooks/useBarcodePrinting';
-import { createSolutionBuilderWithWatch } from 'typescript';
 
 interface SinglePrintBarcodeState {
   show?: boolean;
@@ -123,6 +122,10 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
     }
   };
 
+  const loadFabricBundles = async() => {
+    StyleBundleService.getStyleBundles(selectedStyleNumber?.value.toString() ?? '')
+  }
+
   useEffect(() => {
     setState({ ...state, show: visible });
     if (visible) initData();
@@ -130,6 +133,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
 
   const initData = async () => {
     setPrinterOptions(await fetchPrintersSelectOptions());
+    await loadFabricBundles();
   };
 
   const resetAllState = () => {

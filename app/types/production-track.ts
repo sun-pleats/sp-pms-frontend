@@ -8,6 +8,7 @@ export interface ProductionTrack {
   section_id?: string;
   operator_id?: string;
   process_id?: string;
+  time: number | string;
   target: number | string;
   remarks: string;
   section?: Section;

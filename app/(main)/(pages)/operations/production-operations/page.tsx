@@ -30,7 +30,6 @@ const ProductionOperationPage = () => {
 
   const {
     operatorsOption,
-    setSelectedOperatorProcess,
     selectedOperatorProcess,
     loadings,
     getProcessOptions,
@@ -45,7 +44,8 @@ const ProductionOperationPage = () => {
     setTrackFilter,
     processOptions,
     storeTracks,
-    fetchTracks
+    fetchTracks,
+    updateOperatorTime
   } = useProductionOperations();
 
   useEffect(() => {
@@ -231,11 +231,35 @@ const ProductionOperationPage = () => {
                       {...field}
                       value={field.value}
                       filter
-                      onChange={(e: any) => field.onChange(e.value)}
+                      onChange={(e: any) => {
+                         field.onChange(e.value);
+                         updateOperatorTime(options.rowIndex);
+                      }}
                       placeholder="Select"
                       errorMessage={fieldState.error?.message}
                       isError={fieldState.error ? true : false}
                       options={getProcessOptions(options.rowIndex)}
+                    />
+                  )}
+                />
+              )}
+            />
+             <Column
+              field="time"
+              header="Time"
+              body={(_row: any, options: { rowIndex: number }) => (
+                <Controller
+                  control={control}
+                  name={`tracks.${options.rowIndex}.time` as const}
+                  rules={{ required: 'Time is required', min: { value: 1, message: 'Minimum is 1' } }}
+                  render={({ field, fieldState }) => (
+                    <FormInputNumber
+                      value={field.value as number | null}
+                      onValueChange={(e) => field.onChange(e.value ?? null)}
+                      placeholder="Seconds"
+                      inputClassName="w-full"
+                      errorMessage={fieldState.error?.message}
+                      isError={fieldState.error ? true : false}
                     />
                   )}
                 />

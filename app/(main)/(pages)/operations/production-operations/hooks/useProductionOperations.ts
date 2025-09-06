@@ -1,15 +1,15 @@
-import useUtilityData from '@/app/hooks/useUtilityData';
-import { OperatorProcessService } from '@/app/services/OperatorProcessService';
-import { ProductionTrackService } from '@/app/services/ProductionTrackService';
 import { DefaultFormData } from '@/app/types/form';
-import { Operator, OperatorProcess } from '@/app/types/operator';
-import { ProductionTrack } from '@/app/types/production-track';
 import { generateSimpleId } from '@/app/utils';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import moment from 'moment';
+import { Operator, OperatorProcess } from '@/app/types/operator';
+import { OperatorProcessService } from '@/app/services/OperatorProcessService';
+import { ProductionTrack } from '@/app/types/production-track';
+import { ProductionTrackService } from '@/app/services/ProductionTrackService';
 import { SelectItem } from 'primereact/selectitem';
-import { useContext, useEffect, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+import moment from 'moment';
+import React, { useContext, useEffect, useState } from 'react';
+import useUtilityData from '@/app/hooks/useUtilityData';
 
 interface TrackFilter {
   date?: any;
@@ -42,19 +42,30 @@ export const useProductionOperations = () => {
   const [selectedOperatorProcess, setSelectedOperatorProcess] = useState<OperatorProcess | undefined>();
   const [productionTracks, setProductionTracks] = useState<ProductionTrack[]>([]);
   const [operators, setOperators] = useState<Operator[]>([]);
-  const [operatorsOption, setOperatorsOption] = useState<SelectItem[]>([]);
   const [processOptions, setProcessOptions] = useState<SelectItem[]>();
   const [sewingLineOptions, setSewingLineOptions] = useState<SelectItem[]>();
   const [tracksToDelete, setTracksToDelete] = useState<string[]>([]);
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const { fetchProcessOptions, fetchOperators, fetchSectionSelectOption } = useUtilityData();
-  const { control, handleSubmit, reset } = useForm<FormData>({
+  const { control, handleSubmit, reset, getValues } = useForm<FormData>({
     defaultValues: {
       tracks: []
     }
   });
 
-  const { append, remove } = useFieldArray({
+  const operatorsOption = React.useMemo<SelectItem[]>(() => {
+    return operators
+      .filter(r => r.section_id === trackFilter.section_id)
+      .map(r => ({ label: r.name, value: r.id }))
+      .reduce<SelectItem[]>((acc, curr) => {
+        if (!acc.some(item => item.value === curr.value)) {
+          acc.push(curr);
+        }
+        return acc;
+      }, []);
+  }, [operators, trackFilter]);
+
+  const { append, remove, update } = useFieldArray({
     control,
     name: 'tracks'
   });
@@ -69,6 +80,7 @@ export const useProductionOperations = () => {
     id: generateSimpleId() + (items?.length + 1).toString(),
     date: trackFilter.date,
     section_id: trackFilter.section_id,
+    time: 0,
     target: 0,
     process_id: '',
     operator_id: '',
@@ -84,7 +96,13 @@ export const useProductionOperations = () => {
 
   const getProcessOptions = (rowIndex: number): SelectItem[] => {
     const option = items[rowIndex];
-    return operators?.find((s) => s.id == option.operator_id)?.operator_processes?.map((p) => ({ value: p.process.id, label: p.process.name })) ?? [];
+    return (operators?.find((s) => s.id == option.operator_id)?.operator_processes?.map((p) => ({ value: p.process.id, label: p.process.name })) ?? [])
+      .reduce<SelectItem[]>((acc, curr) => {
+        if (!acc.some(item => item.value === curr.value)) {
+          acc.push(curr);
+        }
+        return acc;
+      }, []);;
   };
 
   const storeTracks = async (e: FormData) => {
@@ -98,6 +116,7 @@ export const useProductionOperations = () => {
           operator_id: r.operator_id ?? '',
           process_id: r.process_id ?? '',
           target: r.target,
+          time: r.time,
           remarks: r.remarks
         })),
         delete_tracks: tracksToDelete
@@ -129,7 +148,8 @@ export const useProductionOperations = () => {
           operator_id: d.operator_id,
           process_id: d.process_id,
           target: d.target,
-          remarks: d.remarks
+          remarks: d.remarks,
+          time: d.time,
         });
       });
       addNewItem();
@@ -158,7 +178,6 @@ export const useProductionOperations = () => {
     fetchOperators()
       .then((data) => {
         setOperators(data);
-        setOperatorsOption(data.map((r) => ({ label: r.name, value: r.id })));
       })
       .finally(() => setLoading({ fetchingOperator: false }));
 
@@ -187,6 +206,16 @@ export const useProductionOperations = () => {
     remove(rowIndex);
   };
 
+  const updateOperatorTime = (rowIndex: number) => {
+
+    const operatorId = String(getValues(`tracks.${rowIndex}.operator_id`));
+    const processId = String(getValues(`tracks.${rowIndex}.process_id`));
+    const current = getValues(`tracks.${rowIndex}`);
+    const process = operators.find(r => r.id == operatorId.toString())?.operator_processes?.find(r => r.process_id?.toString() == processId);
+
+    update(rowIndex, { ...current, time: (process?.time || 0) });
+  }
+
   return {
     onProcessDeleteClick,
     setProductionTracks,
@@ -210,6 +239,7 @@ export const useProductionOperations = () => {
     items,
     control,
     trackFilter,
-    setTrackFilter
+    setTrackFilter,
+    updateOperatorTime
   };
 };

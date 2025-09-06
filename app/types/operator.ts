@@ -10,6 +10,9 @@ export interface Operator {
   created_at?: string;
   updated_at?: string;
   operator_processes?: {
+    process_id?: number;
+    section_id?: number;
+    time?: number;
     process: Process;
   }[];
 }

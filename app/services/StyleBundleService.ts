@@ -9,6 +9,9 @@ export const StyleBundleService = {
   getBundles(params?: Record<string, any>): AxiosPromise<StyleBundlePaginatedResponse> {
     return apiClient.get(`${BASE_URL}`, { params });
   },
+  getStyleBundles(style_id: string): AxiosPromise<StyleBundle[]> {
+    return apiClient.get(`${BASE_URL}/styles/${style_id}`);
+  },
   releaseFabrics(payload: StyleReleaseFabricPayload, style_id: string): AxiosPromise<StyleBundle[]> {
     return apiClient.post(`${BASE_URL}/release-fabrics/${style_id}`, payload);
   },
