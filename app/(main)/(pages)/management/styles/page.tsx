@@ -2,6 +2,9 @@
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
+import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
@@ -13,16 +16,13 @@ import Modal from '@/app/components/modal/component';
 import MultiplePrintBarcode from '@/app/components/style/MultiplePrintBarcode';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import PageCard from '@/app/components/page-card/component';
+import PageHeader from '@/app/components/page-header/component';
+import PageTile from '@/app/components/page-title/component';
 import React, { useEffect, useState } from 'react';
 import SinglePrintBarcode from '@/app/components/style/SinglePrintBarcode';
+import TableHeader from '@/app/components/table-header/component';
 import UploadStyles from './components/upload-styles';
 import useUtilityData from '@/app/hooks/useUtilityData';
-import { IconField } from 'primereact/iconfield';
-import { InputIcon } from 'primereact/inputicon';
-import PageHeader from '@/app/components/page-header/component';
-import TableHeader from '@/app/components/table-header/component';
-import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
-import PageTile from '@/app/components/page-title/component';
 
 interface StylePageState {
   deleteModalShow?: boolean;
@@ -144,7 +144,6 @@ const StylesPage = () => {
         <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
         <Column field="style_number" header="Style#" style={{ minWidth: '12rem' }} />
         <Column field="buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />
-        <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
         <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
         <Column header="Japan Date" field="ship_date_from_japan" />
         <Column field="ship_date_from_cebu" header="Cebu Date" />
