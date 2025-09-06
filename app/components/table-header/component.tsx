@@ -8,14 +8,16 @@ import React, { useState } from 'react';
 interface TableHeaderProps {
   children?: any;
   onClear?: () => void;
+  searchValue?: string;
+  onSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const TableHeader = ({ onClear, children }: TableHeaderProps) => {
-  const [searchValue, setGlobalFilterValue1] = useState('');
+const TableHeader = ({ onClear, children, searchValue, onSearchChange }: TableHeaderProps) => {
+  // const [searchValue, setGlobalFilterValue] = useState('');
 
-  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setGlobalFilterValue1(e.target.value);
-  };
+  // const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setGlobalFilterValue(e.target.value);
+  // };
 
   return (
     <div className="flex flex-column md:flex-row gap-3 md:gap-2 align-items-stretch md:align-items-center">

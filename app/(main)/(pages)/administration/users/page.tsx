@@ -35,8 +35,12 @@ const UsersPage = () => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
+        
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter({ keyword: e.target.value });
+  };
 
-  const clearFilter1 = () => {
+  const clearFilter = () => {
     setFilter({
       keyword: ''
     });
@@ -44,13 +48,16 @@ const UsersPage = () => {
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter1} />;
+    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchUsers = useCallback(async () => {
-    const { data } = await UserService.getUsers();
+  const fetchUsers = useCallback(async (keyword?: string) => {
+    setLoading(true);
+    const search = keyword?.trim() || filter.keyword?.trim() || '';
+    const { data } = await UserService.getUsers(search ? { search } : {});
     setUsers(getUsers(data.data));
-  }, []);
+    setLoading(false);
+  }, [filter.keyword]);
 
   useEffect(() => {
     fetchUsers();
