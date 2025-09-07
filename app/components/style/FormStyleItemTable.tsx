@@ -42,10 +42,10 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
 
   const tableHeader = () => {
     return (
-      <div className="flex align-items-center">
-        <p>Style Items</p>
+      <div className="flex align-items-center" style={{ marginLeft: '-15px', marginRight: '-15px' }}>
+        <div>Style Items</div>
         <div className="ml-auto flex align-items-center gap-2">
-          <Button severity="help" type="button" onClick={onAddOperatorClick} className="mt-2" icon="pi pi-plus" label="Add" />
+          <Button type="button" onClick={onAddOperatorClick} icon="pi pi-plus" label="Add" />
         </div>
       </div>
     );
@@ -72,6 +72,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
       emptyMessage="No items provided."
     >
       <Column
+        className='field-mb-0'
         field="item_name"
         header="Item"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -91,6 +92,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
         )}
       />
       <Column
+        className='field-mb-0'
         field="item_number"
         header="Item No."
         body={(_row: any, options: { rowIndex: number }) => (
@@ -105,6 +107,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
         )}
       />
       <Column
+        className='field-mb-0'
         field="specs_qty"
         header="Specs"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -126,6 +129,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
       />
 
       <Column
+        className='field-mb-0'
         field="specs_unit"
         header="Specs"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -140,6 +144,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
         )}
       />
       <Column
+        className='field-mb-0'
         field="youjyaku_qty"
         header="Youjyaku"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -161,6 +166,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
       />
 
       <Column
+        className='field-mb-0'
         field="youjyaku_unit"
         header="Specs"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -176,6 +182,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
       />
 
       <Column
+        className='field-mb-0'
         field="color_detail"
         header="Color Details"
         body={(_row: any, options: { rowIndex: number }) => (

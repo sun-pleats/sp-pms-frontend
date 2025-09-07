@@ -9,6 +9,7 @@ import FormCalendar from '../form/calendar/component';
 import FormInputText from '../form/input-text/component';
 import FormStyleItemTable from './FormStyleItemTable';
 import FormStyleFabricTable from './FormStyleFabricTable';
+import { Divider } from 'primereact/divider';
 
 interface FormStyleProps {
   styleOptions: SelectItem[];
@@ -78,7 +79,7 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid">
-        <div className="col-12 md:col-3">
+        <div className="col-12 md:col-6">
           <Controller
             name="control_number"
             control={control}
@@ -88,7 +89,7 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
             )}
           />
         </div>
-        <div className="col-12 md:col-3">
+        <div className="col-12 md:col-6">
           <Controller
             name="buyer_name"
             control={control}
@@ -101,7 +102,7 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
       </div>
 
       <div className="grid">
-        <div className="col-12 md:col-3">
+        <div className="col-12 md:col-6">
           <Controller
             name="style_number"
             control={control}
@@ -111,7 +112,7 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
             )}
           />
         </div>
-        <div className="col-12 md:col-3">
+        <div className="col-12 md:col-6">
           <Controller
             name="pleats_name"
             control={control}
@@ -124,7 +125,7 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
       </div>
 
       <div className="grid">
-        <div className="col-12 md:col-3">
+        <div className="col-12 md:col-6">
           <Controller
             name="item_type"
             control={control}
@@ -137,8 +138,12 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
         <div className="col-12 md:col-3"></div>
       </div>
 
+      <Divider align="center" className="mb-5">
+        Shipping Information
+      </Divider>
+
       <div className="grid">
-        <div className="col-12 md:col-3">
+        <div className="col-12 md:col-6">
           <Controller
             name="ship_date_from_cebu"
             control={control}
@@ -153,7 +158,7 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
             )}
           />
         </div>
-        <div className="col-12 md:col-3">
+        <div className="col-12 md:col-6">
           <Controller
             name="ship_date_from_japan"
             control={control}
@@ -171,7 +176,7 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
       </div>
 
       <div className="grid">
-        <div className="col-12 md:col-3">
+        <div className="col-12 md:col-6">
           <Controller
             name="noumae"
             control={control}
@@ -181,7 +186,7 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
             )}
           />
         </div>
-        <div className="col-12 md:col-3">
+        <div className="col-12 md:col-6">
           <Controller
             name="sample"
             control={control}
@@ -194,7 +199,7 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
       </div>
 
       <div className="grid">
-        <div className="col-12 md:col-3">
+        <div className="col-12 md:col-6">
           <Controller
             name="pattern"
             control={control}

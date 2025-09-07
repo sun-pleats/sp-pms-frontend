@@ -43,10 +43,10 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
 
   const tableHeader = () => {
     return (
-      <div className="flex align-items-center">
-        <p>Planned Fabrics</p>
+      <div className="flex align-items-center" style={{ marginLeft: '-15px', marginRight: '-15px' }}>
+        <div>Planned Fabrics</div>
         <div className="ml-auto flex align-items-center gap-2">
-          <Button severity="help" type="button" onClick={onAddOperatorClick} className="mt-2" icon="pi pi-plus" label="Add" />
+          <Button type="button" onClick={onAddOperatorClick} icon="pi pi-plus" label="Add" />
         </div>
       </div>
     );
@@ -73,6 +73,7 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
       emptyMessage="No items provided."
     >
       <Column
+        className='field-mb-0'
         field="col_number"
         header="Col No."
         body={(_row: any, options: { rowIndex: number }) => (
@@ -87,6 +88,7 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
         )}
       />
       <Column
+        className='field-mb-0'
         field="color"
         header="Color"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -101,6 +103,7 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
         )}
       />
       <Column
+        className='field-mb-0'
         field="size_one"
         header="01"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -121,6 +124,7 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
         )}
       />
       <Column
+        className='field-mb-0'
         field="size_two"
         header="02"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -140,6 +144,7 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
         )}
       />
       <Column
+        className='field-mb-0'
         field="size_three"
         header="03"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -159,6 +164,7 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
         )}
       />
       <Column
+        className='field-mb-0'
         field="size_four"
         header="04"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -178,6 +184,7 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
         )}
       />
       <Column
+        className='field-mb-0'
         field="size_five"
         header="05"
         body={(_row: any, options: { rowIndex: number }) => (
