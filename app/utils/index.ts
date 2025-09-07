@@ -12,6 +12,10 @@ export function formatDate(date: any) {
   return moment(date).format('YYYY/MM/DD');
 }
 
+export function formatDateTime(date: any) {
+  return moment(date).format('YYYY/MM/DD HH:mm');
+}
+
 export function formatDbDate(date: any) {
   return moment(date).format('YYYY-MM-DD');
 }

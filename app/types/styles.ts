@@ -1,3 +1,6 @@
+import { Department } from "./department";
+import { User } from "./users";
+
 export interface Style {
   id: string;
   control_number: string;
@@ -78,4 +81,20 @@ export interface StyleBundle {
   style?: Style;
   style_planned_fabric?: StylePlannedFabric;
   style_planned_fabric_size?: StylePlannedFabricSize;
+}
+
+export interface StyleBundleEntryLog {
+  style_bundle_id?: string;
+  entry_time?: string;
+  exit_time?: string;
+  department_id?: string;
+  entry_by_user_id?: string;
+  exit_by_user_id?: string;
+  returned?: string;
+  remarks?: string;
+  style_bundle?: StyleBundle;
+  entry_by_user?: User;
+  exit_by_user?: User;
+  past_log?: boolean; // Temporary not part of the model Will appear only during logging
+  department?: Department;
 }
