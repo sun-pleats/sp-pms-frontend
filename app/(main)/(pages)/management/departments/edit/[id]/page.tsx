@@ -46,8 +46,8 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
   };
 
   return (
-    <div className="grid">
-      <div className="col-6">
+    <div className="grid justify-content-center">
+      <div className="col-12 lg:col-6">
         <PageCard
           title="Edit Department"
           toolbar={<PageAction actionBack={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[PageActions.BACK]} />}

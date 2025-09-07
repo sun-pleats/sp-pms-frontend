@@ -42,8 +42,8 @@ const CreateSectionPage = () => {
   };
 
   return (
-    <div className="grid">
-      <div className="col-12 md:col-6">
+    <div className="grid justify-content-center">
+      <div className="col-12 lg:col-6">
         <PageCard title="Create Section" toolbar={<PageAction actionBack={() => router.push(ROUTES.SECTION.INDEX)} actions={[PageActions.BACK]} />}>
           <div className="grid">
             <div className="col-12">

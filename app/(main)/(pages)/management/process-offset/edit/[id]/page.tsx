@@ -46,8 +46,8 @@ const EditProcessOffsetPage = ({ params }: EditProcessOffsetPageProps) => {
   }, [params?.id, getProcessOffset]);
 
   return (
-    <div className="grid">
-      <div className="col-6">
+    <div className="grid justify-content-center">
+      <div className="col-12 lg:col-6">
         <PageCard
           title="Edit ProcessOffset"
           toolbar={<PageAction actionBack={() => router.push(ROUTES.PROCESS_OFFSETS.INDEX)} actions={[PageActions.BACK]} />}

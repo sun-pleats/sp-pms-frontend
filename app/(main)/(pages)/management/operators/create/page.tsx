@@ -44,8 +44,8 @@ const CreateOperatorPage = () => {
   };
 
   return (
-    <div className="grid">
-      <div className="col-12 md:col-6">
+    <div className="grid justify-content-center">
+      <div className="col-12 lg:col-6">
         <PageCard
           title="Create Operator"
           toolbar={<PageAction actionBack={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[PageActions.BACK]} />}

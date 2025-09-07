@@ -40,7 +40,7 @@ const FormAction = ({
         <Button loading={loadingBack} onClick={actionBack} type="button" label="Back" severity={'secondary'} icon="pi pi-arrow-left" />
       )}
       {actions?.includes(FormActions.CANCEL) && (
-        <Button onClick={actionCancel} loading={loadingCancel} type="button" label="Cancel" severity={'secondary'} icon="pi pi-times" />
+        <Button onClick={actionCancel} loading={loadingCancel} type="button" style={{ minWidth: '110px' }} label="Cancel" severity={'secondary'} icon="pi pi-times" />
       )}
 
       {actions?.includes(FormActions.SAVE) && (

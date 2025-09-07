@@ -57,8 +57,8 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
   }, []);
 
   return (
-    <div className="grid">
-      <div className="col-6">
+    <div className="grid justify-content-center">
+      <div className="col-12 lg:col-6">
         <PageCard title="Edit Section" toolbar={<PageAction actionBack={() => router.push(ROUTES.SECTION.INDEX)} actions={[PageActions.BACK]} />}>
           <div className="grid">
             <div className="col-12">

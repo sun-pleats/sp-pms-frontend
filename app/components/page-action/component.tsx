@@ -16,7 +16,7 @@ interface PageActionProps {
 const PageAction = ({ actions, actionBack, actionAdd, actionUpload, children }: PageActionProps) => {
   return (
     <>
-      {actions?.includes(PageActions.BACK) && <Button onClick={actionBack} label="Back" icon="pi pi-arrow-left" style={{ marginRight: '.5em' }} />}
+      {actions?.includes(PageActions.BACK) && <Button onClick={actionBack} outlined severity="secondary" label="Back" icon="pi pi-arrow-left" style={{ marginRight: '.5em' }} />}
       {actions?.includes(PageActions.ADD) && <Button onClick={actionAdd} label="New" icon="pi pi-plus" style={{ marginRight: '.5em' }} />}
       {actions?.includes(PageActions.UPLAOD) && (
         <Button onClick={actionUpload} severity="help" label="Upload" icon="pi pi-upload" style={{ marginRight: '.5em' }} />
