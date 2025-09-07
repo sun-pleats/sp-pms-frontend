@@ -1,4 +1,3 @@
-import { DepartmentService } from '@/app/services/DepartmentService';
 import UserService from '@/app/services/UserService';
 import { DefaultFormData } from '@/app/types/form';
 import { useState } from 'react';
@@ -15,7 +14,8 @@ export const useUserPage = () => {
         password: e.password,
         role: e.user_type,
         username: e.username,
-        status: 'active'
+        status: 'active',
+        barcode_id: e.barcode_id,
       });
       return response;
     } catch (error) {
@@ -33,7 +33,8 @@ export const useUserPage = () => {
         password: e.password,
         role: e.user_type,
         username: e.username,
-        status: 'active'
+        status: 'active',
+        barcode_id: e.barcode_id,
       });
       return response;
     } catch (error) {

@@ -1,26 +1,25 @@
 'use client';
-import React, { useContext } from 'react';
-import PageCard from '@/app/components/page-card/component';
-import PageAction, { PageActions } from '@/app/components/page-action/component';
+
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
 import { useRouter } from 'next/navigation';
-import FormUser from '@/app/components/users/FormUser';
-import FormAction, { FormActions } from '@/app/components/form-action/component';
-import UserService from '@/app/services/UserService';
-import { LayoutContext, LayoutProvider } from '@/layout/context/layoutcontext';
-import type { AxiosError } from 'axios';
 import { useUserPage } from '../hooks/useUserPage';
+import FormAction, { FormActions } from '@/app/components/form-action/component';
+import FormUser from '@/app/components/users/FormUser';
+import PageAction, { PageActions } from '@/app/components/page-action/component';
+import PageCard from '@/app/components/page-card/component';
+import React, { useContext } from 'react';
 
 const CreateUserPage = () => {
   const router = useRouter();
   const userTypes: SelectItem[] = [
     { label: 'Operator', value: 'operator' },
     { label: 'Administrator', value: 'administrator' },
-    { label: 'Manager', value: 'manager' }
+    { label: 'Manager', value: 'manager' },
+    { label: 'Bundle Logger', value: 'bundle-logger' }
   ];
 
-  
   const { saveUser, isSaveLoading } = useUserPage();
   const { showApiError, showSuccess } = useContext(LayoutContext);
 

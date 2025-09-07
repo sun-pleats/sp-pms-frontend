@@ -5,9 +5,7 @@ import FormDropdown from '../form/dropdown/component';
 import FormInputText from '../form/input-text/component';
 import { UserForm } from '@/app/types/users';
 import { useEffect } from 'react';
-import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 interface FormUserProps {
   userTypes: SelectItem[];
@@ -22,6 +20,7 @@ type FormData = {
   email: string;
   password: string;
   user_type: string;
+  barcode_id?: string;
 };
 
 const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) => {
@@ -42,7 +41,8 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
         email: value?.email,
         username: value?.username,
         password: '',
-        user_type: value?.role
+        user_type: value?.role,
+        barcode_id: '',
       });
     }
   }, [value, reset]);
@@ -62,7 +62,6 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
           />
         )}
       />
-
       <Controller
         name="email"
         control={control}
@@ -117,6 +116,19 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
             errorMessage={fieldState.error?.message}
             isError={!!fieldState.error}
             options={userTypes}
+          />
+        )}
+      />
+      <Controller
+        name="barcode_id"
+        control={control}
+        rules={{ required: 'Barcode id is required' }}
+        render={({ field, fieldState }) => (
+          <FormInputText
+            {...field}
+            label="Employee Barcode ID"
+            errorMessage={fieldState.error?.message}
+            isError={!!fieldState.error}
           />
         )}
       />
