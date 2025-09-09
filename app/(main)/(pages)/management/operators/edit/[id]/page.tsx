@@ -60,7 +60,7 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
   };
 
   return (
-    <div className="grid justify-content-center">
+    <div className="grid justify-content-start">
       <div className="col-12 lg:col-6">
         <PageCard title="Edit Operator" toolbar={<PageAction actionBack={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[PageActions.BACK]} />}>
           <div className="grid">

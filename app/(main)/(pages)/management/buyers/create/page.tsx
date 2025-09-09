@@ -5,47 +5,47 @@ import PageAction, { PageActions } from '@/app/components/page-action/component'
 import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
 import FormAction, { FormActions } from '@/app/components/form-action/component';
-import FormProcess from '@/app/components/processes/FormProcess';
-import { useProcessPage } from '../hooks/useProcessPage';
+import FormBuyer from '@/app/components/buyers/FormBuyer';
+import { useBuyerPage } from '../hooks/useBuyerPage';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { DefaultFormData } from '@/app/types/form';
 
-const CreateProcessPage = () => {
+const CreateBuyerPage = () => {
   const router = useRouter();
 
-  const { saveProcess, isSaveLoading } = useProcessPage();
+  const { saveBuyer, isSaveLoading } = useBuyerPage();
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const handleSubmit = async (data: DefaultFormData) => {
     try {
-      await saveProcess(data);
-      showSuccess('Process offset successfully created.');
+      await saveBuyer(data);
+      showSuccess('Buyer offset successfully created.');
       setTimeout(() => {
-        router.push(ROUTES.PROCESS.INDEX);
+        router.push(ROUTES.BUYER.INDEX);
       }, 2000);
     } catch (error: any) {
-      showApiError(error, 'Failed to process offset.');
+      showApiError(error, 'Failed to buyer offset.');
     }
   };
 
   return (
     <div className="grid justify-content-start">
       <div className="col-12 lg:col-6">
-        <PageCard title="Create Process" toolbar={<PageAction actionBack={() => router.push(ROUTES.PROCESS.INDEX)} actions={[PageActions.BACK]} />}>
+        <PageCard title="Create Buyer" toolbar={<PageAction actionBack={() => router.push(ROUTES.BUYER.INDEX)} actions={[PageActions.BACK]} />}>
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormProcess onSubmit={handleSubmit}>
+                <FormBuyer onSubmit={handleSubmit}>
                   <div className="flex">
                     <div className="ml-auto">
                       <FormAction
                         loadingSave={isSaveLoading}
-                        actionCancel={() => router.push(ROUTES.PROCESS_OFFSETS.INDEX)}
+                        actionCancel={() => router.push(ROUTES.BUYER_OFFSETS.INDEX)}
                         actions={[FormActions.CANCEL, FormActions.SAVE]}
                       />
                     </div>
                   </div>
-                </FormProcess>
+                </FormBuyer>
               </div>
             </div>
           </div>
@@ -55,4 +55,4 @@ const CreateProcessPage = () => {
   );
 };
 
-export default CreateProcessPage;
+export default CreateBuyerPage;

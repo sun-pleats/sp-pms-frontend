@@ -41,3 +41,16 @@ export interface OperatorProcess {
     [time: string]: number | string | undefined;
   };
 }
+
+export interface OperatorBuyer {
+  id?: string | number;
+  operator_id?: string;
+  operator?: Operator;
+  process_id?: string;
+  process_name?: string;
+  total_output?: number;
+  target?: number;
+  outputs?: {
+    [time: string]: number | string | undefined;
+  };
+}

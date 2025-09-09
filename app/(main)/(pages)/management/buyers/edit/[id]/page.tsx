@@ -1,67 +1,67 @@
 'use client';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { ProcessForm } from '@/app/types/process';
-import { ProcessService } from '@/app/services/ProcessService';
+import { BuyerForm } from '@/app/types/buyers';
+import { BuyerService } from '@/app/services/BuyerService';
 import { ROUTES } from '@/app/constants/routes';
-import { useProcessPage } from '../../hooks/useProcessPage';
+import { useBuyerPage } from '../../hooks/useBuyerPage';
 import { useRouter } from 'next/navigation';
 import FormAction, { FormActions } from '@/app/components/form-action/component';
-import FormProcess from '@/app/components/processes/FormProcess';
+import FormBuyer from '@/app/components/buyers/FormBuyer';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import PageCard from '@/app/components/page-card/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 
-interface EditProcessPageProps {
+interface EditBuyerPageProps {
   params?: { id: any };
 }
 
-const EditProcessPage = ({ params }: EditProcessPageProps) => {
+const EditBuyerPage = ({ params }: EditBuyerPageProps) => {
   const router = useRouter();
-  const { updateProcess, isSaveLoading } = useProcessPage();
+  const { updateBuyer, isSaveLoading } = useBuyerPage();
   const { showApiError, showSuccess } = useContext(LayoutContext);
-  const [process, setProcess] = useState<ProcessForm | undefined>();
+  const [buyer, setBuyer] = useState<BuyerForm | undefined>();
 
-  const getProcess = useCallback(async () => {
-    setProcess((await ProcessService.getProcess(params?.id)).data as ProcessForm);
+  const getBuyer = useCallback(async () => {
+    setBuyer((await BuyerService.getBuyer(params?.id)).data as BuyerForm);
   }, [params?.id]);
 
-  const handleSubmit = async (data: ProcessForm) => {
+  const handleSubmit = async (data: BuyerForm) => {
     try {
-      await updateProcess(params?.id as string, data);
-      showSuccess('Process successfully created.');
+      await updateBuyer(params?.id as string, data);
+      showSuccess('Buyer successfully created.');
       setTimeout(() => {
-        router.push(ROUTES.PROCESS.INDEX);
+        router.push(ROUTES.BUYER.INDEX);
       }, 2000);
     } catch (error: any) {
-      showApiError(error, 'Failed to save process.');
+      showApiError(error, 'Failed to save buyer.');
     }
     console.log('handleSubmit', data);
   };
 
   useEffect(() => {
     if (params?.id) {
-      getProcess();
+      getBuyer();
     }
-  }, [params?.id, getProcess]);
+  }, [params?.id, getBuyer]);
 
   return (
     <div className="grid justify-content-start">
       <div className="col-12 lg:col-6">
-        <PageCard title="Edit Process" toolbar={<PageAction actionBack={() => router.push(ROUTES.PROCESS.INDEX)} actions={[PageActions.BACK]} />}>
+        <PageCard title="Edit Buyer" toolbar={<PageAction actionBack={() => router.push(ROUTES.BUYER.INDEX)} actions={[PageActions.BACK]} />}>
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormProcess value={process} onSubmit={handleSubmit}>
+                <FormBuyer value={buyer} onSubmit={handleSubmit}>
                   <div className="flex">
                     <div className="ml-auto">
                       <FormAction
                         loadingSave={isSaveLoading}
-                        actionCancel={() => router.push(ROUTES.PROCESS.INDEX)}
+                        actionCancel={() => router.push(ROUTES.BUYER.INDEX)}
                         actions={[FormActions.CANCEL, FormActions.UPDATE]}
                       />
                     </div>
                   </div>
-                </FormProcess>
+                </FormBuyer>
               </div>
             </div>
           </div>
@@ -71,4 +71,4 @@ const EditProcessPage = ({ params }: EditProcessPageProps) => {
   );
 };
 
-export default EditProcessPage;
+export default EditBuyerPage;
