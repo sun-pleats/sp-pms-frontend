@@ -30,7 +30,8 @@ const AppMenu = () => {
         { label: 'Sections', icon: 'pi pi-fw pi-sitemap', to: '/management/sections' },
         { label: 'Operators', icon: 'pi pi-fw pi-users', to: '/management/operators' },
         { label: 'Processes', icon: 'pi pi-fw pi-cog', to: '/management/processes' },
-        { label: 'Process Offset', icon: 'pi pi-fw pi-sliders-h', to: '/management/process-offset' }
+        { label: 'Process Offset', icon: 'pi pi-fw pi-sliders-h', to: '/management/process-offset' },
+        { label: 'Buyers', icon: 'pi pi-fw pi-users', to: '/management/buyers' }
       ]
     },
     {

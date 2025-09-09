@@ -15,6 +15,11 @@ export const ROUTES = {
     CREATE: '/management/processes/create',
     EDIT: '/management/processes/edit'
   },
+  BUYER: {
+    INDEX: '/management/buyers',
+    CREATE: '/management/buyers/create',
+    EDIT: '/management/buyers/edit'
+  },
   OPERATORS: {
     INDEX: '/management/operators',
     CREATE: '/management/operators/create',
