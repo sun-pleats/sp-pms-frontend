@@ -46,7 +46,7 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
   };
 
   return (
-    <div className="grid justify-content-center">
+    <div className="grid justify-content-start">
       <div className="col-12 lg:col-6">
         <PageCard
           title="Edit Department"

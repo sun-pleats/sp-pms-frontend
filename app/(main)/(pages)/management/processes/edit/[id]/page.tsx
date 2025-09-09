@@ -45,7 +45,7 @@ const EditProcessPage = ({ params }: EditProcessPageProps) => {
   }, [params?.id, getProcess]);
 
   return (
-    <div className="grid justify-content-center">
+    <div className="grid justify-content-start">
       <div className="col-12 lg:col-6">
         <PageCard title="Edit Process" toolbar={<PageAction actionBack={() => router.push(ROUTES.PROCESS.INDEX)} actions={[PageActions.BACK]} />}>
           <div className="grid">
