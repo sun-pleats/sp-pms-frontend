@@ -16,7 +16,7 @@ const PageHeader = ({ titles, children }: PageHeaderProps) => {
   return (
     <div className="flex items-center justify-between pb-4 w-full">
       {/* Left side: Breadcrumb */}
-      <BreadCrumb model={items} home={home} className={`w-full ` + (children && `mr-3`) } />
+      <BreadCrumb model={items} home={home} className={`w-full ` + (children && `mr-3`)} />
 
       {children && (
         <>

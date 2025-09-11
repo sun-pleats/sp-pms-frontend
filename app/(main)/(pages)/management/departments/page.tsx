@@ -104,7 +104,7 @@ const DepartmentsPage = () => {
       </>
     );
   };
-  
+
   const handleDelete = async () => {
     try {
       await DepartmentService.deleteDepartment(pageState.deleteId as string);

@@ -35,7 +35,7 @@ const UsersPage = () => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
-        
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter({ keyword: e.target.value });
   };
@@ -51,13 +51,16 @@ const UsersPage = () => {
     return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchUsers = useCallback(async (keyword?: string) => {
-    setLoading(true);
-    const search = keyword?.trim() || filter.keyword?.trim() || '';
-    const { data } = await UserService.getUsers(search ? { search } : {});
-    setUsers(getUsers(data.data));
-    setLoading(false);
-  }, [filter.keyword]);
+  const fetchUsers = useCallback(
+    async (keyword?: string) => {
+      setLoading(true);
+      const search = keyword?.trim() || filter.keyword?.trim() || '';
+      const { data } = await UserService.getUsers(search ? { search } : {});
+      setUsers(getUsers(data.data));
+      setLoading(false);
+    },
+    [filter.keyword]
+  );
 
   useEffect(() => {
     fetchUsers();
@@ -113,7 +116,7 @@ const UsersPage = () => {
       </>
     );
   };
-    
+
   const handleDelete = async () => {
     try {
       await UserService.deleteUser(pageState.deleteId as string);

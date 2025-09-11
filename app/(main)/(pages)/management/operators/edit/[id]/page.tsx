@@ -27,14 +27,14 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
 
   const { isSectionLoading, fetchSectionOptions, isProcessLoading, fetchProcessOptions } = useUtilityData();
 
-   useEffect(() => {
-     initData();
-   }, []);
- 
-   const initData = () => {
-     fetchSectionOptions().then((data: SelectItem[]) => setLines(data));
-     fetchProcessOptions().then((data: SelectItem[]) => setProcesses(data));
-   };
+  useEffect(() => {
+    initData();
+  }, []);
+
+  const initData = () => {
+    fetchSectionOptions().then((data: SelectItem[]) => setLines(data));
+    fetchProcessOptions().then((data: SelectItem[]) => setProcesses(data));
+  };
 
   const getOperator = useCallback(async () => {
     setOperator((await OperatorService.getOperator(params?.id)).data as OperatorForm);
@@ -45,7 +45,7 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
       getOperator();
     }
   }, [params?.id, getOperator]);
-  
+
   const handleSubmit = async (data: OperatorForm) => {
     try {
       await updateOperator(params?.id as string, data);
@@ -66,15 +66,14 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormOperator 
-                  processesOptions={processes} 
-                  lines={lines} 
-                  value={operator} 
-                  onSubmit={handleSubmit}
-                >
+                <FormOperator processesOptions={processes} lines={lines} value={operator} onSubmit={handleSubmit}>
                   <div className="flex mt-2">
                     <div className="ml-auto">
-                      <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                      <FormAction
+                        loadingSave={isSaveLoading}
+                        actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)}
+                        actions={[FormActions.CANCEL, FormActions.UPDATE]}
+                      />
                     </div>
                   </div>
                 </FormOperator>

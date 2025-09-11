@@ -37,7 +37,7 @@ const EditUserPage = ({ params }: EditUserPageProps) => {
       getUser();
     }
   }, [params?.id, getUser]);
-    
+
   const handleSubmit = async (data: User) => {
     try {
       await updateUser(params?.id as string, data);
@@ -61,7 +61,11 @@ const EditUserPage = ({ params }: EditUserPageProps) => {
                 <FormUser value={user} userTypes={userTypes} onSubmit={handleSubmit}>
                   <div className="flex">
                     <div className="ml-auto">
-                      <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.USERS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                      <FormAction
+                        loadingSave={isSaveLoading}
+                        actionCancel={() => router.push(ROUTES.USERS.INDEX)}
+                        actions={[FormActions.CANCEL, FormActions.UPDATE]}
+                      />
                     </div>
                   </div>
                 </FormUser>

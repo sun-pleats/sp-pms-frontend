@@ -122,9 +122,9 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
     }
   };
 
-  const loadFabricBundles = async() => {
-    StyleBundleService.getStyleBundles(selectedStyleNumber?.value.toString() ?? '')
-  }
+  const loadFabricBundles = async () => {
+    StyleBundleService.getStyleBundles(selectedStyleNumber?.value.toString() ?? '');
+  };
 
   useEffect(() => {
     setState({ ...state, show: visible });

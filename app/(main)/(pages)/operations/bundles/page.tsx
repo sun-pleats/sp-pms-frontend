@@ -175,7 +175,7 @@ const BundlesPage = () => {
         <Column field="style.ship_date_from_cebu" header="Cebu Date" />
         <Column field="style.ship_date_from_japan" header="Japan Date" />
         <Column header="Color" field="style_planned_fabric.color" />
-        <Column field="roll_number" header="Roll No."   />
+        <Column field="roll_number" header="Roll No." />
         <Column header="Size" field="style_planned_fabric_size.size_number" />
         <Column field="quantity" header="Quantity" />
         <Column field="quantity" header="Location" />

@@ -37,7 +37,7 @@ const OperatorsPage = () => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
-  
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter({ keyword: e.target.value });
   };
@@ -53,13 +53,16 @@ const OperatorsPage = () => {
     return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchOperators = useCallback(async (keyword?: string) => {
-    setLoading(true);
-    const search = keyword?.trim() || filter.keyword?.trim() || '';
-    const { data } = await OperatorService.getOperators(search ? { search } : {});
-    setOperators(getOperators(data.data ?? []));
-    setLoading(false);
-  }, [filter.keyword]);
+  const fetchOperators = useCallback(
+    async (keyword?: string) => {
+      setLoading(true);
+      const search = keyword?.trim() || filter.keyword?.trim() || '';
+      const { data } = await OperatorService.getOperators(search ? { search } : {});
+      setOperators(getOperators(data.data ?? []));
+      setLoading(false);
+    },
+    [filter.keyword]
+  );
 
   useEffect(() => {
     fetchOperators();
@@ -118,7 +121,7 @@ const OperatorsPage = () => {
       </>
     );
   };
-    
+
   const handleDelete = async () => {
     try {
       await OperatorService.deleteOperator(pageState.deleteId as string);

@@ -44,7 +44,7 @@ const FormOperator = ({ value, onSubmit, children, lines, processesOptions, load
       reset({
         name: value?.name,
         section_id: value?.section_id,
-        process_ids: value?.operator_processes?.map((p) => p.id) || [] 
+        process_ids: value?.operator_processes?.map((p) => p.id) || []
       });
     }
   }, [value]);

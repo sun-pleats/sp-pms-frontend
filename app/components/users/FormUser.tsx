@@ -42,7 +42,7 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
         username: value?.username,
         password: '',
         user_type: value?.role,
-        barcode_id: '',
+        barcode_id: ''
       });
     }
   }, [value, reset]);
@@ -54,12 +54,7 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
         control={control}
         rules={{ required: 'Name is required' }}
         render={({ field, fieldState }) => (
-          <FormInputText
-            {...field}
-            label="Employee Name"
-            errorMessage={fieldState.error?.message}
-            isError={!!fieldState.error}
-          />
+          <FormInputText {...field} label="Employee Name" errorMessage={fieldState.error?.message} isError={!!fieldState.error} />
         )}
       />
       <Controller
@@ -67,13 +62,7 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
         control={control}
         rules={{ required: 'Email is required' }}
         render={({ field, fieldState }) => (
-          <FormInputText
-            {...field}
-            label="Email"
-            type="email"
-            errorMessage={fieldState.error?.message}
-            isError={!!fieldState.error}
-          />
+          <FormInputText {...field} label="Email" type="email" errorMessage={fieldState.error?.message} isError={!!fieldState.error} />
         )}
       />
       <Controller
@@ -81,12 +70,7 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
         control={control}
         rules={{ required: 'Username is required' }}
         render={({ field, fieldState }) => (
-          <FormInputText
-            {...field}
-            label="Username"
-            errorMessage={fieldState.error?.message}
-            isError={!!fieldState.error}
-          />
+          <FormInputText {...field} label="Username" errorMessage={fieldState.error?.message} isError={!!fieldState.error} />
         )}
       />
       <Controller
@@ -94,13 +78,7 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
         control={control}
         rules={{ required: 'Password is required' }}
         render={({ field, fieldState }) => (
-          <FormInputText
-            {...field}
-            label="Password"
-            type="password"
-            errorMessage={fieldState.error?.message}
-            isError={!!fieldState.error}
-          />
+          <FormInputText {...field} label="Password" type="password" errorMessage={fieldState.error?.message} isError={!!fieldState.error} />
         )}
       />
       <Controller
@@ -124,12 +102,7 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
         control={control}
         rules={{ required: 'Barcode id is required' }}
         render={({ field, fieldState }) => (
-          <FormInputText
-            {...field}
-            label="Employee Barcode ID"
-            errorMessage={fieldState.error?.message}
-            isError={!!fieldState.error}
-          />
+          <FormInputText {...field} label="Employee Barcode ID" errorMessage={fieldState.error?.message} isError={!!fieldState.error} />
         )}
       />
 

@@ -31,10 +31,11 @@ const TableHeader = ({ onClear, children, searchValue, onSearchChange }: TableHe
           <InputText value={searchValue} onChange={onSearchChange} placeholder="Keyword Search" className="w-full" />
           <InputIcon
             className="pi pi-times cursor-pointer"
-            style={{ 
-              right: '0.75rem', 
-              position: 'absolute', 
-              display: typeof searchValue === 'string' && searchValue.length > 0 ? '' : 'none' }}
+            style={{
+              right: '0.75rem',
+              position: 'absolute',
+              display: typeof searchValue === 'string' && searchValue.length > 0 ? '' : 'none'
+            }}
             onClick={onClear}
           />
         </IconField>

@@ -57,10 +57,10 @@ export const useProductionOperations = () => {
 
   const operatorsOption = React.useMemo<SelectItem[]>(() => {
     return operators
-      .filter(r => r.section_id === trackFilter.section_id)
-      .map(r => ({ label: r.name, value: r.id }))
+      .filter((r) => r.section_id === trackFilter.section_id)
+      .map((r) => ({ label: r.name, value: r.id }))
       .reduce<SelectItem[]>((acc, curr) => {
-        if (!acc.some(item => item.value === curr.value)) {
+        if (!acc.some((item) => item.value === curr.value)) {
           acc.push(curr);
         }
         return acc;
@@ -98,13 +98,14 @@ export const useProductionOperations = () => {
 
   const getProcessOptions = (rowIndex: number): SelectItem[] => {
     const option = items[rowIndex];
-    return (operators?.find((s) => s.id == option.operator_id)?.operator_processes?.map((p) => ({ value: p.process.id, label: p.process.name })) ?? [])
-      .reduce<SelectItem[]>((acc, curr) => {
-        if (!acc.some(item => item.value === curr.value)) {
-          acc.push(curr);
-        }
-        return acc;
-      }, []);;
+    return (
+      operators?.find((s) => s.id == option.operator_id)?.operator_processes?.map((p) => ({ value: p.process.id, label: p.process.name })) ?? []
+    ).reduce<SelectItem[]>((acc, curr) => {
+      if (!acc.some((item) => item.value === curr.value)) {
+        acc.push(curr);
+      }
+      return acc;
+    }, []);
   };
 
   const storeTracks = async (e: FormData) => {
@@ -136,7 +137,7 @@ export const useProductionOperations = () => {
       setLoading({ duplicatingTracks: true });
       const dateNow = moment(trackFilter.date);
       const dateNext = dateNow.clone().add('day', 1);
-      await ProductionTrackService.duplicate(trackFilter.section_id,dateNow.toDate(), dateNext.toDate());
+      await ProductionTrackService.duplicate(trackFilter.section_id, dateNow.toDate(), dateNext.toDate());
       showSuccess('Production processes duplicated successfully.');
     } catch (e: any) {
       showApiError(e, 'Error duplicating production process.');
@@ -165,7 +166,7 @@ export const useProductionOperations = () => {
           process_id: d.process_id,
           target: d.target,
           remarks: d.remarks,
-          time: d.time,
+          time: d.time
         });
       });
       addNewItem();
@@ -223,14 +224,13 @@ export const useProductionOperations = () => {
   };
 
   const updateOperatorTime = (rowIndex: number) => {
-
     const operatorId = String(getValues(`tracks.${rowIndex}.operator_id`));
     const processId = String(getValues(`tracks.${rowIndex}.process_id`));
     const current = getValues(`tracks.${rowIndex}`);
-    const process = operators.find(r => r.id == operatorId.toString())?.operator_processes?.find(r => r.process_id?.toString() == processId);
+    const process = operators.find((r) => r.id == operatorId.toString())?.operator_processes?.find((r) => r.process_id?.toString() == processId);
 
-    update(rowIndex, { ...current, time: (process?.time || 0) });
-  }
+    update(rowIndex, { ...current, time: process?.time || 0 });
+  };
 
   return {
     onProcessDeleteClick,

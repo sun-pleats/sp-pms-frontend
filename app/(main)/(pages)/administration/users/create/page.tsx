@@ -45,7 +45,11 @@ const CreateUserPage = () => {
                 <FormUser userTypes={userTypes} onSubmit={handleSubmit}>
                   <div className="flex">
                     <div className="ml-auto">
-                      <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.USERS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
+                      <FormAction
+                        loadingSave={isSaveLoading}
+                        actionCancel={() => router.push(ROUTES.USERS.INDEX)}
+                        actions={[FormActions.CANCEL, FormActions.SAVE]}
+                      />
                     </div>
                   </div>
                 </FormUser>

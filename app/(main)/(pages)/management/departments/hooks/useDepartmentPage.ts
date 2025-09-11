@@ -20,7 +20,7 @@ export const useDepartmentPage = () => {
 
   const updateDepartment = async (id: string, e: DefaultFormData) => {
     try {
-      setIsSaveLoading(true);      
+      setIsSaveLoading(true);
       const response = await DepartmentService.updateDepartment(id, {
         name: e.name
       });

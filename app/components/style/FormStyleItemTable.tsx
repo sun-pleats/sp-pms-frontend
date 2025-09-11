@@ -72,7 +72,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
       emptyMessage="No items provided."
     >
       <Column
-        className='field-mb-0'
+        className="field-mb-0"
         field="item_name"
         header="Item"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -92,7 +92,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
         )}
       />
       <Column
-        className='field-mb-0'
+        className="field-mb-0"
         field="item_number"
         header="Item No."
         body={(_row: any, options: { rowIndex: number }) => (
@@ -107,7 +107,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
         )}
       />
       <Column
-        className='field-mb-0'
+        className="field-mb-0"
         field="specs_qty"
         header="Specs"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -129,7 +129,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
       />
 
       <Column
-        className='field-mb-0'
+        className="field-mb-0"
         field="specs_unit"
         header="Specs"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -144,7 +144,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
         )}
       />
       <Column
-        className='field-mb-0'
+        className="field-mb-0"
         field="youjyaku_qty"
         header="Youjyaku"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -166,7 +166,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
       />
 
       <Column
-        className='field-mb-0'
+        className="field-mb-0"
         field="youjyaku_unit"
         header="Specs"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -182,7 +182,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
       />
 
       <Column
-        className='field-mb-0'
+        className="field-mb-0"
         field="color_detail"
         header="Color Details"
         body={(_row: any, options: { rowIndex: number }) => (

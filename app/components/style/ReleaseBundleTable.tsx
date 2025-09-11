@@ -80,7 +80,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
       return;
     }
     field.onChange(e);
-  }
+  };
 
   const onAddOperatorClick = () => {
     addNewItem();

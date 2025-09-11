@@ -45,7 +45,7 @@ const ProductionOperationPage = () => {
     storeTracks,
     fetchTracks,
     updateOperatorTime,
-    duplicateTracks,
+    duplicateTracks
   } = useProductionOperations();
 
   useEffect(() => {
@@ -168,8 +168,8 @@ const ProductionOperationPage = () => {
               type="button"
               size="small"
               className="mt-2"
-               title="Add Process"
-              icon="pi pi-plus" 
+              title="Add Process"
+              icon="pi pi-plus"
             />
             <Button
               disabled={!trackFilter.section_id}
@@ -179,7 +179,7 @@ const ProductionOperationPage = () => {
               type="submit"
               className="mt-2"
               title="Save"
-              icon="pi pi-save" 
+              icon="pi pi-save"
             />
             <Button
               disabled={!trackFilter.section_id}
@@ -243,8 +243,8 @@ const ProductionOperationPage = () => {
                       value={field.value}
                       filter
                       onChange={(e: any) => {
-                         field.onChange(e.value);
-                         updateOperatorTime(options.rowIndex);
+                        field.onChange(e.value);
+                        updateOperatorTime(options.rowIndex);
                       }}
                       placeholder="Select"
                       errorMessage={fieldState.error?.message}
@@ -255,7 +255,7 @@ const ProductionOperationPage = () => {
                 />
               )}
             />
-             <Column
+            <Column
               field="time"
               header="Time"
               body={(_row: any, options: { rowIndex: number }) => (

@@ -15,7 +15,7 @@ export const useUserPage = () => {
         role: e.user_type,
         username: e.username,
         status: 'active',
-        barcode_id: e.barcode_id,
+        barcode_id: e.barcode_id
       });
       return response;
     } catch (error) {
@@ -34,14 +34,14 @@ export const useUserPage = () => {
         role: e.user_type,
         username: e.username,
         status: 'active',
-        barcode_id: e.barcode_id,
+        barcode_id: e.barcode_id
       });
       return response;
     } catch (error) {
       setIsSaveLoading(false);
       throw error;
     }
-  }
+  };
 
   return {
     saveUser,

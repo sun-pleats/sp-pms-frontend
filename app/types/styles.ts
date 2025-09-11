@@ -1,5 +1,5 @@
-import { Department } from "./department";
-import { User } from "./users";
+import { Department } from './department';
+import { User } from './users';
 
 export interface Style {
   id: string;

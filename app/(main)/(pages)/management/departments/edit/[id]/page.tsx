@@ -31,7 +31,7 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
       getDepartment();
     }
   }, [params?.id, getDepartment]);
-  
+
   const handleSubmit = async (data: DepartmentForm) => {
     try {
       await updateDepartment(params?.id as string, data);
@@ -58,7 +58,11 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
                 <FormDepartment value={department} onSubmit={handleSubmit}>
                   <div className="flex">
                     <div className="ml-auto">
-                      <FormAction  loadingSave={isSaveLoading}  actionCancel={() => router.push(ROUTES.DEPARTMENTS.INDEX)} actions={[FormActions.CANCEL, FormActions.UPDATE]} />
+                      <FormAction
+                        loadingSave={isSaveLoading}
+                        actionCancel={() => router.push(ROUTES.DEPARTMENTS.INDEX)}
+                        actions={[FormActions.CANCEL, FormActions.UPDATE]}
+                      />
                     </div>
                   </div>
                 </FormDepartment>
