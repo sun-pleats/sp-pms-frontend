@@ -79,11 +79,20 @@ const FormSection = ({ onSubmit, children, departments, value, loading }: FormSe
       />
 
       <Controller
-        name="break_time"
+        name="break_time_start"
         control={control}
-        rules={{ required: 'Break time is required' }}
+        rules={{ required: 'Break time start is required' }}
         render={({ fieldState, field }) => (
-          <FormTime {...field} label="Break Time" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+          <FormTime {...field} label="Break Time Start" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+        )}
+      />
+
+      <Controller
+        name="break_time_end"
+        control={control}
+        rules={{ required: 'Break time end is required' }}
+        render={({ fieldState, field }) => (
+          <FormTime {...field} label="Break Time End" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
         )}
       />
 

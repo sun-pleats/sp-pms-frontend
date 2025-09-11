@@ -3,7 +3,8 @@ import { Department } from './department';
 export interface Section {
   id?: string;
   name: string;
-  break_time?: string;
+  break_time_start?: string;
+  break_time_end?: string;
   shift_start?: string;
   shift_end?: string;
   created_by?: string;
@@ -17,7 +18,8 @@ export interface SectionForm {
   id: string;
   name: string;
   department_id?: string;
-  break_time?: string;
+  break_time_start?: string;
+  break_time_end?: string;
   shift_start?: string;
   shift_end?: string;
   created_by?: string;

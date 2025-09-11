@@ -46,6 +46,18 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
     scale: 14
   });
 
+  setTimeout(() => {
+    console.log('ASD');
+    setLayoutConfig({
+      ripple: false,
+      inputStyle: 'outlined',
+      menuMode: 'static',
+      colorScheme: 'dark',
+      theme: 'arya-blue',
+      scale: 14
+    });
+  }, 5000);
+
   const [layoutState, setLayoutState] = useState<LayoutState>({
     staticMenuDesktopInactive: false,
     overlayMenuActive: false,

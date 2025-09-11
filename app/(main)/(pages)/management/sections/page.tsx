@@ -34,7 +34,7 @@ const SectionsPage = () => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
-     
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter({ keyword: e.target.value });
   };
@@ -50,13 +50,16 @@ const SectionsPage = () => {
     return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchSections = useCallback(async (keyword?: string) => {
-    setLoading(true);
-    const search = keyword?.trim() || filter.keyword?.trim() || '';
-    const data = await SectionService.getSections(search ? { search } : {});
-    setSections(getSections(data.data.data ?? []));
-    setLoading(false);
-  }, [filter.keyword]);
+  const fetchSections = useCallback(
+    async (keyword?: string) => {
+      setLoading(true);
+      const search = keyword?.trim() || filter.keyword?.trim() || '';
+      const data = await SectionService.getSections(search ? { search } : {});
+      setSections(getSections(data.data.data ?? []));
+      setLoading(false);
+    },
+    [filter.keyword]
+  );
 
   useEffect(() => {
     fetchSections();
@@ -122,7 +125,8 @@ const SectionsPage = () => {
         <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
         <Column field="department.name" header="Department" style={{ minWidth: '12rem' }} />
-        <Column field="break_time" header="Break Time" style={{ minWidth: '12rem' }} />
+        <Column field="break_time_start" header="Break Time Start" style={{ minWidth: '12rem' }} />
+        <Column field="break_time_end" header="Break Time End" style={{ minWidth: '12rem' }} />
         <Column field="shift_start" header="Shift Start" style={{ minWidth: '12rem' }} />
         <Column field="shift_end" header="Shift End" style={{ minWidth: '12rem' }} />
         <Column field="created_at" header="Created" body={(data: Section) => formatDate(data.created_at)} />

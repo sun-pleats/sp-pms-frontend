@@ -53,7 +53,13 @@ export const ROUTES = {
   PRODUCTION_OPERATION: {
     INDEX: 'production-operations'
   },
-  ROUTE_PATH_LOGIN: '/login'
+  ROUTE_PATH_LOGIN: '/login',
+
+  REPORTS: {
+    PRODUCTION_DAILY_OUTPUT: {
+      INDEX: 'daily-production-output'
+    }
+  }
 };
 
 export const PUBLIC_ROUTES = ['/login', '/kiosk'];

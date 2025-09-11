@@ -13,7 +13,8 @@ export const useSectionPage = () => {
       const response = await SectionService.createSection({
         name: e.name,
         department_id: e.department_id,
-        break_time: format24Hour(e.break_time),
+        break_time_start: format24Hour(e.break_time_start),
+        break_time_end: format24Hour(e.break_time_end),
         shift_end: format24Hour(e.shift_end),
         shift_start: format24Hour(e.shift_start)
       });
@@ -30,7 +31,8 @@ export const useSectionPage = () => {
       const response = await SectionService.updateSection(id, {
         name: e.name,
         department_id: e.department_id,
-        break_time: format24Hour(e.break_time),
+        break_time_start: format24Hour(e.break_time_start),
+        break_time_end: format24Hour(e.break_time_end),
         shift_end: format24Hour(e.shift_end),
         shift_start: format24Hour(e.shift_start)
       });
