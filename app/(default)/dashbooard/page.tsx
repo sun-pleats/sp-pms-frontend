@@ -14,141 +14,48 @@ import Modal from '@/app/components/modal/component';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import useKiosk from './hooks/useDashboard';
 import useUtilityData from '@/app/hooks/useUtilityData';
+import Dashboard from '@/app/(main)/page';
+import DashboardTable from '@/app/components/dashboard/DashboardTable';
+import { BuyerDashboard } from '@/app/types/buyers';
 
 interface StyleDetail {
   name: string;
   value: string;
 }
 
+const buyers: BuyerDashboard[] = [
+  {
+    id: '1',
+    name: 'Buyer 1',
+    current_suply: 1200,
+    target: 1500,
+    actual: 1000,
+    progress_rate: '50%',
+    defects: 10,
+    defects_rate: '10%',
+    balance: 100,
+    created_at: '',
+    updated_at: '',
+  },
+  {
+    id: '2',
+    name: 'Buyer 2',
+    current_suply: 1200,
+    target: 0,
+    actual: 0,
+    progress_rate: '0%',
+    defects: 10,
+    defects_rate: '10%',
+    balance: 0,
+    created_at: '',
+    updated_at: '',
+  }
+];
+
 const LandingPage = () => {
   return (
     <div className='w-full'>
-      <div className='grid grid-col-5 w-full' style={{height: 'calc(100vh / 4)'}}>
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column flex-1 gap-3'>
-            <div className='w-full p-2 text-center'>Current Supply</div>
-            <div className='text-7xl font-bold flex justify-content-center align-items-center' style={{height: 'calc(25vh - 100px)'}}>1200</div>
-          </div>
-        </div>  
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-            <div className='w-full p-2 text-center'>Target</div>
-            <div className='text-7xl font-bold flex justify-content-center align-items-center' style={{height: 'calc(25vh - 100px)'}}></div>
-          </div>
-        </div>  
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-            <div className='w-full p-2 text-center'>Actual</div>
-            <div className='text-7xl font-bold flex justify-content-center align-items-center' style={{height: 'calc(25vh - 100px)'}}></div>
-          </div>
-        </div>  
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-            <div className='w-full p-2 text-center'>Progress Rate</div>
-            <div className='text-7xl font-bold flex justify-content-center align-items-center' style={{height: 'calc(25vh - 100px)'}}></div>
-          </div>
-        </div> 
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column'>
-            <div className='w-full border-1 p-2 text-center'>Defects</div>
-            <div className='text-7xl font-bold border-1 w-full text-center flex justify-content-center align-items-center' style={{height: 'calc(25vh - 60px)'}}>0</div>
-          </div>
-        </div> 
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column'>
-            <div className='w-full border-1 p-2 text-center'>Defects Rate</div>
-            <div className='text-7xl font-bold border-1 w-full text-center flex justify-content-center align-items-center' style={{height: 'calc(25vh - 60px)'}}>0%</div>
-          </div>
-        </div>  
-      </div>
-      <div className='grid grid-col-5 w-full' style={{height: 'calc(100vh / 4)'}}>
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-          </div>
-        </div>  
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-          </div>
-        </div>  
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-            <div className='w-full p-2 text-center'>Balance</div>
-            <div className='text-7xl font-bold flex justify-content-center align-items-center' style={{height: 'calc(25vh - 100px)'}}>0</div>
-          </div>
-        </div>  
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-            <div className='w-full p-2 text-center'>Scan Here</div>
-          </div>
-        </div> 
-        <div className='col-12 lg:col-5 xl:col-4 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column'>
-          </div>
-        </div>  
-      </div>
-      <div className='grid grid-col-5 w-full' style={{height: 'calc(100vh / 4)'}}>
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-            <div className='w-full p-2 text-center'>Current Supply</div>
-            <div className='text-7xl font-bold flex justify-content-center align-items-center' style={{height: 'calc(25vh - 100px)'}}>1200</div>
-          </div>
-        </div>  
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-            <div className='w-full p-2 text-center'>Target</div>
-            <div className='text-7xl font-bold flex justify-content-center align-items-center' style={{height: 'calc(25vh - 100px)'}}></div>
-          </div>
-        </div>  
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-            <div className='w-full p-2 text-center'>Actual</div>
-            <div className='text-7xl font-bold flex justify-content-center align-items-center' style={{height: 'calc(25vh - 100px)'}}></div>
-          </div>
-        </div>  
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-            <div className='w-full p-2 text-center'>Progress Rate</div>
-            <div className='text-7xl font-bold flex justify-content-center align-items-center' style={{height: 'calc(25vh - 100px)'}}></div>
-          </div>
-        </div> 
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column'>
-            <div className='w-full border-1 py-2 text-center'>Defects</div>
-            <div className='text-7xl font-bold border-1 w-full text-center flex justify-content-center align-items-center' style={{height: 'calc(25vh - 60px)'}}>0</div>
-          </div>
-        </div> 
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column'>
-            <div className='w-full border-1 py-2 text-center'>Defects Rate</div>
-            <div className='text-7xl font-bold border-1 w-full text-center flex justify-content-center align-items-center' style={{height: 'calc(25vh - 60px)'}}>0%</div>
-          </div>
-        </div>  
-      </div>
-      <div className='grid grid-col-5 w-full' style={{height: 'calc(100vh / 4)'}}>
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-          </div>
-        </div>  
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-          </div>
-        </div>  
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-            <div className='w-full p-2 text-center'>Balance</div>
-            <div className='text-7xl font-bold flex justify-content-center align-items-center' style={{height: 'calc(25vh - 100px)'}}>0</div>
-          </div>
-        </div>  
-        <div className='col-12 lg:col-5 xl:col-2 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column gap-3'>
-            <div className='w-full p-2 text-center'>Scan Here</div>
-          </div>
-        </div> 
-        <div className='col-12 lg:col-5 xl:col-4 border-1 surface-border surface-card'>
-          <div className='justify-content-center align-items-center flex flex-column'>
-          </div>
-        </div>  
-      </div>
+      <DashboardTable buyers={buyers} />
     </div>
   );
 };
