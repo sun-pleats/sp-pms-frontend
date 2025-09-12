@@ -42,7 +42,6 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
     } catch (error: any) {
       showApiError(error, 'Failed to save department.');
     }
-    console.log('handleSubmit', data);
   };
 
   return (

@@ -5,6 +5,7 @@ export interface ProductionDailyOutput {
   process_id: string;
   process_name: string;
   production_track_id: number;
+  target: number;
   log_date: string;
   '12AM': number;
   '1AM': number;

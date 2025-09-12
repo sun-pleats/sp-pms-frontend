@@ -47,7 +47,6 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
   });
 
   setTimeout(() => {
-    console.log('ASD');
     setLayoutConfig({
       ripple: false,
       inputStyle: 'outlined',

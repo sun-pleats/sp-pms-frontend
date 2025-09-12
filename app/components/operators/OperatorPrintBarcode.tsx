@@ -49,8 +49,6 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
           checked: false
         })) ?? []
       );
-
-      console.log(operator);
     }
   }, [operator]);
 

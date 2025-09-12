@@ -35,7 +35,7 @@ const BuyersPage = () => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
-      
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter({ keyword: e.target.value });
   };
@@ -60,13 +60,16 @@ const BuyersPage = () => {
     return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchBuyers = useCallback(async (keyword?: string) => {
-    setLoading(true);
-    const search = keyword?.trim() || filter.keyword?.trim() || '';
-    const data = await BuyerService.getBuyers(search ? { search } : {});
-    setBuyers(getBuyers(data.data.data ?? []));
-    setLoading(false);
-  }, [filter.keyword]);
+  const fetchBuyers = useCallback(
+    async (keyword?: string) => {
+      setLoading(true);
+      const search = keyword?.trim() || filter.keyword?.trim() || '';
+      const data = await BuyerService.getBuyers(search ? { search } : {});
+      setBuyers(getBuyers(data.data.data ?? []));
+      setLoading(false);
+    },
+    [filter.keyword]
+  );
 
   useEffect(() => {
     fetchBuyers();

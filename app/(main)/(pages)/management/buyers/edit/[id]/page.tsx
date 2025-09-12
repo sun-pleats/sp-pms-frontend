@@ -35,7 +35,6 @@ const EditBuyerPage = ({ params }: EditBuyerPageProps) => {
     } catch (error: any) {
       showApiError(error, 'Failed to save buyer.');
     }
-    console.log('handleSubmit', data);
   };
 
   useEffect(() => {

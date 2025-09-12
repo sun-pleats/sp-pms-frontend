@@ -1,4 +1,4 @@
-import { Calendar } from 'primereact/calendar';
+import { Calendar, CalendarSelectionMode } from 'primereact/calendar';
 import { classNames } from 'primereact/utils';
 import React, { forwardRef } from 'react';
 
@@ -10,15 +10,21 @@ interface FormCalendarProps extends React.InputHTMLAttributes<HTMLInputElement> 
   value?: any;
   placeholder?: string;
   className?: string;
+  selectionMode?: CalendarSelectionMode;
+  readOnlyInput?: boolean;
+  hideOnRangeSelection?: boolean;
 }
 
 const FormCalendar = forwardRef<HTMLInputElement, FormCalendarProps>(
-  ({ label = 'Label', value, isError, onChange, errorMessage, className }, ref) => (
+  ({ label = 'Label', value, isError, selectionMode, readOnlyInput, hideOnRangeSelection, onChange, errorMessage, className }, ref) => (
     <div className="field">
       <label htmlFor="name">{label}</label>
       <Calendar
         inputRef={ref}
         value={value}
+        selectionMode={selectionMode}
+        readOnlyInput={readOnlyInput}
+        hideOnRangeSelection={hideOnRangeSelection}
         className={classNames(
           className,
           {

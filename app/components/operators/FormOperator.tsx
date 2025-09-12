@@ -39,7 +39,6 @@ const FormOperator = ({ value, onSubmit, children, lines, processesOptions, load
 
   useEffect(() => {
     if (value) {
-      console.log('value', value);
       // @ts-ignore
       reset({
         name: value?.name,

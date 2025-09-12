@@ -40,7 +40,7 @@ const CreateBuyerPage = () => {
                     <div className="ml-auto">
                       <FormAction
                         loadingSave={isSaveLoading}
-                        actionCancel={() => router.push(ROUTES.BUYER_OFFSETS.INDEX)}
+                        actionCancel={() => router.push(ROUTES.BUYER.INDEX)}
                         actions={[FormActions.CANCEL, FormActions.SAVE]}
                       />
                     </div>

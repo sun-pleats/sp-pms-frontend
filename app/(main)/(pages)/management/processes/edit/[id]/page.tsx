@@ -35,7 +35,6 @@ const EditProcessPage = ({ params }: EditProcessPageProps) => {
     } catch (error: any) {
       showApiError(error, 'Failed to save process.');
     }
-    console.log('handleSubmit', data);
   };
 
   useEffect(() => {

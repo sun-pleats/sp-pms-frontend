@@ -36,7 +36,6 @@ const EditProcessOffsetPage = ({ params }: EditProcessOffsetPageProps) => {
     } catch (error: any) {
       showApiError(error, 'Failed to save process offset.');
     }
-    console.log('handleSubmit', data);
   };
 
   useEffect(() => {

@@ -56,7 +56,6 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
     } catch (error: any) {
       showApiError(error, 'Failed to save operator.');
     }
-    console.log('handleSubmit', data);
   };
 
   return (

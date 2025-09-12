@@ -48,7 +48,6 @@ const EditUserPage = ({ params }: EditUserPageProps) => {
     } catch (error: any) {
       showApiError(error, 'Failed to save user.');
     }
-    console.log('handleSubmit', data);
   };
 
   return (
