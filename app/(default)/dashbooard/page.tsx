@@ -35,7 +35,7 @@ const buyers: BuyerDashboard[] = [
     defects_rate: '10%',
     balance: 100,
     created_at: '',
-    updated_at: '',
+    updated_at: ''
   },
   {
     id: '2',
@@ -48,13 +48,13 @@ const buyers: BuyerDashboard[] = [
     defects_rate: '10%',
     balance: 0,
     created_at: '',
-    updated_at: '',
+    updated_at: ''
   }
 ];
 
 const LandingPage = () => {
   return (
-    <div className='w-full'>
+    <div className="w-full">
       <DashboardTable buyers={buyers} />
     </div>
   );

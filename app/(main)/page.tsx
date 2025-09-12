@@ -8,7 +8,6 @@ import { Menu } from 'primereact/menu';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ProductService } from '../../demo/service/ProductService';
 import { LayoutContext } from '../../layout/context/layoutcontext';
-import Link from 'next/link';
 import { Demo } from '@/types';
 import { ChartData, ChartOptions } from 'chart.js';
 import { useRouter } from 'next/navigation';

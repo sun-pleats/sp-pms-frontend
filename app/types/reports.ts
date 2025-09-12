@@ -38,3 +38,15 @@ export interface ProductionDailyOutput {
   efficiency_target: number;
   efficiency: number;
 }
+
+export interface ProductionMonthlyEfficiency {
+  operator_id: number;
+  operator_name: string;
+  process_id: string;
+  process_name: string;
+  section_id: number;
+  section_name: string;
+  month: number;
+  year: number;
+  avg_efficiency: number;
+}

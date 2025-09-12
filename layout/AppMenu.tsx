@@ -38,7 +38,7 @@ const AppMenu = () => {
       label: 'Reports',
       items: [
         { label: 'Daily Production Output', icon: 'pi pi-fw pi-circle-fill', to: '/reports/daily-production-output' },
-        { label: 'Monthly Line Output', icon: 'pi pi-fw pi-circle-fill', to: '/management/users', disabled: true },
+        { label: 'Monthly Efficiency Report', icon: 'pi pi-fw pi-circle-fill', to: '/reports/monthly-production-efficiency' },
         { label: 'Bundle Releases', icon: 'pi pi-fw pi-circle-fill', to: '/management/users', disabled: true },
         { label: 'System Audit', icon: 'pi pi-fw pi-circle-fill', to: '/management/users', disabled: true }
       ]

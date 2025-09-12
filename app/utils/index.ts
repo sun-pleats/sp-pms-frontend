@@ -19,3 +19,9 @@ export function formatDateTime(date: any) {
 export function formatDbDate(date: any) {
   return moment(date).format('YYYY-MM-DD');
 }
+
+export function getMonthName(monthNumber: number) {
+  const date = new Date();
+  date.setMonth(monthNumber - 1); // JS months are 0-based
+  return date.toLocaleString('default', { month: 'long' });
+}
