@@ -149,6 +149,7 @@ const ProductionOperationPage = () => {
               value={trackFilter.date}
               onChange={(e: any) => setTrackFilter({ ...trackFilter, date: e.value })}
               label="Operation Date"
+              readOnlyInput
             />
             <div className="mt-2">
               <Button

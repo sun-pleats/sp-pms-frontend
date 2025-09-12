@@ -10,13 +10,13 @@ import { ProductionDailyOutput } from '@/app/types/reports';
 import { ReportService } from '@/app/services/ReportService';
 import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
-import FormCalendar from '@/app/components/form/calendar/component';
+import { TabPanel, TabView } from 'primereact/tabview';
 import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
+import FormRangeCalendar from '@/app/components/form/range-calendar/component';
+import OperatorPerformanceCard from '@/app/components/reports/operator-performance-card/OperatorPerformanceCard';
 import PageTile from '@/app/components/page-title/component';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import useUtilityData from '@/app/hooks/useUtilityData';
-import OperatorPerformanceCard from '@/app/components/reports/operator-performance-card/OperatorPerformanceCard';
-import { TabPanel, TabView } from 'primereact/tabview';
 
 interface SearchFilter {
   keyword?: string;
@@ -119,11 +119,10 @@ const DailyProductionOutputsPage = () => {
       <div className="flex flex-align-items-center">
         <div className="flex flex-align-items-center mr-2">
           <div className="flex align-items-center gap-2">
-            <FormCalendar
+            <FormRangeCalendar
               value={filter.dates}
               onChange={(e: any) => setFilter({ ...filter, dates: e.value })}
               label="Operation Date"
-              selectionMode="range"
               readOnlyInput
               hideOnRangeSelection
             />

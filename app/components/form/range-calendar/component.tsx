@@ -2,7 +2,7 @@ import { Calendar, CalendarSelectionMode } from 'primereact/calendar';
 import { classNames } from 'primereact/utils';
 import React, { forwardRef } from 'react';
 
-interface FormCalendarProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface FormRangeCalendarProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   isError?: boolean;
   errorMessage?: string;
@@ -10,17 +10,23 @@ interface FormCalendarProps extends React.InputHTMLAttributes<HTMLInputElement> 
   value?: any;
   placeholder?: string;
   className?: string;
+  selectionMode?: CalendarSelectionMode;
   readOnlyInput?: boolean;
+  hideOnRangeSelection?: boolean;
+  isRange?: boolean;
 }
 
-const FormCalendar = forwardRef<HTMLInputElement, FormCalendarProps>(
-  ({ label = 'Label', value, isError, readOnlyInput, onChange, errorMessage, className }, ref) => (
+const FormRangeCalendar = forwardRef<HTMLInputElement, FormRangeCalendarProps>(
+  ({ label = 'Label', value, isError, isRange, readOnlyInput, hideOnRangeSelection, onChange, errorMessage, className }, ref) => (
     <div className="field">
       <label htmlFor="name">{label}</label>
+
       <Calendar
         inputRef={ref}
         value={value}
+        selectionMode="range"
         readOnlyInput={readOnlyInput}
+        hideOnRangeSelection={hideOnRangeSelection}
         className={classNames(
           className,
           {
@@ -35,6 +41,6 @@ const FormCalendar = forwardRef<HTMLInputElement, FormCalendarProps>(
   )
 );
 
-FormCalendar.displayName = 'FormCalendar';
+FormRangeCalendar.displayName = 'FormRangeCalendar';
 
-export default FormCalendar;
+export default FormRangeCalendar;
