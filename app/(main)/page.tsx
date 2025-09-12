@@ -45,7 +45,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Force the update temp
-    router.push('/dashbooard');
+    router.push('/operations/production-operations');
   }, []);
   const applyLightTheme = () => {
     const lineOptions: ChartOptions = {
