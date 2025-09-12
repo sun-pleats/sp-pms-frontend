@@ -79,6 +79,18 @@
         padding: 0;
         list-style: none;
         display: flex;
+        gap: 0.5rem;
+
+        .p-menu {
+            z-index: 2000;
+        }
+
+        .p-togglebutton {
+            .p-button-icon-only {
+                height: 100%;
+                width: 3rem;
+            }
+        }
 
         .layout-topbar-button {
             margin-left: 1rem;

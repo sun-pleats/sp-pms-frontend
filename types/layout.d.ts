@@ -49,6 +49,7 @@ export interface LayoutContextProps {
   showWarning: (detail: string, summary?: string) => void;
   showError: (detail: string) => void;
   showApiError: (error?: AxiosError, summary: string) => void;
+  onThemeToogle: () => void;
 }
 
 export interface MenuContextProps {
