@@ -19,7 +19,7 @@ import PageAction, { PageActions } from '@/app/components/page-action/component'
 import PageCard from '@/app/components/page-card/component';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { use, useCallback, useContext, useEffect, useState } from 'react';
 import SinglePrintBarcode from '@/app/components/style/SinglePrintBarcode';
 import TableHeader from '@/app/components/table-header/component';
 import UploadStyles from './components/upload-styles';
@@ -36,6 +36,7 @@ interface StylePageState {
 
 interface PageFilter {
   buyers?: string[];
+  keyword?: string
 }
 
 const StylesPage = () => {
@@ -47,28 +48,35 @@ const StylesPage = () => {
   const [buyerOptions, setBuyerOptions] = useState<SelectItem[]>([]);
   const [filters1, setFilters1] = useState<DataTableFilterMeta>({});
   const { showApiError, showSuccess } = useContext(LayoutContext);
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
   const { fetchBuyersSelectOption } = useUtilityData();
-  const { fetchStyles, styles, isFetchStyleLoading } = useStylePage();
+  const [styles, setStyle] = useState<Style[]>([]);
+  // const { styles, isFetchStyleLoading } = useStylePage();
 
   const clearPageFilter = () => {
-    setPageFilter({});
+    setPageFilter({ ...pageFilter, keyword: '' });
   };
 
   const handlePageFilter = (e: any) => {
     setPageFilter({ ...pageFilter, buyers: e.value });
   }
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPageFilter({ ...pageFilter, keyword: e.target.value });
+  };
+
   const tableHeader = () => {
     return (
-      <TableHeader onClear={clearPageFilter}>
+      <TableHeader onClear={clearPageFilter} searchValue={pageFilter.keyword ?? ''} onSearchChange={handleSearchChange}>
         <div className="w-full md:w-20rem">
           <FormMultiDropdown
             value={pageFilter.buyers}
             onChange={handlePageFilter}
             filter
             options={buyerOptions}
+            optionValue="label"
             placeholder="Filter Buyer"
             className="w-full"
           />
@@ -78,10 +86,37 @@ const StylesPage = () => {
   };
 
   const initData = async () => {
-    fetchStyles();
     setBuyerOptions(await fetchBuyersSelectOption())
   }
 
+  const fetchStyles = useCallback(
+    async (keyword?: string) => {
+      setLoading(true);
+      const search = keyword?.trim() || pageFilter.keyword?.trim() || '';
+      const buyer = pageFilter.buyers || [];
+
+      // Build payload dynamically
+      const payload: any = {};
+      if (search) payload.search = search;
+      if (buyer.length > 0) payload.buyer = buyer;
+
+      const { data } = await StyleService.getStyles(payload);
+      setStyle(getStyles(data.data ?? []));
+      setLoading(false);
+    },
+    [pageFilter.keyword, pageFilter.buyers]
+  );
+
+  const getStyles = (data: Style[]) => {
+    return [...(data || [])].map((d) => {
+      return d;
+    });
+  };
+
+  useEffect(() => {
+    fetchStyles();
+  }, [fetchStyles]);
+  
   useEffect(() => {
     initData();
   }, []);
@@ -144,7 +179,7 @@ const StylesPage = () => {
         dataKey="id"
         filters={filters1}
         scrollable
-        loading={isFetchStyleLoading}
+        loading={loading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         selectionMode={'checkbox'}
         selection={selectedStyles}
