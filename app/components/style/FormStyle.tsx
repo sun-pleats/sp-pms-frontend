@@ -10,12 +10,19 @@ import FormInputText from '../form/input-text/component';
 import FormStyleItemTable from './FormStyleItemTable';
 import FormStyleFabricTable from './FormStyleFabricTable';
 import { Divider } from 'primereact/divider';
+import FormDropdown from '../form/dropdown/component';
+import { useEffect } from 'react';
 
 interface FormStyleProps {
+  value?: DefaultFormData;
   styleOptions: SelectItem[];
   itemTypes?: SelectItem[];
   onSubmit?: any;
   children?: any;
+  buyerOptions?: SelectItem[];
+  loading?: {
+    buyerField?: boolean;
+  };
 }
 
 interface FormData extends DefaultFormData {
@@ -34,7 +41,7 @@ interface FormData extends DefaultFormData {
   style_fabrics: FormStyleFabric[];
 }
 
-const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
+const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormStyleProps) => {
   const emptyStyleItem = (): StyleItem => ({
     id: generateSimpleId(),
     item_name: '',
@@ -75,6 +82,27 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
       style_fabrics: [emptyStyleFabric()]
     }
   });
+  
+  useEffect(() => {
+    if (value) {
+      // @ts-ignore
+      reset({
+        control_number: value?.control_number,
+        buyer_name: value?.buyer_name,
+        style_number: value?.style_number,
+        pleats_name: value?.pleats_name,
+        item_type: value?.item_type,
+        ship_date_from_japan: value?.ship_date_from_japan, // ISO date string: "YYYY-MM-DD"
+        ship_date_from_cebu: value?.ship_date_from_cebu, // ISO date string
+        noumae: value?.noumae,
+        sample: value?.sample,
+        pattern: value?.pattern,
+        name: value?.name,
+        style_items: value?.style_items || [emptyStyleItem()],
+        style_fabrics: value?.style_fabrics || [emptyStyleFabric()]
+      });
+    }
+  }, [value]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -94,8 +122,19 @@ const FormStyle = ({ onSubmit, children }: FormStyleProps) => {
             name="buyer_name"
             control={control}
             rules={{ required: 'Buyer name is required' }}
-            render={({ fieldState, field }) => (
-              <FormInputText {...field} label="Buyer Name" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+            render={({ fieldState, field }) => (   
+              <FormDropdown
+                loading={loading?.buyerField}
+                label="Buyer"
+                value={field.value}
+                onChange={(e: any) => field.onChange(e.value)}
+                filter={true}
+                placeholder="Select"
+                options={buyerOptions}
+                optionValue="label"
+                errorMessage={fieldState.error?.message}
+                isError={fieldState.error ? true : false}
+              />
             )}
           />
         </div>

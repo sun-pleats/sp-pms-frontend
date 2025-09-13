@@ -52,8 +52,6 @@ const StylesPage = () => {
     setPageFilter({});
   };
 
-
-
   const handlePageFilter = (e: any) => {
     setPageFilter({ ...pageFilter, buyers: e.value });
   }
@@ -98,7 +96,7 @@ const StylesPage = () => {
   const actionBodyTemplate = (rowData: Style) => {
     return (
       <div className='flex flex-row gap-2'>
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(1)} size='small' severity="warning" />
+        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size='small' severity="warning" />
         <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size='small' severity="danger" />
       </div>
     );
