@@ -34,7 +34,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
       label: 'Profile',
       icon: 'pi pi-user',
       command: () => {
-        console.log('Go to Profile');
+        router.push('/user/profile');
       },
     },
     {

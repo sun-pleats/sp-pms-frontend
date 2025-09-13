@@ -15,6 +15,14 @@ class UserService {
     return apiClient.get(`${BASE_URL}/${id}`);
   }
 
+  getUserByEmail(email: string) {
+    return apiClient.get(`${BASE_URL}`, { params: { email } });
+  }
+
+  getMe() {
+    return apiClient.get(`${BASE_URL}/me`);
+  }
+
   createUser(payload: UserCreatePayload) {
     return apiClient.post(`${BASE_URL}`, payload);
   }
@@ -25,6 +33,10 @@ class UserService {
 
   deleteUser(id: string) {
     return apiClient.delete(`${BASE_URL}/${id}`);
+  }
+
+  updateUserAccount(payload: { password?: string; username?: string; }) {
+    return apiClient.put<User>(`${BASE_URL}/me/account`, payload);
   }
 }
 
