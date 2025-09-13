@@ -6,21 +6,30 @@ import { Section } from '../types/section';
 import { Process } from '../types/process';
 import { Operator } from '../types/operator';
 import { format24Hour, formatDate } from '../utils';
+import { Buyer } from '../types/buyers';
 
 export default function useUtilityData() {
   const [isDepartmentLoading, setIsDepartmentLoading] = useState<boolean>(false);
   const [isSectionLoading, setIsSectionLoading] = useState<boolean>(false);
   const [isProcessLoading, setIsProcessLoading] = useState<boolean>(false);
   const [isOperatorLoading, setIsOperatorLoading] = useState<boolean>(false);
+  const [isBuyerLoading, setIsBuyerLoading] = useState<boolean>(false);
 
   const fetchItemTypes = async (): Promise<string[]> => {
     const { data } = await UtilityService.itemTypes();
     return data;
   };
 
-  const fetchBuyers = async (): Promise<string[]> => {
-    const { data } = await UtilityService.buyers();
-    return data;
+  const fetchBuyers = async (): Promise<Buyer[]> => {
+    try{
+      setIsBuyerLoading(true);
+      const { data } = await UtilityService.buyers();
+      return data;
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsBuyerLoading(false);
+    }
   };
 
   const fetchOperators = async (): Promise<Operator[]> => {
@@ -78,7 +87,7 @@ export default function useUtilityData() {
 
   const fetchBuyersSelectOption = async (): Promise<SelectItem[]> => {
     const data = await fetchBuyers();
-    return data.map((b: string) => ({ value: b, label: b }));
+    return data.map((b: Buyer) => ({ value: b.id, label: b.name }));
   };
 
   const fetchDepartmentOptions = async (): Promise<SelectItem[]> => {
@@ -94,6 +103,11 @@ export default function useUtilityData() {
   const fetchProcessOptions = async (): Promise<SelectItem[]> => {
     const data = await fetchProcesses();
     return data.map((d: Process) => ({ value: d.id, label: d.name }));
+  };
+
+  const fetchBuyerOptions = async (): Promise<SelectItem[]> => {
+    const data = await fetchBuyers();
+    return data.map((d: Buyer) => ({ value: d.id, label: d.name }));
   };
 
   const fetchOperatorOptions = async (): Promise<SelectItem[]> => {
@@ -114,9 +128,11 @@ export default function useUtilityData() {
     fetchProcessOptions,
     fetchOperators,
     fetchOperatorOptions,
+    fetchBuyerOptions,
     isOperatorLoading,
     isDepartmentLoading,
     isSectionLoading,
-    isProcessLoading
+    isProcessLoading,
+    isBuyerLoading
   };
 }

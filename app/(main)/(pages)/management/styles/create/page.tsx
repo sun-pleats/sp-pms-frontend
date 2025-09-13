@@ -9,19 +9,22 @@ import FormAction, { FormActions } from '@/app/components/form-action/component'
 import FormStyle from '@/app/components/style/FormStyle';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import PageCard from '@/app/components/page-card/component';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import useUtilityData from '@/app/hooks/useUtilityData';
 
 const CreateStylePage = () => {
   const router = useRouter();
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const { saveStyle, isSaveLoading } = useStylePage();
+  const [buyers, setBuyers] = useState<SelectItem[]>([]);
+  const { isBuyerLoading, fetchBuyerOptions } = useUtilityData();
 
   useEffect(() => {
     initData();
   }, [])
 
   const initData = async () => {
-    //setItemTypes(await fetchItemTypes());
+    fetchBuyerOptions().then((data: SelectItem[]) => setBuyers(data));
   }
 
   const styleOptions: SelectItem[] = [
@@ -53,7 +56,12 @@ const CreateStylePage = () => {
       <div className='grid'>
         <div className='col-12'>
           <div className='p-fluid'>
-            <FormStyle onSubmit={handleSubmit} styleOptions={styleOptions}>
+            <FormStyle 
+              onSubmit={handleSubmit} 
+              styleOptions={styleOptions}
+              loading={{ buyerField: isBuyerLoading }}
+              buyerOptions={buyers}
+            >
               <div className='grid mt-5'>
                 <div className='ml-auto'>
                   <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.USERS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />

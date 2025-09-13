@@ -8,9 +8,13 @@ import { LayoutContext } from './context/layoutcontext';
 import { Button } from 'primereact/button';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/contexts/useAuth';
+import { ToggleButton } from 'primereact/togglebutton';
+import { on } from 'events';
+import ProfileMenu from '@/app/components/profile-menu/ProfileMenu';
+import { MenuItem } from 'primereact/menuitem';
 
 const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
-  const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar } = useContext(LayoutContext);
+  const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar, onThemeToogle } = useContext(LayoutContext);
   const menubuttonRef = useRef(null);
   const topbarmenuRef = useRef(null);
   const topbarmenubuttonRef = useRef(null);
@@ -24,9 +28,23 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     topbarmenubutton: topbarmenubuttonRef.current
   }));
 
-  const onLogoutClick = () => {
-    logout();
-  };
+  
+  const menuItems: MenuItem[] = [
+    {
+      label: 'Profile',
+      icon: 'pi pi-user',
+      command: () => {
+        router.push('/user/profile');
+      },
+    },
+    {
+      label: 'Logout',
+      icon: 'pi pi-sign-out',
+      command: () => {
+        logout();
+      },
+    },
+  ];
 
   return (
     <div className="layout-topbar">
@@ -44,12 +62,20 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
         ref={topbarmenuRef}
         className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}
       >
+        <ToggleButton
+          checked={layoutConfig.theme !== 'mira'} // true if dark theme
+          onIcon="pi pi-sun"
+          offIcon="pi pi-moon"
+          offLabel=''
+          onLabel=''
+          onChange={onThemeToogle}
+          className="p-button-rounded p-button-text p-button-icon-only"
+          aria-label="Toggle theme"
+        />
+
         <Button label="Kiosk" onClick={() => router.push('/kiosk')} rounded></Button>
 
-        <button onClick={onLogoutClick} type="button" className="p-link layout-topbar-button">
-          <i className="pi pi-sign-out"></i>
-          <span>Logout</span>
-        </button>
+        <ProfileMenu items={menuItems} />
       </div>
     </div>
   );

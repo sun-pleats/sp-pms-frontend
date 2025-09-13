@@ -42,7 +42,7 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
     inputStyle: 'outlined',
     menuMode: 'static',
     colorScheme: 'light',
-    theme: 'soho-light',
+    theme: 'mira',
     scale: 14
   });
 
@@ -67,6 +67,13 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
     }
   };
 
+  const onThemeToogle = () => {
+    setLayoutConfig((prevLayoutConfig) => ({
+      ...prevLayoutConfig,
+      theme: prevLayoutConfig.theme === 'mira' ? 'lara-dark-green' : 'mira'
+    }));
+  };
+
   const showProfileSidebar = () => {
     setLayoutState((prevLayoutState) => ({ ...prevLayoutState, profileSidebarVisible: !prevLayoutState.profileSidebarVisible }));
   };
@@ -85,12 +92,20 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
     layoutState,
     setLayoutState,
     onMenuToggle,
+    onThemeToogle,
     showProfileSidebar,
     showSuccess,
     showWarning,
     showError,
-    showApiError
+    showApiError,
   };
+
+  useEffect(() => {
+    const themeLink = document.getElementById('theme-css') as HTMLLinkElement | null;
+    if (themeLink) {
+      themeLink.href = `/themes/${layoutConfig.theme}/theme.css`;
+    }
+  }, [layoutConfig.theme]);
 
   return (
     <LayoutContext.Provider value={value}>

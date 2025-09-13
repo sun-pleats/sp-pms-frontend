@@ -5,6 +5,7 @@ import { Section } from '../types/section';
 import { Process } from '../types/process';
 import { StylePaginatedResponse } from '../types/api/styles';
 import { Operator } from '../types/operator';
+import { Buyer } from '../types/buyers';
 
 const BASE_URL = '/api/utils';
 
@@ -12,7 +13,7 @@ class UtilityService {
   itemTypes(): AxiosPromise {
     return apiClient.get(`${BASE_URL}/item-types`);
   }
-  buyers(): AxiosPromise<string[]> {
+  buyers(): AxiosPromise<Buyer[]> {
     return apiClient.get(`${BASE_URL}/buyers`);
   }
   departments(): AxiosPromise<Department[]> {

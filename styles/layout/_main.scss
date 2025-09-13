@@ -27,13 +27,17 @@ a {
 }
 
 .sticky-banner {
-  position: fixed;
+    position: fixed;
+    top: 65px;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* make sure it’s above header/navbar */
 
-  top: 65px;
-  left: 0;
-  width: 100%;
-  z-index: 1100; /* make sure it’s above header/navbar */
-  .p-inline-message .p-inline-message-text {
-  font-size: 14px !important;
-  }
+    .p-inline-message {
+        padding: 0.5rem 0.5rem;
+        border-radius: 4px;
+        .p-inline-message-text {
+            font-size: 14px !important;
+        }
+    }
 }
