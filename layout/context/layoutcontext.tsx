@@ -97,7 +97,7 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
     showSuccess,
     showWarning,
     showError,
-    showApiError,
+    showApiError
   };
 
   useEffect(() => {

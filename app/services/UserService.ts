@@ -35,7 +35,7 @@ class UserService {
     return apiClient.delete(`${BASE_URL}/${id}`);
   }
 
-  updateUserAccount(payload: { password?: string; username?: string; }) {
+  updateUserAccount(payload: { password?: string; username?: string }) {
     return apiClient.put<User>(`${BASE_URL}/me/account`, payload);
   }
 }

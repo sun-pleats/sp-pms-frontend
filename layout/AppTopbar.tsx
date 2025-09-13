@@ -28,22 +28,21 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     topbarmenubutton: topbarmenubuttonRef.current
   }));
 
-  
   const menuItems: MenuItem[] = [
     {
       label: 'Profile',
       icon: 'pi pi-user',
       command: () => {
         router.push('/user/profile');
-      },
+      }
     },
     {
       label: 'Logout',
       icon: 'pi pi-sign-out',
       command: () => {
         logout();
-      },
-    },
+      }
+    }
   ];
 
   return (
@@ -66,8 +65,8 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
           checked={layoutConfig.theme !== 'mira'} // true if dark theme
           onIcon="pi pi-sun"
           offIcon="pi pi-moon"
-          offLabel=''
-          onLabel=''
+          offLabel=""
+          onLabel=""
           onChange={onThemeToogle}
           className="p-button-rounded p-button-text p-button-icon-only"
           aria-label="Toggle theme"

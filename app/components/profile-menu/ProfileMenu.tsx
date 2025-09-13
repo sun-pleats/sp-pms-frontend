@@ -24,20 +24,11 @@ const ProfileMenu = ({ items }: ProfileMenuProps) => {
       <Menu model={items} popup ref={menu} />
 
       {/* Trigger (Avatar or Logo) */}
-      <Button
-            className="p-link bg-transparent"
-            onClick={(e) => menu.current.toggle(e)}
-            aria-label="Profile menu"
-            rounded
-      >
-        <Avatar
-            label={userInitial}
-            size="large"
-            shape="circle"
-        />
+      <Button className="p-link bg-transparent" onClick={(e) => menu.current.toggle(e)} aria-label="Profile menu" rounded>
+        <Avatar label={userInitial} size="large" shape="circle" />
       </Button>
     </div>
   );
-}
+};
 
 export default ProfileMenu;

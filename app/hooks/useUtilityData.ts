@@ -21,7 +21,7 @@ export default function useUtilityData() {
   };
 
   const fetchBuyers = async (): Promise<Buyer[]> => {
-    try{
+    try {
       setIsBuyerLoading(true);
       const { data } = await UtilityService.buyers();
       return data;

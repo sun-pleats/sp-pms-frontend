@@ -90,7 +90,7 @@ const FormUserProfile = ({ userTypes = [], value, onSubmit, children }: FormUser
           <FormInputText {...field} label="Employee Barcode ID" errorMessage={fieldState.error?.message} isError={!!fieldState.error} />
         )}
       />
-      
+
       <Divider align="center" className="my-5">
         Account Credentials
       </Divider>

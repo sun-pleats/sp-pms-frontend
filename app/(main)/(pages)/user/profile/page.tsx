@@ -1,22 +1,21 @@
 'use client';
 
-import FormAction, { FormActions } from "@/app/components/form-action/component";
-import PageCard from "@/app/components/page-card/component";
-import FormUserProfile from "@/app/components/user-profile/FormUserProfile";
-import { useUserProfilePage } from "./hooks/useUserProfilePage";
-import { useCallback, useEffect, useState } from "react";
-import { UserForm } from "@/app/types/users";
-import { useAuth } from "@/app/contexts/useAuth";
-import { get } from "http";
-import UserService from "@/app/services/UserService";
-import { SelectItem } from "primereact/selectitem";
-
+import FormAction, { FormActions } from '@/app/components/form-action/component';
+import PageCard from '@/app/components/page-card/component';
+import FormUserProfile from '@/app/components/user-profile/FormUserProfile';
+import { useUserProfilePage } from './hooks/useUserProfilePage';
+import { useCallback, useEffect, useState } from 'react';
+import { UserForm } from '@/app/types/users';
+import { useAuth } from '@/app/contexts/useAuth';
+import { get } from 'http';
+import UserService from '@/app/services/UserService';
+import { SelectItem } from 'primereact/selectitem';
 
 const UserProfile = () => {
   const { updateUserAccount, isSaveLoading } = useUserProfilePage();
   const [userData, setUserData] = useState<UserForm | undefined>();
   const { user } = useAuth();
-  
+
   const userTypes: SelectItem[] = [
     { label: 'Operator', value: 'operator' },
     { label: 'Administrator', value: 'administrator' },
@@ -26,13 +25,12 @@ const UserProfile = () => {
   const getUserData = useCallback(async () => {
     if (!user?.email) return;
 
-    const res = (await UserService.getMe());
+    const res = await UserService.getMe();
     console.log('res', res);
     if (res.data) {
       setUserData(res.data as UserForm);
     }
   }, [user?.email]);
-
 
   useEffect(() => {
     getUserData();
@@ -48,10 +46,7 @@ const UserProfile = () => {
                 <FormUserProfile value={userData} userTypes={userTypes} onSubmit={updateUserAccount}>
                   <div className="flex">
                     <div className="ml-auto">
-                      <FormAction
-                          loadingSave={isSaveLoading}
-                          actions={[FormActions.SAVE]}
-                      />
+                      <FormAction loadingSave={isSaveLoading} actions={[FormActions.SAVE]} />
                     </div>
                   </div>
                 </FormUserProfile>
@@ -61,7 +56,7 @@ const UserProfile = () => {
         </PageCard>
       </div>
     </div>
-  )
+  );
 };
 
 export default UserProfile;

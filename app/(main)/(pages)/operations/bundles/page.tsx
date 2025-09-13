@@ -181,6 +181,7 @@ const BundlesPage = () => {
         <Column field="quantity" header="Location" />
         <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
       </DataTable>
+
       <Modal
         title="Delete Record"
         visible={pageState.deleteModalShow}

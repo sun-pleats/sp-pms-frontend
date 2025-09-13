@@ -12,15 +12,14 @@ export const useUserProfilePage = () => {
       setIsSaveLoading(true);
       const response = await UserService.updateUserAccount({
         password: e.password,
-        username: e.username,
+        username: e.username
       });
       showSuccess('Account successfully updated.');
       return response;
     } catch (error) {
       showApiError(error, 'Failed to save account.');
       throw error;
-    }
-    finally {
+    } finally {
       setIsSaveLoading(false);
     }
   };

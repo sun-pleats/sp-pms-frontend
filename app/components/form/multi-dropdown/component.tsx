@@ -21,7 +21,22 @@ interface FormMultiDropdownProps {
 
 const FormMultiDropdown = forwardRef<any, FormMultiDropdownProps>(
   (
-    { label, filter, isError, className = 'field', placeholder, loading, value, onChange, maxSelectedLabels = 3, errorMessage, options, optionLabel = 'label', optionValue = 'value', ...rest },
+    {
+      label,
+      filter,
+      isError,
+      className = 'field',
+      placeholder,
+      loading,
+      value,
+      onChange,
+      maxSelectedLabels = 3,
+      errorMessage,
+      options,
+      optionLabel = 'label',
+      optionValue = 'value',
+      ...rest
+    },
     ref
   ) => (
     <div className={className}>

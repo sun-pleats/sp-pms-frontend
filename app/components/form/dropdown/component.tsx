@@ -18,7 +18,10 @@ interface FormDropdownProps {
 }
 
 const FormDropdown = forwardRef<any, FormDropdownProps>(
-  ({ label, isError, value, className = 'field', placeholder, filter, loading, onChange, errorMessage, options, optionValue = 'value', ...rest }, ref) => (
+  (
+    { label, isError, value, className = 'field', placeholder, filter, loading, onChange, errorMessage, options, optionValue = 'value', ...rest },
+    ref
+  ) => (
     <div className={className}>
       {label && <label htmlFor="name">{label}</label>}
       <Dropdown
