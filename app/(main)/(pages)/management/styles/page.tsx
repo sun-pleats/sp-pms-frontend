@@ -3,6 +3,7 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
@@ -18,17 +19,19 @@ import PageAction, { PageActions } from '@/app/components/page-action/component'
 import PageCard from '@/app/components/page-card/component';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SinglePrintBarcode from '@/app/components/style/SinglePrintBarcode';
 import TableHeader from '@/app/components/table-header/component';
 import UploadStyles from './components/upload-styles';
 import useUtilityData from '@/app/hooks/useUtilityData';
+import { StyleService } from '@/app/services/StyleService';
 
 interface StylePageState {
   deleteModalShow?: boolean;
   showMultiPrintBarcode?: boolean;
   showSinglePrintBarcode?: boolean;
   showUploading?: boolean;
+  deleteId?: string | number; 
 }
 
 interface PageFilter {
@@ -43,6 +46,7 @@ const StylesPage = () => {
   const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
   const [buyerOptions, setBuyerOptions] = useState<SelectItem[]>([]);
   const [filters1, setFilters1] = useState<DataTableFilterMeta>({});
+  const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const router = useRouter();
   const { fetchBuyersSelectOption } = useUtilityData();
@@ -86,10 +90,11 @@ const StylesPage = () => {
     router.push(`${ROUTES.STYLES_EDIT}/${id}`);
   }
 
-  const onActionDeleteClick = () => {
+  const onActionDeleteClick = (id: string | number) => {
     setPageState({
       ...pageState,
-      deleteModalShow: true
+      deleteModalShow: true,
+      deleteId: id
     })
   }
 
@@ -97,7 +102,7 @@ const StylesPage = () => {
     return (
       <div className='flex flex-row gap-2'>
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size='small' severity="warning" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size='small' severity="danger" />
+        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} size='small' severity="danger" />
       </div>
     );
   };
@@ -105,6 +110,17 @@ const StylesPage = () => {
   const onStyleSelectionChange = (data: any) => {
     setSelectedStyles(data.value)
   }
+  
+  const handleDelete = async () => {
+    try {
+      await StyleService.deleteStyle(pageState.deleteId as string);
+      showSuccess('Style successfully deleted.');
+      setPageState({ ...pageState, deleteModalShow: false });
+      fetchStyles();
+    } catch (error: any) {
+      showApiError(error, 'Failed to delete Style.');
+    }
+  };
 
   return (
     <>
@@ -153,6 +169,7 @@ const StylesPage = () => {
         visible={pageState.deleteModalShow}
         onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
         confirmSeverity='danger'
+        onConfirm={handleDelete}
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>

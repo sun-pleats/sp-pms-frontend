@@ -14,11 +14,14 @@ export const StyleService = {
   },
   getStyle(id: string) {
     return apiClient.get(`${BASE_URL}/${id}`);
-    // return fetch('/demo/data/styles.json', { headers: { 'Cache-Control': 'no-cache' } })
-    //   .then((res) => res.json())
-    //   .then((d) => d.data.find((r: Style) => r.id == id));
   },
   createStyle(payload: StyleCreatePayload) {
     return apiClient.post(`${BASE_URL}`, payload);
+  },
+  updateStyle(id: string, payload: StyleCreatePayload) {
+    return apiClient.put(`${BASE_URL}/${id}`, payload);
+  },
+  deleteStyle(id: string) {
+    return apiClient.delete(`${BASE_URL}/${id}`);
   }
 };

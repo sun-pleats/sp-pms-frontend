@@ -31,8 +31,8 @@ interface FormData extends DefaultFormData {
   style_number: string;
   pleats_name?: string | null;
   item_type?: string | null;
-  ship_date_from_japan?: string | null; // ISO date string: "YYYY-MM-DD"
-  ship_date_from_cebu?: string | null; // ISO date string
+  ship_date_from_japan?: Date |string | null; // ISO date string: "YYYY-MM-DD"
+  ship_date_from_cebu?: Date | string | null; // ISO date string
   noumae?: string | null;
   sample?: string | null;
   pattern?: string | null;
@@ -85,6 +85,8 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
   
   useEffect(() => {
     if (value) {
+      const toDate = (d?: string | null) => (d ? new Date(d) : null);
+
       // @ts-ignore
       reset({
         control_number: value?.control_number,
@@ -92,14 +94,42 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
         style_number: value?.style_number,
         pleats_name: value?.pleats_name,
         item_type: value?.item_type,
-        ship_date_from_japan: value?.ship_date_from_japan, // ISO date string: "YYYY-MM-DD"
-        ship_date_from_cebu: value?.ship_date_from_cebu, // ISO date string
+        ship_date_from_japan: toDate(value?.ship_date_from_japan) ?? null, // convert to Date
+        ship_date_from_cebu: toDate(value?.ship_date_from_cebu) ?? null,   // convert to Date
         noumae: value?.noumae,
         sample: value?.sample,
         pattern: value?.pattern,
         name: value?.name,
-        style_items: value?.style_items || [emptyStyleItem()],
-        style_fabrics: value?.style_fabrics || [emptyStyleFabric()]
+        style_items: value?.style_items.map((s: any) => {
+        return { 
+          id: s.id || generateSimpleId(),
+          item_name: s.item_name || '',
+          item_number: s.item_number || '',
+          specs_qty: s.specs_qty || 0,
+          specs_unit: s.specs_unit || '',
+          youjyaku_qty: s.youjyaku_qty || 0,
+          youjyaku_unit: s.youjyaku_unit || '',
+          color_detail: s.color_detail || ''
+         } }) || [emptyStyleItem()],
+        style_fabrics: value?.style_planned_fabrics.map((f: any) => { 
+
+          f.style_planned_fabric_sizes.forEach((size: any) => {
+            console.log(size);
+            (f as any)[`size_${size.size_number + 1}`] = size.quantity || 0;
+          });
+
+          return {
+            id: f.id || generateSimpleId(),
+            col_number: `${f.col_number}` ||  '',
+            color: f.color || '',
+            size_one: f.size_1  || 0,
+            size_two: f.size_2 || 0,
+            size_three: f.size_3 || 0,
+            size_four: f.size_4 || 0,
+            size_five: f.size_5 || 0,
+            total: f.total || 0
+          }
+        }) || [emptyStyleFabric()]
       });
     }
   }, [value]);

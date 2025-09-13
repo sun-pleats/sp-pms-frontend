@@ -61,11 +61,23 @@ export const useStylePage = () => {
     }
   }
 
+  const updateStyle = async (id: string, e: DefaultFormData) => {
+    try {
+      setIsSaveLoading(true);
+      const response = await StyleService.updateStyle(id, formatSavePayload(e));
+      return response;
+    } catch (error) {
+      setIsSaveLoading(false);
+      throw error;
+    }
+  }
+
   return {
     isSaveLoading,
     saveStyle,
     styles,
     isFetchStyleLoading,
     fetchStyles,
+    updateStyle
   };
 };

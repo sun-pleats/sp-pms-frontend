@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import PageCard from '@/app/components/page-card/component';
 import { SelectItem } from 'primereact/selectitem';
 import FormStyle from '@/app/components/style/FormStyle';
@@ -12,6 +12,8 @@ import { useStylePage } from '../../hooks/useStylePage';
 import useUtilityData from '@/app/hooks/useUtilityData';
 import { DefaultFormData } from '@/app/types/form';
 import { StyleService } from '@/app/services/StyleService';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { date } from 'yup';
 
 interface EditStylePageProps {
   params?: { id: any };
@@ -19,7 +21,8 @@ interface EditStylePageProps {
 
 const EditStylePage = ({ params }: EditStylePageProps) => {
   const router = useRouter();
-  const { isSaveLoading } = useStylePage();
+  const { showApiError, showSuccess } = useContext(LayoutContext);
+  const { updateStyle, isSaveLoading } = useStylePage();
   const [buyers, setBuyers] = useState<SelectItem[]>([]);
   const { isBuyerLoading, fetchBuyerOptions } = useUtilityData();
   const [style, setStyle] = useState<DefaultFormData | undefined>();
@@ -46,16 +49,16 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
     }
   }, [params?.id, getStyle]);
 
-  const handleSubmit = async (e: DefaultFormData) => {
-    // try {
-    //   await saveStyle(e);
-    //   showSuccess("Style successfully updated.");
-    //   setTimeout(() => {
-    //     router.push(ROUTES.STYLES_INDEX);
-    //   }, 2000);
-    // } catch (error: any) {
-    //   showApiError(error, 'Failed to update style.');
-    // }
+  const handleSubmit = async (data: DefaultFormData) => {
+    try {
+      await updateStyle(params?.id as string, data);
+      showSuccess("Style successfully updated.");
+      setTimeout(() => {
+        router.push(ROUTES.STYLES_INDEX);
+      }, 2000);
+    } catch (error: any) {
+      showApiError(error, 'Failed to update style.');
+    }
   }
 
   return (
@@ -72,6 +75,7 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
         <div className='col-12'>
           <div className='p-fluid'>
             <FormStyle
+              onSubmit={handleSubmit}
               value={style}
               styleOptions={styleOptions}
               loading={{ buyerField: isBuyerLoading }}
