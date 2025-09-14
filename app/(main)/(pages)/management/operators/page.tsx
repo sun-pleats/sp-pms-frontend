@@ -156,7 +156,8 @@ const OperatorsPage = () => {
         <Column field="section.name" header="Section" style={{ minWidth: '12rem' }} />
         <Column field="section.department.name" header="Department" style={{ minWidth: '12rem' }} />
         <Column field="line_id" header="Processes" style={{ minWidth: '12rem' }} body={processTemplate} />
-        <Column header="Create" field="created_at" dataType="created_at" body={dateBodyTemplate} />
+        <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(operator: Operator) => operator?.created_by?.name} />
+        <Column header="Created At" field="created_at" dataType="created_at" body={dateBodyTemplate} />
         <Column body={actionBodyTemplate} header="Actions"></Column>
       </DataTable>
       <Modal

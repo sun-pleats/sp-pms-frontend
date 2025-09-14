@@ -73,6 +73,18 @@ const ProcessOffsetsPage = () => {
     });
   };
 
+  const formatDate = (value: Date) => {
+    return value.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
+  const dateBodyTemplate = (rowData: ProcessOffset) => {
+    return formatDate(new Date(rowData.created_at));
+  };
+
   const onActionDeleteClick = (id: string | number) => {
     setPageState({
       ...pageState,
@@ -138,7 +150,8 @@ const ProcessOffsetsPage = () => {
         <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
         <Column field="description" header="Description" style={{ minWidth: '12rem' }} />
-        <Column field="created_by" header="Added By" style={{ minWidth: '12rem' }} />
+        <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(data: ProcessOffset) => data?.created_by?.name} />
+        <Column field="created_at" header="Created At" body={dateBodyTemplate} />
         <Column body={actionBodyTemplate} header="Actions"></Column>
       </DataTable>
       <Modal

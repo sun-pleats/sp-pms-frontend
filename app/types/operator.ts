@@ -6,8 +6,8 @@ export interface Operator {
   name: string;
   section_id?: string;
   section?: Section;
-  created_by?: string;
-  created_at?: string;
+  created_by?: User;
+  created_at?: User;
   updated_at?: string;
   operator_processes?: {
     process_id?: number;

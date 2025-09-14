@@ -70,6 +70,18 @@ const SectionsPage = () => {
       return d;
     });
   };
+  
+  const formatDate = (value: Date) => {
+    return value.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
+  const dateBodyTemplate = (rowData: Section) => {
+    return formatDate(new Date(rowData.created_at));
+  };
 
   const onActionEditClick = (id: string | number) => {
     router.push(`${ROUTES.SECTION.EDIT}/${id}`);
@@ -129,7 +141,8 @@ const SectionsPage = () => {
         <Column field="break_time_end" header="Break Time End" style={{ minWidth: '12rem' }} />
         <Column field="shift_start" header="Shift Start" style={{ minWidth: '12rem' }} />
         <Column field="shift_end" header="Shift End" style={{ minWidth: '12rem' }} />
-        <Column field="created_at" header="Created" body={(data: Section) => formatDate(data.created_at)} />
+        <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(section: Section) => section?.created_by?.name} />
+        <Column field="created_at" header="Created At" body={dateBodyTemplate} />
         <Column header="Actions" body={actionBodyTemplate}></Column>
       </DataTable>
       <Modal

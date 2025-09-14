@@ -150,8 +150,9 @@ const UsersPage = () => {
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
         <Column field="username" header="Username" style={{ minWidth: '12rem' }} />
         <Column field="role" header="Role" style={{ minWidth: '10rem' }} body={(user: User) => user.role.toUpperCase()} />
-        <Column header="Create By" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
         <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} />
+        <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(user: User) => user?.created_by?.name} />
+        <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
         <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
       </DataTable>
       <Modal
