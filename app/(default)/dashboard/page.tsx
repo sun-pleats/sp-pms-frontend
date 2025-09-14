@@ -1,20 +1,7 @@
 'use client';
 
-import { Button } from 'primereact/button';
-import { formatDateTime } from '@/app/utils';
-import { LayoutContext } from '../../../layout/context/layoutcontext';
-import { ListBox } from 'primereact/listbox';
-import { Skeleton } from 'primereact/skeleton';
-import { useRouter } from 'next/navigation';
-import Barcode from '@/app/components/barcode/Barcode';
-import FormDropdown from '@/app/components/form/dropdown/component';
-import FormInputText from '@/app/components/form/input-text/component';
-import Link from 'next/link';
-import Modal from '@/app/components/modal/component';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import useKiosk from './hooks/useDashboard';
-import useUtilityData from '@/app/hooks/useUtilityData';
-import Dashboard from '@/app/(main)/page';
+import './page.scss';
+import React from 'react';
 import DashboardTable from '@/app/components/dashboard/DashboardTable';
 import { BuyerDashboard } from '@/app/types/buyers';
 
@@ -54,8 +41,10 @@ const buyers: BuyerDashboard[] = [
 
 const LandingPage = () => {
   return (
-    <div className="w-full">
-      <DashboardTable buyers={buyers} />
+    <div className="gradient-bg">
+      <div className="w-full">
+        <DashboardTable buyers={buyers} />
+      </div>
     </div>
   );
 };

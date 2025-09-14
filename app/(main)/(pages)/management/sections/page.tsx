@@ -70,7 +70,7 @@ const SectionsPage = () => {
       return d;
     });
   };
-  
+
   const formatDate = (value: Date) => {
     return value.toLocaleDateString('en-US', {
       day: '2-digit',

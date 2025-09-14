@@ -42,7 +42,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
 
   const tableHeader = () => {
     return (
-      <div className="flex align-items-center" style={{ marginLeft: '-15px', marginRight: '-15px' }}>
+      <div className="flex align-items-center">
         <div>Style Items</div>
         <div className="ml-auto flex align-items-center gap-2">
           <Button type="button" onClick={onAddOperatorClick} icon="pi pi-plus" label="Add" />

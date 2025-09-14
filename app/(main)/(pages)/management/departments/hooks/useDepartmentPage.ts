@@ -9,7 +9,8 @@ export const useDepartmentPage = () => {
     try {
       setIsSaveLoading(true);
       const response = await DepartmentService.createDepartment({
-        name: e.name
+        name: e.name,
+        immutable: e.immutable
       });
       return response;
     } catch (error) {
@@ -22,7 +23,8 @@ export const useDepartmentPage = () => {
     try {
       setIsSaveLoading(true);
       const response = await DepartmentService.updateDepartment(id, {
-        name: e.name
+        name: e.name,
+        immutable: e.immutable
       });
       return response;
     } catch (error) {

@@ -42,7 +42,7 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
     inputStyle: 'outlined',
     menuMode: 'static',
     colorScheme: 'light',
-    theme: 'mira',
+    theme: 'lara-light-blue',
     scale: 14
   });
 
@@ -70,7 +70,7 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
   const onThemeToogle = () => {
     setLayoutConfig((prevLayoutConfig) => ({
       ...prevLayoutConfig,
-      theme: prevLayoutConfig.theme === 'mira' ? 'lara-dark-green' : 'mira'
+      theme: prevLayoutConfig.theme === 'lara-light-blue' ? 'lara-dark-blue' : 'lara-light-blue'
     }));
   };
 

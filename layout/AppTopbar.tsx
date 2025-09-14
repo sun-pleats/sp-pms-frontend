@@ -62,7 +62,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
         className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}
       >
         <ToggleButton
-          checked={layoutConfig.theme !== 'mira'} // true if dark theme
+          checked={layoutConfig.theme !== 'lara-light-blue'} // true if dark theme
           onIcon="pi pi-sun"
           offIcon="pi pi-moon"
           offLabel=""

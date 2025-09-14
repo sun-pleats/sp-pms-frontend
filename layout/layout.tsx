@@ -125,10 +125,6 @@ const Layout = ({ children }: ChildContainerProps) => {
     <React.Fragment>
       <div className={containerClass}>
         <AppTopbar ref={topbarRef} />
-
-        <div className="sticky-banner">
-          <Message className="w-full" severity="warn" text="This system is still ongoing development, you may experience issues." />
-        </div>
         <div ref={sidebarRef} className="layout-sidebar">
           <AppSidebar />
         </div>

@@ -19,11 +19,19 @@ interface EditDepartmentPageProps {
 const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
   const router = useRouter();
   const { updateDepartment, isSaveLoading } = useDepartmentPage();
+  const [isFetching, setIsFetching] = useState<boolean>(false);
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const [department, setDepartment] = useState<DepartmentForm | undefined>();
 
   const getDepartment = useCallback(async () => {
-    setDepartment((await DepartmentService.getDepartment(params?.id)).data as DepartmentForm);
+    try {
+      setIsFetching(true);
+      setDepartment((await DepartmentService.getDepartment(params?.id)).data as DepartmentForm);
+    } catch (error) {
+      showApiError(error, 'Fetching error');
+    } finally {
+      setIsFetching(false);
+    }
   }, [params?.id]);
 
   useEffect(() => {
@@ -58,7 +66,7 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
                   <div className="flex">
                     <div className="ml-auto">
                       <FormAction
-                        loadingSave={isSaveLoading}
+                        loadingUpdate={isSaveLoading || isFetching}
                         actionCancel={() => router.push(ROUTES.DEPARTMENTS.INDEX)}
                         actions={[FormActions.CANCEL, FormActions.UPDATE]}
                       />
