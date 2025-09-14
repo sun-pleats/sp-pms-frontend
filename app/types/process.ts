@@ -1,7 +1,10 @@
+import { User } from "./users";
+
 export interface Process {
   id: string;
   name: string;
-  created_by?: string;
+  created_by?: User;
+  updated_by?: User;
   created_at: string;
   updated_at: string;
 }

@@ -81,6 +81,18 @@ const BuyersPage = () => {
     });
   };
 
+  const formatDate = (value: Date) => {
+    return value.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
+  const dateBodyTemplate = (rowData: Buyer) => {
+    return formatDate(new Date(rowData.created_at));
+  };
+
   const onActionEditClick = (id: string | number) => {
     router.push(`${ROUTES.BUYER.EDIT}/${id}`);
   };
@@ -134,7 +146,8 @@ const BuyersPage = () => {
       >
         <Column field="id" header="ID" />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
-        <Column field="created_by" header="Added By" style={{ minWidth: '12rem' }} />
+        <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(buyer: Buyer) => buyer?.created_by?.name} />
+        <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
         <Column body={actionBodyTemplate} header="Actions"></Column>
       </DataTable>
       <Modal

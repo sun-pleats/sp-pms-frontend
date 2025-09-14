@@ -10,7 +10,8 @@ export interface User {
   username: string;
   password: string;
   role: UserRole;
-  created_by?: string;
+  created_by?: User;
+  updated_by?: User;
   created_at: string;
   updated_at: string;
   refreshToken?: string;
