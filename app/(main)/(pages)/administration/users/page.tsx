@@ -33,6 +33,7 @@ const UsersPage = () => {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<SearchFilter>({});
   const { showApiError, showSuccess } = useContext(LayoutContext);
+  const abortControllerRef = React.useRef<AbortController | null>(null);
 
   const router = useRouter();
 
@@ -53,11 +54,32 @@ const UsersPage = () => {
 
   const fetchUsers = useCallback(
     async (keyword?: string) => {
+      // Abort previous request if exists
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
       setLoading(true);
-      const search = keyword?.trim() || filter.keyword?.trim() || '';
-      const { data } = await UserService.getUsers(search ? { search } : {});
-      setUsers(getUsers(data.data));
-      setLoading(false);
+      try {
+        const search = keyword?.trim() || filter.keyword?.trim() || '';
+        const { data } = await UserService.getUsers(
+          search ? { search } : {},
+          { signal: controller.signal }
+        );
+        setUsers(getUsers(data.data));
+      } catch (error: any) {
+        
+        if (error.name !== 'AbortError') {
+          console.error(error);
+        }
+      } finally {
+        // Only set loading to false if this is the latest controller
+        if (abortControllerRef.current === controller) {
+          setLoading(false);
+        }
+      }
     },
     [filter.keyword]
   );

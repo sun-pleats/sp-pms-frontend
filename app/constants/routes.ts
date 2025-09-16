@@ -58,6 +58,9 @@ export const ROUTES = {
   REPORTS: {
     PRODUCTION_DAILY_OUTPUT: {
       INDEX: 'daily-production-output'
+    },
+    SYSTEM_AUDIT: {
+      INDEX: 'system-audit'
     }
   }
 };

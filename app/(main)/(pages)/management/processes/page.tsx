@@ -33,6 +33,7 @@ const ProcessesPage = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<SearchFilter>({});
   const { showApiError, showSuccess } = useContext(LayoutContext);
+  const abortControllerRef = React.useRef<AbortController | null>(null);
 
   const router = useRouter();
 
@@ -62,11 +63,32 @@ const ProcessesPage = () => {
 
   const fetchProcesses = useCallback(
     async (keyword?: string) => {
+      // Abort previous request if exists
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
       setLoading(true);
-      const search = keyword?.trim() || filter.keyword?.trim() || '';
-      const data = await ProcessService.getProcesses(search ? { search } : {});
-      setProcesses(getProcesses(data.data.data ?? []));
-      setLoading(false);
+      try {
+        const search = keyword?.trim() || filter.keyword?.trim() || '';
+        const data = await ProcessService.getProcesses(
+          search ? { search } : {},
+          { signal: controller.signal }
+        );
+        setProcesses(getProcesses(data.data.data ?? []));
+      } catch (error: any) {
+        
+        if (error.name !== 'AbortError') {
+          console.error(error);
+        }
+      } finally {
+        // Only set loading to false if this is the latest controller
+        if (abortControllerRef.current === controller) {
+          setLoading(false);
+        }
+      }
     },
     [filter.keyword]
   );
@@ -148,7 +170,7 @@ const ProcessesPage = () => {
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(process: Process) => process?.created_by?.name} />
         <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
-        <Column body={actionBodyTemplate} header="Actions"></Column>
+        <Column header="Actions" body={actionBodyTemplate} style={{ minWidth: '10rem' }}></Column>
       </DataTable>
       <Modal
         title="Delete Record"

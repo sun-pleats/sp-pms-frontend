@@ -7,8 +7,8 @@ import { UserCreatePayload } from '../types/api/users';
 const BASE_URL = '/api/users';
 
 class UserService {
-  getUsers(payload?: Record<string, any>): AxiosPromise {
-    return apiClient.get(`${BASE_URL}`, { params: { ...payload } });
+  getUsers(payload?: Record<string, any>, options?: any): AxiosPromise {
+    return apiClient.get(`${BASE_URL}`, { params: { ...payload }, ...options });
   }
 
   getUser(id: string) {

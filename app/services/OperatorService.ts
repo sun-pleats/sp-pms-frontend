@@ -6,8 +6,8 @@ import apiClient from '../api/http-common';
 const BASE_URL = '/api/operators';
 
 export const OperatorService = {
-  getOperators(params?: Record<string, any>): AxiosPromise<OperatorPaginatedResponse> {
-    return apiClient.get(`${BASE_URL}`, { params });
+  getOperators(params?: Record<string, any>, options?: any): AxiosPromise<OperatorPaginatedResponse> {
+    return apiClient.get(`${BASE_URL}`, { params, ...options });
   },
   createOperator(payload: OperatorCreatePayload) {
     return apiClient.post(`${BASE_URL}`, payload);

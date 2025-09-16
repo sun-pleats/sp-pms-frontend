@@ -36,6 +36,7 @@ const ProcessOffsetsPage = () => {
   const [filter, setFilter] = useState<SearchFilter>({});
   const router = useRouter();
   const { showApiError, showSuccess } = useContext(LayoutContext);
+  const abortControllerRef = React.useRef<AbortController | null>(null);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter({ keyword: e.target.value });
@@ -54,11 +55,32 @@ const ProcessOffsetsPage = () => {
 
   const fetchProcessOffsets = useCallback(
     async (keyword?: string) => {
+      // Abort previous request if exists
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
       setLoading(true);
-      const search = keyword?.trim() || filter.keyword?.trim() || '';
-      const { data } = await ProcessOffsetService.getProcessOffsets(search ? { search } : {});
-      setProcessOffsets(getProcessOffsets(data.data ?? []));
-      setLoading(false);
+      try {
+        const search = keyword?.trim() || filter.keyword?.trim() || '';
+        const { data } = await ProcessOffsetService.getProcessOffsets(
+          search ? { search } : {},
+          { signal: controller.signal }
+        );
+        setProcessOffsets(getProcessOffsets(data.data ?? []));
+      } catch (error: any) {
+        
+        if (error.name !== 'AbortError') {
+          console.error(error);
+        }
+      } finally {
+        // Only set loading to false if this is the latest controller
+        if (abortControllerRef.current === controller) {
+          setLoading(false);
+        }
+      }
     },
     [filter.keyword]
   );
@@ -152,7 +174,7 @@ const ProcessOffsetsPage = () => {
         <Column field="description" header="Description" style={{ minWidth: '12rem' }} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(data: ProcessOffset) => data?.created_by?.name} />
         <Column field="created_at" header="Created At" body={dateBodyTemplate} />
-        <Column body={actionBodyTemplate} header="Actions"></Column>
+        <Column header="Actions" body={actionBodyTemplate} style={{ minWidth: '13rem' }}></Column>
       </DataTable>
       <Modal
         title="Delete Record"
