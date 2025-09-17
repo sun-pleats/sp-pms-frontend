@@ -10,8 +10,8 @@ export const BuyerService = {
   getBuyer(id: string): AxiosPromise<Buyer> {
     return apiClient.get(`${BASE_URL}/${id}`);
   },
-  getBuyers(params?: Record<string, any>): AxiosPromise<BuyerPaginatedResponse> {
-    return apiClient.get(`${BASE_URL}`, { params });
+  getBuyers(params?: Record<string, any>, options?: any): AxiosPromise<BuyerPaginatedResponse> {
+    return apiClient.get(`${BASE_URL}`, { params, ...options });
   },
   createBuyer(payload: BuyerCreatePayload) {
     return apiClient.post(`${BASE_URL}`, payload);

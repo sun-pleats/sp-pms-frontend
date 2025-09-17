@@ -25,21 +25,45 @@ interface FormSectionProps {
 interface FormData extends DefaultFormData {
   name: string;
   department_id?: string;
+  break_time_start?: string;
+  break_time_end?: string;
+
 }
 
 const FormSection = ({ onSubmit, children, departments, value, loading }: FormSectionProps) => {
-  const { control, handleSubmit, reset } = useForm<FormData>({
+  const { control, handleSubmit, reset } = useForm<SectionForm>({
     defaultValues: {
       name: value?.name || '',
-      department_id: value?.department_id || ''
+      department_id: value?.department_id || '',
+      break_time_start: value?.break_time_start || '',
+      break_time_end: value?.break_time_end || '',
+      shift_end: value?.shift_end || '',
+      shift_start: value?.shift_start || ''
     }
   });
 
   useEffect(() => {
     if (value) {
+      
+      const timeStringToDate = (timeStr?: string) => {
+        if (!timeStr) return null;
+        const [hour, minute, second] = timeStr.split(':');
+        const now = new Date();
+        now.setHours(Number(hour) || 0);
+        now.setMinutes(Number(minute) || 0);
+        now.setSeconds(Number(second) || 0);
+        now.setMilliseconds(0);
+        return now;
+      };
+
+
       reset({
         name: value.name || '',
-        department_id: value.department_id || ''
+        department_id: value.department_id || '',
+        break_time_start: timeStringToDate(value.break_time_start),
+        break_time_end: timeStringToDate(value.break_time_end),
+        shift_end: timeStringToDate(value.shift_end),
+        shift_start: timeStringToDate(value.shift_start)
       });
     }
   }, [value, reset]);

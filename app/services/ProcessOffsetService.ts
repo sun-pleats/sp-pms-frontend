@@ -6,8 +6,8 @@ import { ProcessOffset } from '../types/process-offset';
 const BASE_URL = '/api/process-offset';
 
 export const ProcessOffsetService = {
-  getProcessOffsets(params?: Record<string, any>): AxiosPromise<ProcessOffsetPaginatedResponse> {
-    return apiClient.get(`${BASE_URL}`, { params });
+  getProcessOffsets(params?: Record<string, any>, options?: any): AxiosPromise<ProcessOffsetPaginatedResponse> {
+    return apiClient.get(`${BASE_URL}`, { params, ...options });
   },
   createProcessOffset(payload: ProcessOffsetCreatePayload) {
     return apiClient.post(`${BASE_URL}`, payload);

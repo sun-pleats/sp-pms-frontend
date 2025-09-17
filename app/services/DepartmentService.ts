@@ -9,8 +9,8 @@ export const DepartmentService = {
   getDepartment(id: string) {
     return apiClient.get(`${BASE_URL}/${id}`);
   },
-  getDepartmentes(params?: Record<string, any>): AxiosPromise<DepartmentPaginatedResponse> {
-    return apiClient.get(`${BASE_URL}`, { params });
+  getDepartmentes(params?: Record<string, any>, options?: any): AxiosPromise<DepartmentPaginatedResponse> {
+    return apiClient.get(`${BASE_URL}`, { params, ...options });
   },
   createDepartment(payload: DepartmentCreatePayload) {
     return apiClient.post(`${BASE_URL}`, payload);

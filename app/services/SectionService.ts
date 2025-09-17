@@ -9,8 +9,8 @@ export const SectionService = {
   getSection(id: string): AxiosPromise<Section> {
     return apiClient.get(`${BASE_URL}/${id}`);
   },
-  getSections(params?: Record<string, any>): AxiosPromise<SectionPaginatedResponse> {
-    return apiClient.get(`${BASE_URL}`, { params });
+  getSections(params?: Record<string, any>, options?: any): AxiosPromise<SectionPaginatedResponse> {
+    return apiClient.get(`${BASE_URL}`, { params, ...options });
   },
   createSection(payload: SectionCreatePayload) {
     return apiClient.post(`${BASE_URL}`, payload);
