@@ -64,13 +64,9 @@ const UsersPage = () => {
       setLoading(true);
       try {
         const search = keyword?.trim() || filter.keyword?.trim() || '';
-        const { data } = await UserService.getUsers(
-          search ? { search } : {},
-          { signal: controller.signal }
-        );
+        const { data } = await UserService.getUsers(search ? { search } : {}, { signal: controller.signal });
         setUsers(getUsers(data.data));
       } catch (error: any) {
-        
         if (error.name !== 'AbortError') {
           console.error(error);
         }

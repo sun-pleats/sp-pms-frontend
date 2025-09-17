@@ -53,7 +53,7 @@ const SectionsPage = () => {
 
   const fetchSections = useCallback(
     async (keyword?: string) => {
-       // Abort previous request if exists
+      // Abort previous request if exists
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
@@ -63,10 +63,7 @@ const SectionsPage = () => {
       setLoading(true);
       try {
         const search = keyword?.trim() || filter.keyword?.trim() || '';
-        const data = await SectionService.getSections(
-          search ? { search } : {},
-          { signal: controller.signal }
-        );
+        const data = await SectionService.getSections(search ? { search } : {}, { signal: controller.signal });
         setSections(getSections(data.data.data ?? []));
       } catch (error: any) {
         if (error.name !== 'AbortError') {

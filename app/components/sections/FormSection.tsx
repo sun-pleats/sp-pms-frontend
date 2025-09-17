@@ -27,7 +27,6 @@ interface FormData extends DefaultFormData {
   department_id?: string;
   break_time_start?: string;
   break_time_end?: string;
-
 }
 
 const FormSection = ({ onSubmit, children, departments, value, loading }: FormSectionProps) => {
@@ -44,7 +43,6 @@ const FormSection = ({ onSubmit, children, departments, value, loading }: FormSe
 
   useEffect(() => {
     if (value) {
-      
       const timeStringToDate = (timeStr?: string) => {
         if (!timeStr) return null;
         const [hour, minute, second] = timeStr.split(':');
@@ -55,7 +53,6 @@ const FormSection = ({ onSubmit, children, departments, value, loading }: FormSe
         now.setMilliseconds(0);
         return now;
       };
-
 
       reset({
         name: value.name || '',

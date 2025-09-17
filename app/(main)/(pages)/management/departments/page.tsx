@@ -64,10 +64,7 @@ const DepartmentsPage = () => {
       try {
         const search = keyword?.trim() || filter.keyword?.trim() || '';
         // Pass keyword to service if available
-        const { data } = await DepartmentService.getDepartmentes(
-          search ? { search } : {},
-          { signal: controller.signal }
-        );
+        const { data } = await DepartmentService.getDepartmentes(search ? { search } : {}, { signal: controller.signal });
         setDepartments(getDepartments(data.data ?? []));
       } catch (error: any) {
         if (error.name !== 'AbortError') {

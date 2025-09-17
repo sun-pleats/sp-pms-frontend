@@ -65,12 +65,8 @@ const OperatorsPage = () => {
 
       setLoading(true);
       try {
-        
         const search = keyword?.trim() || filter.keyword?.trim() || '';
-        const { data } = await OperatorService.getOperators(
-          search ? { search } : {},
-          { signal: controller.signal }
-        );
+        const { data } = await OperatorService.getOperators(search ? { search } : {}, { signal: controller.signal });
         setOperators(getOperators(data.data ?? []));
       } catch (error: any) {
         if (error.name !== 'AbortError') {

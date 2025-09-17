@@ -69,17 +69,13 @@ const BuyersPage = () => {
       }
       const controller = new AbortController();
       abortControllerRef.current = controller;
-      
+
       setLoading(true);
       try {
         const search = keyword?.trim() || filter.keyword?.trim() || '';
-        const data = await BuyerService.getBuyers(
-          search ? { search } : {},
-          { signal: controller.signal }
-        );
+        const data = await BuyerService.getBuyers(search ? { search } : {}, { signal: controller.signal });
         setBuyers(getBuyers(data.data.data ?? []));
       } catch (error: any) {
-        
         if (error.name !== 'AbortError') {
           console.error(error);
         }

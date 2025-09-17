@@ -73,13 +73,9 @@ const ProcessesPage = () => {
       setLoading(true);
       try {
         const search = keyword?.trim() || filter.keyword?.trim() || '';
-        const data = await ProcessService.getProcesses(
-          search ? { search } : {},
-          { signal: controller.signal }
-        );
+        const data = await ProcessService.getProcesses(search ? { search } : {}, { signal: controller.signal });
         setProcesses(getProcesses(data.data.data ?? []));
       } catch (error: any) {
-        
         if (error.name !== 'AbortError') {
           console.error(error);
         }

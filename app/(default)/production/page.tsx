@@ -123,7 +123,7 @@ const ProductionPage = () => {
             placeholder="Select section"
             options={sectionOptions}
           />
-          <Button label="Home" icon="pi pi-home" style={{marginTop: '0.75rem'}}   onClick={() => router.push('/')}></Button>
+          <Button label="Home" icon="pi pi-home" style={{ marginTop: '0.75rem' }} onClick={() => router.push('/')}></Button>
         </div>
         <div id="home" className="landing-wrapper overflow-hidden">
           <div className="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static">

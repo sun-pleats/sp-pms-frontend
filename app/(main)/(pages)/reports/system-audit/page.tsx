@@ -1,6 +1,5 @@
 'use client';
 
-
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { SystemAudit } from '@/app/types/system-audit';
@@ -39,7 +38,7 @@ const SystemAuditPage = () => {
     });
     fetchSystemAudits();
   };
-  
+
   const fetchSystemAudits = useCallback(
     async (keyword?: string) => {
       // Abort previous request if exists
@@ -50,14 +49,11 @@ const SystemAuditPage = () => {
       abortControllerRef.current = controller;
 
       const search = keyword?.trim() || filter.keyword?.trim() || '';
-      
+
       setLoading(true);
       try {
         // Pass signal to your service
-        const data = await ReportService.getAllSystemAudit(
-          search ? { search } : {},
-          { signal: controller.signal }
-        );
+        const data = await ReportService.getAllSystemAudit(search ? { search } : {}, { signal: controller.signal });
         console.log('data', data);
         setSystemAudits(data?.data?.data ?? []);
       } catch (error: any) {
@@ -81,7 +77,7 @@ const SystemAuditPage = () => {
   const renderHeader = () => {
     return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
   };
-  
+
   const formatDate = (value: Date) => {
     return value.toLocaleDateString('en-US', {
       day: '2-digit',
@@ -141,17 +137,11 @@ const SystemAuditPage = () => {
         <Column field="ip" header="IP" style={{ minWidth: '12rem' }} />
         <Column field="created_at" header="Created At" dataType="date" style={{ minWidth: '12rem' }} body={dateBodyTemplate} />
       </DataTable>
-      <Dialog
-        header="Meta Data"
-        visible={metaDialogVisible}
-        style={{ width: '50vw' }}
-        onHide={() => setMetaDialogVisible(false)}
-        modal
-      >
+      <Dialog header="Meta Data" visible={metaDialogVisible} style={{ width: '50vw' }} onHide={() => setMetaDialogVisible(false)} modal>
         <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{metaDialogContent}</pre>
       </Dialog>
     </>
-  )
+  );
 };
 
 export default SystemAuditPage;

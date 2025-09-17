@@ -65,13 +65,9 @@ const ProcessOffsetsPage = () => {
       setLoading(true);
       try {
         const search = keyword?.trim() || filter.keyword?.trim() || '';
-        const { data } = await ProcessOffsetService.getProcessOffsets(
-          search ? { search } : {},
-          { signal: controller.signal }
-        );
+        const { data } = await ProcessOffsetService.getProcessOffsets(search ? { search } : {}, { signal: controller.signal });
         setProcessOffsets(getProcessOffsets(data.data ?? []));
       } catch (error: any) {
-        
         if (error.name !== 'AbortError') {
           console.error(error);
         }
