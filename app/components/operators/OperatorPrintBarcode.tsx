@@ -33,7 +33,7 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
   const [selectedProcesses, setSelectedProcesses] = useState<BarcodeDetail[]>([]);
 
   const { showError } = useContext(LayoutContext);
-  const { queuePrintStyleBundle, fetchPrintersSelectOptions } = useBarcodePrinting();
+  const { queuePrintOperatorProcess, fetchPrintersSelectOptions } = useBarcodePrinting();
 
   useEffect(() => {
     setState({ ...state, show: visible });
@@ -77,7 +77,7 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
       return;
     }
     // @NOTE: Change to operator printing
-    await queuePrintStyleBundle(selectedPrinter?.toString() ?? '', ['1']);
+    await queuePrintOperatorProcess(selectedPrinter?.toString() ?? '', ['1']);
     setState({ ...state, saving: false });
   };
 

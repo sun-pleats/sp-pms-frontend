@@ -51,12 +51,14 @@ export default function useBarcodePrinting() {
   };
 
   const queuePrintStyleBundle = (barcode_printer_id: string, ids: string[]) => queueBarcode(barcode_printer_id, ids, PRINTING_MODELS.STYLE_BUNDLE);
+  const queuePrintOperatorProcess = (barcode_printer_id: string, ids: string[]) => queueBarcode(barcode_printer_id, ids, PRINTING_MODELS.OPERATOR_PROCESS);
 
   return {
     queueBarcode,
     fetchPrinters,
     fetchPrintersSelectOptions,
     fetchQueues,
-    queuePrintStyleBundle
+    queuePrintStyleBundle,
+    queuePrintOperatorProcess
   };
 }
