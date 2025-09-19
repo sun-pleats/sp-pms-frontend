@@ -7,25 +7,10 @@ import { useRouter } from 'next/navigation';
 import FormAction, { FormActions } from '@/app/components/form-action/component';
 import FormProcessOffset from '@/app/components/process-offset/FormProcessOffset';
 import { useProcessOffsetPage } from '../hooks/useProcessOffsetPage';
-import { DefaultFormData } from '@/app/types/form';
-import { LayoutContext } from '@/layout/context/layoutcontext';
 
 const CreateProcessOffsetPage = () => {
   const router = useRouter();
   const { saveProcessOffset, isSaveLoading } = useProcessOffsetPage();
-  const { showApiError, showSuccess } = useContext(LayoutContext);
-
-  const handleSubmit = async (data: DefaultFormData) => {
-    try {
-      await saveProcessOffset(data);
-      showSuccess('Process offset successfully created.');
-      setTimeout(() => {
-        router.push(ROUTES.PROCESS_OFFSETS.INDEX);
-      }, 2000);
-    } catch (error: any) {
-      showApiError(error, 'Failed to process offset.');
-    }
-  };
 
   return (
     <div className="grid justify-content-start">
@@ -37,7 +22,7 @@ const CreateProcessOffsetPage = () => {
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormProcessOffset onSubmit={handleSubmit}>
+                <FormProcessOffset onSubmit={saveProcessOffset}>
                   <div className="flex mt-2">
                     <div className="ml-auto">
                       <FormAction
