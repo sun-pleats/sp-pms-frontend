@@ -1,29 +1,30 @@
 import { Button } from 'primereact/button';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { ProcessOffset } from '@/app/types/process-offset';
 import { SelectItem } from 'primereact/selectitem';
 import FormDropdown from '../form/dropdown/component';
 import Modal from '@/app/components/modal/component';
 import React, { useContext, useEffect, useState } from 'react';
 import useBarcodePrinting from '@/app/hooks/useBarcodePrinting';
 
-interface SinglePrintBarcodeState {
+interface PrintBarcodeState {
   show?: boolean;
   saving?: boolean;
 }
 
-interface SinglePrintBarcodeProps {
-  offset?: ProcessOffset;
+interface PrintBarcodeProps {
+  ids: string[];
+  model: string;
   visible?: boolean;
   onHide?: any;
 }
 
-const ProcessOffsetPrintBarcode = ({ offset, visible, onHide }: SinglePrintBarcodeProps) => {
-  const [state, setState] = useState<SinglePrintBarcodeState>({});
+const PrintBarcode = ({ ids, visible, onHide, model }: PrintBarcodeProps) => {
+  const [state, setState] = useState<PrintBarcodeState>({});
   const [selectedPrinter, setSelectedPrinter] = useState<string | null>();
   const [printerOptions, setPrinterOptions] = useState<SelectItem[]>([]);
-  const { showError } = useContext(LayoutContext);
-  const { queuePrintStyleBundle, fetchPrintersSelectOptions } = useBarcodePrinting();
+  const [loadingPrinters, setLoadingPrinters] = useState<boolean>(false);
+  const { showError, showApiError } = useContext(LayoutContext);
+  const { queueBarcode, fetchPrintersSelectOptions } = useBarcodePrinting();
 
   useEffect(() => {
     setState({ ...state, show: visible });
@@ -36,7 +37,14 @@ const ProcessOffsetPrintBarcode = ({ offset, visible, onHide }: SinglePrintBarco
   };
 
   const initData = async () => {
-    setPrinterOptions(await fetchPrintersSelectOptions());
+    try {
+      setLoadingPrinters(true);
+      setPrinterOptions(await fetchPrintersSelectOptions());
+    } catch (error) {
+      showApiError(error, 'Error fetching printers');
+    } finally {
+      setLoadingPrinters(false);
+    }
   };
 
   const print = async () => {
@@ -45,20 +53,22 @@ const ProcessOffsetPrintBarcode = ({ offset, visible, onHide }: SinglePrintBarco
       showError('Please select a printer.');
       return;
     }
-    // @NOTE: Change to offset printing
-    await queuePrintStyleBundle(selectedPrinter?.toString() ?? '', ['1']);
+    // @NOTE: Change to user printing
+    await queueBarcode(selectedPrinter?.toString() ?? '', ids, model);
     setState({ ...state, saving: false });
   };
 
   return (
-    <Modal title="Print Process Offset Barcode" width="50vh" visible={state.show} onHide={onHideModal} confirmSeverity="danger" hideActions={true}>
+    <Modal title="Print Barcode" width="50vh" visible={state.show} onHide={onHideModal} confirmSeverity="danger" hideActions={true}>
       <FormDropdown
         label="Barcode Printer"
         value={selectedPrinter}
         onChange={(option: any) => setSelectedPrinter(option.value)}
         placeholder="Select"
+        loading={loadingPrinters}
         options={printerOptions}
       />
+      <p>{ids.length} Barcode(s) selected.</p>
       <div className="flex">
         <div className="ml-auto">
           <Button onClick={print} loading={state.saving} icon="pi pi-print" severity="info" label="Print Barcode" className="mr-2" />
@@ -68,4 +78,4 @@ const ProcessOffsetPrintBarcode = ({ offset, visible, onHide }: SinglePrintBarco
   );
 };
 
-export default ProcessOffsetPrintBarcode;
+export default PrintBarcode;

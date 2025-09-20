@@ -19,6 +19,8 @@ import PageHeader from '@/app/components/page-header/component';
 import TableHeader from '@/app/components/table-header/component';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 import PageTile from '@/app/components/page-title/component';
+import PrintBarcode from '@/app/components/barcode/PrintBarcode';
+import { PRINTING_MODELS } from '@/app/constants/barcode';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
@@ -196,6 +198,11 @@ const BundlesPage = () => {
         visible={pageState.showSinglePrintBarcode}
       />
       <ReleaseBundles onHide={() => setPageState({ ...pageState, showRelease: false })} visible={pageState.showRelease} />
+      <PrintBarcode
+        model={PRINTING_MODELS.STYLE_BUNDLE}
+        ids={selectedBundles?.flatMap((r) => r.id?.toString() ?? '')}
+        visible={pageState.showMultiPrintBarcode}
+      />
     </>
   );
 };

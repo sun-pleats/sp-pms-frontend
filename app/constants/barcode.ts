@@ -1,4 +1,6 @@
 export const PRINTING_MODELS = {
   STYLE_BUNDLE: 'StyleBundle',
-  OPERATOR_PROCESS: 'OperatorProcess'
+  OPERATOR_PROCESS: 'OperatorProcess',
+  USER: 'User',
+  OPERATOR: 'Operator'
 };

@@ -9,14 +9,14 @@ import { Operator } from '@/app/types/operator';
 import { OperatorService } from '@/app/services/OperatorService';
 import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
-import DataStatusIcon from '@/app/components/data-status-icon/component';
 import Modal from '@/app/components/modal/component';
-import OperatorPrintBarcode from '@/app/components/operators/OperatorPrintBarcode';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
+import PrintBarcode from '@/app/components/barcode/PrintBarcode';
+import { PRINTING_MODELS } from '@/app/constants/barcode';
 
 interface OperatorPageState {
   deleteModalShow?: boolean;
@@ -187,7 +187,7 @@ const OperatorsPage = () => {
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>
-      <OperatorPrintBarcode visible={showPrint} operator={selectedOperator} onHide={() => setShowPrint(false)} />
+      <PrintBarcode visible={showPrint} ids={[selectedOperator?.id ?? '']} model={PRINTING_MODELS.OPERATOR} onHide={() => setShowPrint(false)} />
     </>
   );
 };

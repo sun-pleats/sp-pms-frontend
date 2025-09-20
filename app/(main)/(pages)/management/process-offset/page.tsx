@@ -15,7 +15,8 @@ import PageHeader from '@/app/components/page-header/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import PageTile from '@/app/components/page-title/component';
-import ProcessOffsetPrintBarcode from '@/app/components/process-offset/ProcessOffsetPrintBarcode';
+import PrintBarcode from '@/app/components/barcode/PrintBarcode';
+import { PRINTING_MODELS } from '@/app/constants/barcode';
 
 interface ProcessOffsetPageState {
   deleteModalShow?: boolean;
@@ -181,9 +182,10 @@ const ProcessOffsetsPage = () => {
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>
-      <ProcessOffsetPrintBarcode
+      <PrintBarcode
         visible={pageState.showPrint}
-        offset={selectedOffset}
+        ids={[selectedOffset?.id ?? '']}
+        model={PRINTING_MODELS.OPERATOR_PROCESS}
         onHide={() => setPageState({ ...pageState, showPrint: false })}
       />
     </>

@@ -4,23 +4,24 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
-import { InputText } from 'primereact/inputtext';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ROUTES } from '@/app/constants/routes';
 import { User } from '@/app/types/users';
 import { useRouter } from 'next/navigation';
 import Modal from '@/app/components/modal/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
-import PageCard from '@/app/components/page-card/component';
 import PageHeader from '@/app/components/page-header/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import type { Demo } from '@/types';
 import UserService from '@/app/services/UserService';
+import PrintBarcode from '@/app/components/barcode/PrintBarcode';
+import { PRINTING_MODELS } from '@/app/constants/barcode';
 
 interface UserPageState {
   deleteModalShow?: boolean;
   deleteId?: string | number;
+  showPrint?: boolean;
 }
 
 interface SearchFilter {
@@ -34,9 +35,8 @@ const UsersPage = () => {
   const [filter, setFilter] = useState<SearchFilter>({});
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const abortControllerRef = React.useRef<AbortController | null>(null);
-
+  const [selectedUser, setSelectedUser] = useState<User | undefined>();
   const router = useRouter();
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter({ keyword: e.target.value });
   };
@@ -126,9 +126,15 @@ const UsersPage = () => {
     });
   };
 
+  const onPrintClick = (user: User) => {
+    setSelectedUser(user);
+    setPageState({ ...pageState, showPrint: true });
+  };
+
   const actionBodyTemplate = (rowData: User) => {
     return (
       <>
+        <Button icon="pi pi-print" onClick={() => onPrintClick(rowData)} className="mr-2" />
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} severity="warning" className="mr-2" />
         <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} severity="danger" />
       </>
@@ -182,6 +188,12 @@ const UsersPage = () => {
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>
+      <PrintBarcode
+        visible={pageState.showPrint}
+        ids={[selectedUser?.id ?? '']}
+        model={PRINTING_MODELS.USER}
+        onHide={() => setPageState({ ...pageState, showPrint: false })}
+      />
     </>
   );
 };
