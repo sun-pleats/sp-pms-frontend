@@ -62,6 +62,9 @@ export const ROUTES = {
     SYSTEM_AUDIT: {
       INDEX: 'system-audit'
     }
+  },
+  BUNDLE_FLOW: {
+    INDEX: 'bundle-flow'
   }
 };
 

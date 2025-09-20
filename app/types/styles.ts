@@ -98,3 +98,12 @@ export interface StyleBundleEntryLog {
   past_log?: boolean; // Temporary not part of the model Will appear only during logging
   department?: Department;
 }
+
+export type BundleMovementRecord = {
+  id: string; // unique id per hop
+  productId: string; // which product the hop belongs to
+  department: string;
+  entryTime: string; // ISO string
+  exitTime: string; // ISO string
+  user: string; // who recorded the movement
+};
