@@ -11,7 +11,7 @@ import FormDropdown from '@/app/components/form/dropdown/component';
 import FormInputText from '@/app/components/form/input-text/component';
 import Link from 'next/link';
 import Modal from '@/app/components/modal/component';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import useKiosk from './hooks/useKiosk';
 import useUtilityData from '@/app/hooks/useUtilityData';
 
@@ -47,6 +47,8 @@ const LandingPage = () => {
       .catch((err) => showApiError(err, 'Failed to fetch departments.'));
   };
   const [details, setDetails] = useState<StyleDetail[]>([]);
+  const [phase, setPhase] = useState<'in' | 'out' | undefined>();
+
   const itemTemplate = (item: StyleDetail) => {
     return (
       <div className="flex flex-wrap p-2 align-items-center gap-3">
@@ -75,6 +77,11 @@ const LandingPage = () => {
           setIsReturnedShow(true);
         } else {
           const { style_bundle } = log;
+
+          // Set entry phase
+          if (log.exit_time) setPhase('out');
+          else if (log.entry_time) setPhase('in');
+
           setBarcode(style_bundle?.bundle_number ?? '');
           setDetails([
             { name: 'Style Number', value: style_bundle?.style?.style_number ?? '' },
@@ -142,6 +149,8 @@ const LandingPage = () => {
       <div className="card m-5">
         <div className="card-body">
           <div className="flex flex-column align-items-center m-auto m-5">
+            {phase === 'in' && <h2 className="text-green-500">Logged In</h2>}
+            {phase === 'out' && <h2 className="text-red-500">Logged Out</h2>}
             <Barcode value={barcode} />
           </div>
           <ListBox filter={false} dataKey="id" options={details} itemTemplate={itemTemplate} emptyMessage="Style Details" />

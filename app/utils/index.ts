@@ -25,3 +25,12 @@ export function getMonthName(monthNumber: number) {
   date.setMonth(monthNumber - 1); // JS months are 0-based
   return date.toLocaleString('default', { month: 'long' });
 }
+
+export function currentMonthDates(): Date[] {
+  const now = new Date();
+  // Start of this month
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  // End of this month
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  return [startOfMonth, endOfMonth];
+}

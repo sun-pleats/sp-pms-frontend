@@ -50,3 +50,19 @@ export interface ProductionMonthlyEfficiency {
   year: number;
   avg_efficiency: number;
 }
+
+export interface ReportStyleBundleEntryLog {
+  id?: string;
+  style_number?: string;
+  bundle_number?: string;
+  quantity?: string;
+  roll_number?: string;
+  remarks?: string;
+  entry_time?: string;
+  exit_time?: string;
+  hours_stayed?: number;
+  department_name?: string;
+  log_remarks?: string;
+  size_number?: string;
+  color?: string;
+}

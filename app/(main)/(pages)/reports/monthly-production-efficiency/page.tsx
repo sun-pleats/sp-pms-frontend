@@ -4,7 +4,7 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
-import { formatDbDate, getMonthName } from '@/app/utils';
+import { currentMonthDates, formatDbDate, getMonthName } from '@/app/utils';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ProductionMonthlyEfficiency } from '@/app/types/reports';
 import { ReportService } from '@/app/services/ReportService';
@@ -35,10 +35,7 @@ const ProductionMonthlyEfficiencyPage = () => {
   const [productionMonthlyEfficiency, setProductionMonthlyEfficiency] = useState<ProductionMonthlyEfficiency[]>([]);
   const [loadings, setLoadings] = useState<Loadings>({});
   const [filter, setFilter] = useState<SearchFilter>({
-    dates: [
-      new Date(new Date().setDate(new Date().getDate() - 30)),
-      new Date() // start = today
-    ]
+    dates: currentMonthDates()
   });
   const [sectionOptions, setSectionOptions] = useState<SelectItem[]>();
   const [operatorOptions, setOperatorOptions] = useState<SelectItem[]>([]);
