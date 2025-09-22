@@ -101,7 +101,6 @@ export interface StyleBundleEntryLog {
 
 export type BundleMovementRecord = {
   id: string; // unique id per hop
-  productId: string; // which product the hop belongs to
   department: string;
   entryTime: string; // ISO string
   exitTime: string; // ISO string

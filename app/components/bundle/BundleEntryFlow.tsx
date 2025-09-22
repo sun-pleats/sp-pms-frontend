@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useEffect } from 'react';
 import ReactFlow, { Background, Controls, MiniMap, addEdge, useEdgesState, useNodesState, Position, Handle, Node, Edge } from 'reactflow';
 import 'reactflow/dist/style.css';
 import dagre from 'dagre';
@@ -10,6 +10,7 @@ import 'primereact/resources/themes/lara-light-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import { BundleMovementRecord } from '@/app/types/styles';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 // --- Custom node with PrimeReact Card -------------------------------------------
 const NodeCard: React.FC<{ data: any }> = ({ data }) => {
@@ -23,7 +24,7 @@ const NodeCard: React.FC<{ data: any }> = ({ data }) => {
   );
 
   const footer = (
-    <div className="flex justify-content-between align-items-center text-xs text-gray-600">
+    <div className="flex justify-content-between align-items-center text-xs text-gray-600 gap-1">
       <div className="flex align-items-center gap-1">
         <Avatar label={user.charAt(0)} size="small" shape="circle" />
         <span>{user}</span>
@@ -105,28 +106,54 @@ function buildGraph(records: BundleMovementRecord[]) {
   return layoutLR(nodes, edges);
 }
 
-// --- Main component --------------------------------------------------------------
-export default function BundleEntryFlow({ records = [] }: { records?: BundleMovementRecord[] }) {
-  const initial = useMemo(() => buildGraph(records), [records]);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initial.nodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initial.edges);
-  const onConnect = useCallback((params: any) => setEdges((eds) => addEdge({ ...params, type: 'smoothstep' }, eds)), [setEdges]);
+export default function BundleEntryFlow({ records = [], loading }: { records?: BundleMovementRecord[], loading?: boolean }) {
+  const build = useCallback(() => buildGraph(records), [records]);
+
+  // seed once (safe default)
+  const seeded = useMemo(build, [build]);
+  const hasRecords = records.length > 0;
+
+  const [nodes, setNodes, onNodesChange] = useNodesState(seeded.nodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(seeded.edges);
+
+  // whenever records change → rebuild graph + replace state
+  useEffect(() => {
+    const g = build();
+    setNodes(g.nodes);
+    setEdges(g.edges);
+  }, [build, setNodes, setEdges]);
+
+  const onConnect = useCallback(
+    (params: any) => setEdges((eds) => addEdge({ ...params, type: 'smoothstep' }, eds)),
+    [setEdges]
+  );
+
   return (
     <div style={{ width: '100%', height: '70vh' }}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        nodeTypes={nodeTypes}
-        fitView
-        fitViewOptions={{ padding: 0.2 }}
-      >
-        <MiniMap pannable zoomable />
-        <Controls />
-        <Background gap={12} />
-      </ReactFlow>
+      {loading &&
+        <div className="col-12 flex justify-content-center align-items-center">
+          <ProgressSpinner style={{ width: '50px', height: '50px' }} />
+        </div>
+      }
+        {hasRecords ? (
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          nodeTypes={nodeTypes}
+          fitView
+          fitViewOptions={{ padding: 0.2 }}
+        >
+          <MiniMap pannable zoomable />
+          <Controls />
+          <Background gap={12} />
+        </ReactFlow>
+      ) : (
+        <div className="flex flex-column align-items-center justify-content-center h-full w-full text-gray-500">
+          <i className="pi pi-search text-4xl mb-3" />
+          <span className="text-lg font-medium">Please search a bundle to get started.</span>
+        </div>
+      )}
     </div>
   );
 }
+

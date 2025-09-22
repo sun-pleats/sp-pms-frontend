@@ -114,7 +114,6 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
         }) || [emptyStyleItem()],
         style_fabrics: value?.style_planned_fabrics.map((f: any) => {
           f.style_planned_fabric_sizes.forEach((size: any) => {
-            console.log(size);
             (f as any)[`size_${size.size_number + 1}`] = size.quantity || 0;
           });
 

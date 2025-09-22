@@ -185,7 +185,7 @@ const ProcessOffsetsPage = () => {
       <PrintBarcode
         visible={pageState.showPrint}
         ids={[selectedOffset?.id ?? '']}
-        model={PRINTING_MODELS.OPERATOR_PROCESS}
+        model={PRINTING_MODELS.PROCESS_OFFSET}
         onHide={() => setPageState({ ...pageState, showPrint: false })}
       />
     </>

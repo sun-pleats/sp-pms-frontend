@@ -25,9 +25,9 @@ export default function RemoteStyleBundleDropdown({
   const fetchOptions = useCallback(
     async (q: string) => {
       try {
-        const { data: res } = await UtilityService.findStyles(q, perPage);
+        const { data: res } = await UtilityService.findBundles(q, perPage);
         const mapped: Option[] = (res.data ?? res.data ?? []).map((item: any) => ({
-          label: item.style_number,
+          label: item.bundle_number,
           value: item.id
         }));
         setOptions(mapped);

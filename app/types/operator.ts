@@ -1,5 +1,6 @@
 import { Process } from './process';
 import { Section } from './section';
+import { User } from './users';
 
 export interface Operator {
   id: string;
@@ -10,6 +11,7 @@ export interface Operator {
   created_at?: User;
   updated_at?: string;
   operator_processes?: {
+    id?: number;
     process_id?: number;
     section_id?: number;
     time?: number;

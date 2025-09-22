@@ -53,6 +53,7 @@ export interface ProductionMonthlyEfficiency {
 
 export interface ReportStyleBundleEntryLog {
   id?: string;
+  style_bundle_id?: string;
   style_number?: string;
   bundle_number?: string;
   quantity?: string;
@@ -65,4 +66,6 @@ export interface ReportStyleBundleEntryLog {
   log_remarks?: string;
   size_number?: string;
   color?: string;
+  entry_by_name?: string;
+  exit_by_name?: string;
 }

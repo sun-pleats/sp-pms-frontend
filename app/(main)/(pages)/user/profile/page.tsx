@@ -26,7 +26,6 @@ const UserProfile = () => {
     if (!user?.email) return;
 
     const res = await UserService.getMe();
-    console.log('res', res);
     if (res.data) {
       setUserData(res.data as UserForm);
     }

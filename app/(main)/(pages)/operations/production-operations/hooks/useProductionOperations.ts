@@ -1,5 +1,5 @@
 import { DefaultFormData } from '@/app/types/form';
-import { generateSimpleId } from '@/app/utils';
+import { formatDbDate, generateSimpleId } from '@/app/utils';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Operator, OperatorProcess } from '@/app/types/operator';
 import { OperatorProcessService } from '@/app/services/OperatorProcessService';
@@ -114,7 +114,7 @@ export const useProductionOperations = () => {
       await ProductionTrackService.storeTracks({
         tracks: e.tracks.map((r) => ({
           id: r.id ?? false,
-          date: r.date,
+          date: formatDbDate(r.date),
           section_id: trackFilter.section_id,
           operator_id: r.operator_id ?? '',
           process_id: r.process_id ?? '',

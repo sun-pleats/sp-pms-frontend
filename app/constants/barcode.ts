@@ -1,6 +1,6 @@
 export const PRINTING_MODELS = {
-  STYLE_BUNDLE: 'StyleBundle',
-  OPERATOR_PROCESS: 'OperatorProcess',
-  USER: 'User',
-  OPERATOR: 'Operator'
+  STYLE_BUNDLE: 'App\\Models\\StyleBundle',
+  OPERATOR_PROCESS: 'App\\Models\\OperatorProcess',
+  USER: 'App\\Models\\User',
+  PROCESS_OFFSET: 'App\\Models\\ProcessOffset'
 };

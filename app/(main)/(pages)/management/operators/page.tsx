@@ -15,8 +15,7 @@ import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
-import PrintBarcode from '@/app/components/barcode/PrintBarcode';
-import { PRINTING_MODELS } from '@/app/constants/barcode';
+import OperatorPrintBarcode from '@/app/components/operators/OperatorPrintBarcode';
 
 interface OperatorPageState {
   deleteModalShow?: boolean;
@@ -133,6 +132,7 @@ const OperatorsPage = () => {
           size="small"
           severity="success"
           className="mr-2"
+          disabled={!rowData.operator_processes?.length}
         />
         <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" className="mr-2" />
         <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} size="small" severity="danger" />
@@ -187,7 +187,7 @@ const OperatorsPage = () => {
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>
-      <PrintBarcode visible={showPrint} ids={[selectedOperator?.id ?? '']} model={PRINTING_MODELS.OPERATOR} onHide={() => setShowPrint(false)} />
+      <OperatorPrintBarcode visible={showPrint} operator={selectedOperator} onHide={() => setShowPrint(false)} />
     </>
   );
 };

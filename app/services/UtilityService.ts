@@ -3,7 +3,7 @@ import apiClient from '../api/http-common';
 import { Department } from '../types/department';
 import { Section } from '../types/section';
 import { Process } from '../types/process';
-import { StylePaginatedResponse } from '../types/api/styles';
+import { StyleBundlePaginatedResponse, StylePaginatedResponse } from '../types/api/styles';
 import { Operator } from '../types/operator';
 import { Buyer } from '../types/buyers';
 
@@ -30,6 +30,9 @@ class UtilityService {
   }
   findStyles(keyword: string, perPage: number = 15): AxiosPromise<StylePaginatedResponse> {
     return apiClient.get(`${BASE_URL}/find-styles`, { params: { q: keyword, page: 1, perPage } });
+  }
+  findBundles(keyword: string, perPage: number = 15): AxiosPromise<StyleBundlePaginatedResponse> {
+    return apiClient.get(`${BASE_URL}/find-bundles`, { params: { q: keyword, page: 1, perPage } });
   }
 }
 export default new UtilityService();

@@ -1,6 +1,5 @@
 'use client';
 
-import '@xyflow/react/dist/style.css';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { Controller } from 'react-hook-form';

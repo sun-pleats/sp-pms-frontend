@@ -54,7 +54,6 @@ const SystemAuditPage = () => {
       try {
         // Pass signal to your service
         const data = await ReportService.getAllSystemAudit(search ? { search } : {}, { signal: controller.signal });
-        console.log('data', data);
         setSystemAudits(data?.data?.data ?? []);
       } catch (error: any) {
         if (error.name !== 'AbortError') {
