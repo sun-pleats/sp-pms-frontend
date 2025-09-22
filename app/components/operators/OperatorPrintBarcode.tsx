@@ -71,15 +71,17 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
   };
 
   const print = async () => {
-
     if (!selectedPrinter) {
       showError('Please select a printer.');
       return;
     }
     setState({ ...state, saving: true });
-   
+
     // @NOTE: Change to operator printing
-    await queuePrintOperatorProcess(selectedPrinter?.toString() ?? '', selectedProcesses.flatMap(r=>r.value));
+    await queuePrintOperatorProcess(
+      selectedPrinter?.toString() ?? '',
+      selectedProcesses.flatMap((r) => r.value)
+    );
     setState({ ...state, saving: false });
   };
 

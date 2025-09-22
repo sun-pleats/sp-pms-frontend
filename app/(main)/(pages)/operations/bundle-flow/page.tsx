@@ -1,6 +1,5 @@
 'use client';
 
-
 import { AutoCompleteSelectEvent } from 'primereact/autocomplete';
 import { BundleMovementRecord } from '@/app/types/styles';
 import { Option } from '@/app/types';
@@ -26,19 +25,21 @@ const StyleFlowPage = () => {
     try {
       setIsFetching(true);
       const { data } = await StyleBundleService.getBundleFlow(id);
-      setBundleMovement(data.map(r => ({
-        id: r.id?.toString() ?? '',
-        department: r.department_name ?? '',
-        entryTime: r.entry_time ?? '',
-        exitTime: r.exit_time ?? '',
-        user: r.entry_by_name ?? '',
-      })))
+      setBundleMovement(
+        data.map((r) => ({
+          id: r.id?.toString() ?? '',
+          department: r.department_name ?? '',
+          entryTime: r.entry_time ?? '',
+          exitTime: r.exit_time ?? '',
+          user: r.entry_by_name ?? ''
+        }))
+      );
     } catch (error) {
-      showApiError(error, "Error fetching flow");
+      showApiError(error, 'Error fetching flow');
     } finally {
       setIsFetching(false);
     }
-  }
+  };
 
   return (
     <>

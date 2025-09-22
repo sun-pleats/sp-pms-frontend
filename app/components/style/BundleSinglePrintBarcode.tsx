@@ -84,12 +84,11 @@ const BundleSinglePrintBarcode = ({ bundle, visible, onHide }: BundleSinglePrint
   };
 
   const print = async () => {
-  
     if (!selectedPrinter) {
       showError('Please select a printer.');
       return;
     }
-      setState({ ...state, saving: true });
+    setState({ ...state, saving: true });
     await queuePrintStyleBundle(selectedPrinter?.toString() ?? '', [bundle?.id?.toString() ?? '']);
     hide();
     setState({ ...state, saving: false });

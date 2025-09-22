@@ -48,12 +48,11 @@ const PrintBarcode = ({ ids, visible, onHide, model }: PrintBarcodeProps) => {
   };
 
   const print = async () => {
-  
     if (!selectedPrinter) {
       showError('Please select a printer.');
       return;
     }
-      setState({ ...state, saving: true });
+    setState({ ...state, saving: true });
     // @NOTE: Change to user printing
     await queueBarcode(selectedPrinter?.toString() ?? '', ids, model);
     setState({ ...state, saving: false });

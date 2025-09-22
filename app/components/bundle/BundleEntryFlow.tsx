@@ -106,7 +106,7 @@ function buildGraph(records: BundleMovementRecord[]) {
   return layoutLR(nodes, edges);
 }
 
-export default function BundleEntryFlow({ records = [], loading }: { records?: BundleMovementRecord[], loading?: boolean }) {
+export default function BundleEntryFlow({ records = [], loading }: { records?: BundleMovementRecord[]; loading?: boolean }) {
   const build = useCallback(() => buildGraph(records), [records]);
 
   // seed once (safe default)
@@ -123,26 +123,17 @@ export default function BundleEntryFlow({ records = [], loading }: { records?: B
     setEdges(g.edges);
   }, [build, setNodes, setEdges]);
 
-  const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge({ ...params, type: 'smoothstep' }, eds)),
-    [setEdges]
-  );
+  const onConnect = useCallback((params: any) => setEdges((eds) => addEdge({ ...params, type: 'smoothstep' }, eds)), [setEdges]);
 
   return (
     <div style={{ width: '100%', height: '70vh' }}>
-      {loading &&
+      {loading && (
         <div className="col-12 flex justify-content-center align-items-center">
           <ProgressSpinner style={{ width: '50px', height: '50px' }} />
         </div>
-      }
-        {hasRecords ? (
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          nodeTypes={nodeTypes}
-          fitView
-          fitViewOptions={{ padding: 0.2 }}
-        >
+      )}
+      {hasRecords ? (
+        <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView fitViewOptions={{ padding: 0.2 }}>
           <MiniMap pannable zoomable />
           <Controls />
           <Background gap={12} />
@@ -156,4 +147,3 @@ export default function BundleEntryFlow({ records = [], loading }: { records?: B
     </div>
   );
 }
-
