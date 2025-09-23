@@ -1,5 +1,7 @@
 'use client';
 
+import axios from 'axios';
+
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
@@ -12,11 +14,11 @@ import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
 import Modal from '@/app/components/modal/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
-import PageCard from '@/app/components/page-card/component';
 import PageHeader from '@/app/components/page-header/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import PageTile from '@/app/components/page-title/component';
+import { Image } from 'primereact/image';
 
 interface BuyerPageState {
   deleteModalShow?: boolean;
@@ -111,6 +113,21 @@ const BuyersPage = () => {
     return formatDate(new Date(rowData.created_at));
   };
 
+  const imageBodyTemplate = (rowData: Buyer) => {
+    return (
+      <>
+        {rowData?.buyer_logo_path && (
+          <Image
+            src={rowData.buyer_logo_path}
+            alt={rowData.name}
+            imageStyle={{ width: 50, height: 50, objectFit: 'cover' }}
+            preview // opens a lightbox on click
+          />
+        )}
+      </>
+    );
+  };
+
   const onActionEditClick = (id: string | number) => {
     router.push(`${ROUTES.BUYER.EDIT}/${id}`);
   };
@@ -164,6 +181,7 @@ const BuyersPage = () => {
       >
         <Column field="id" header="ID" />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
+        <Column header="Logo" field="buyer_logo_path" style={{ minWidth: '10rem' }} body={imageBodyTemplate} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(buyer: Buyer) => buyer?.created_by?.name} />
         <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
         <Column header="Actions" body={actionBodyTemplate} style={{ minWidth: '10rem' }}></Column>

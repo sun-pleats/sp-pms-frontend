@@ -17,6 +17,7 @@ const CreateBuyerPage = () => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const handleSubmit = async (data: DefaultFormData) => {
+    console.log(data);
     try {
       await saveBuyer(data);
       showSuccess('Buyer offset successfully created.');

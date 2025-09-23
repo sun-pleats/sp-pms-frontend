@@ -1,7 +1,14 @@
 .gradient-bg {
-  min-height: 100vh; /* full screen */
-  background: linear-gradient(135deg, #000000, #0d47a1); /* black → blue */
+  min-height: 100vh;
+  /* full screen */
+  background: linear-gradient(170deg, #000000, #211eff);
+  /* black → blue */
   display: flex;
   justify-content: center;
   align-items: center;
+
+  .surface-card {
+    background-color: transparent !important;
+    color: white !important;
+  }
 }

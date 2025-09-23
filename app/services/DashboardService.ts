@@ -1,6 +1,6 @@
 import apiClient from '../api/http-common';
 import type { AxiosPromise } from 'axios';
-import { DashboardOperatorEfficiency, DashboardStats, DashboardYearlyEfficiency } from '../types/dashboard';
+import { DashboardOperatorEfficiency, DashboardStats, DashboardYearlyEfficiency, MachinePleatsDashboard } from '../types/dashboard';
 import { StyleBundle } from '../types/styles';
 
 const BASE_URL = '/api/dashboard';
@@ -17,6 +17,9 @@ class DashboardService {
   }
   fetchOperatorEfficiency(): AxiosPromise<DashboardOperatorEfficiency[]> {
     return apiClient.get(`${BASE_URL}/operators-efficiency`);
+  }
+  fetchMachinePleatsStats(): AxiosPromise<MachinePleatsDashboard[]> {
+    return apiClient.get(`${BASE_URL}/machine-pleats`);
   }
 }
 

@@ -22,7 +22,8 @@ const AppMenu = () => {
       items: [
         { label: 'Production', icon: 'pi pi-fw pi-cog', to: '/operations/production-operations' },
         { label: 'Release Bundles', icon: 'pi pi-fw pi-box', to: '/operations/bundles' },
-        { label: 'Bundle Flow', icon: 'pi pi-fw pi-share-alt', to: '/operations/bundle-flow' }
+        { label: 'Bundle Flow', icon: 'pi pi-fw pi-share-alt', to: '/operations/bundle-flow' },
+        { label: 'Machine Pleats Target', icon: 'pi pi-fw pi-share-alt', to: '/operations/bundle-flow', disabled: true }
       ]
     },
     {

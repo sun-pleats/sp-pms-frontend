@@ -7,10 +7,16 @@ export const useBuyerPage = () => {
 
   const saveBuyer = async (e: DefaultFormData) => {
     try {
+      const form = new FormData();
+      form.append('name', e.name);
+
+      if (e.buyer_logo) {
+        form.append('buyer_logo', e.buyer_logo); // must match backend request key
+      }
+
       setIsSaveLoading(true);
-      const response = await BuyerService.createBuyer({
-        name: e.name
-      });
+      const response = await BuyerService.createBuyer(form);
+      setIsSaveLoading(false);
       return response;
     } catch (error) {
       setIsSaveLoading(false);
@@ -20,10 +26,16 @@ export const useBuyerPage = () => {
 
   const updateBuyer = async (id: string, e: DefaultFormData) => {
     try {
+      const form = new FormData();
+      form.append('name', e.name);
+
+      if (e.buyer_logo) {
+        form.append('buyer_logo', e.buyer_logo);
+      }
+
       setIsSaveLoading(true);
-      const response = await BuyerService.updateBuyer(id, {
-        name: e.name
-      });
+      const response = await BuyerService.updateBuyer(id, form);
+      setIsSaveLoading(false);
       return response;
     } catch (error) {
       setIsSaveLoading(false);

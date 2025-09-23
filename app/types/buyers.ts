@@ -3,25 +3,9 @@ import { User } from './users';
 export interface Buyer {
   id: string;
   name: string;
+  buyer_logo_path?: string;
   created_by?: User;
   updated_by?: User;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface BuyerDashboard {
-  id: string;
-  name: string;
-  current_suply: number;
-  target: number;
-  actual: number;
-  progress_rate: string;
-  defects: number;
-  defects_rate: string;
-  balance: number;
-  barcode_image?: string;
-  image?: string;
-  created_by?: string;
   created_at: string;
   updated_at: string;
 }

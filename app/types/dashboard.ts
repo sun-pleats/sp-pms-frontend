@@ -16,3 +16,18 @@ export interface DashboardOperatorEfficiency {
   avg_efficiency: number;
   section_name: string;
 }
+
+export interface MachinePleatsDashboard {
+  id: string;
+  buyer_name: string;
+  buyer_logo: string;
+  current_supply: number;
+  target: number;
+  actual: number;
+  progress_rate: string;
+  defects: number;
+  defects_rate: string;
+  balance: number;
+  barcode_image?: string;
+  image?: string;
+}
