@@ -11,6 +11,7 @@ export interface StyleCreatePayload {
   ship_date_from_cebu?: string | null; // ISO date string
   noumae?: string | null;
   sample?: string | null;
+  season?: string | null;
   pattern?: string | null;
   style_items?: ItemStyleCreatePayload[];
   style_fabrics?: ItemFabricCreatePayload[];

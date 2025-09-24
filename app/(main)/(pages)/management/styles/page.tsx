@@ -4,34 +4,27 @@ import { Column } from 'primereact/column';
 import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { IconField } from 'primereact/iconfield';
-import { InputIcon } from 'primereact/inputicon';
-import { InputText } from 'primereact/inputtext';
 import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
 import { Style } from '@/app/types/styles';
+import { StyleService } from '@/app/services/StyleService';
 import { useRouter } from 'next/navigation';
-import { useStylePage } from './hooks/useStylePage';
 import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
 import Modal from '@/app/components/modal/component';
-import MultiplePrintBarcode from '@/app/components/style/MultiplePrintBarcode';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
-import PageCard from '@/app/components/page-card/component';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
-import React, { use, useCallback, useContext, useEffect, useState } from 'react';
-import SinglePrintBarcode from '@/app/components/style/SinglePrintBarcode';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import UploadStyles from './components/upload-styles';
 import useUtilityData from '@/app/hooks/useUtilityData';
-import { StyleService } from '@/app/services/StyleService';
 
 interface StylePageState {
   deleteModalShow?: boolean;
   showMultiPrintBarcode?: boolean;
   showSinglePrintBarcode?: boolean;
   showUploading?: boolean;
-  deleteId?: string | number; 
+  deleteId?: string | number;
 }
 
 interface PageFilter {
@@ -42,18 +35,15 @@ interface PageFilter {
 const StylesPage = () => {
 
   const [pageState, setPageState] = useState<StylePageState>({});
-  const [selectedStyle, setSelectedStyle] = useState<Style | undefined>(undefined);
   const [pageFilter, setPageFilter] = useState<PageFilter>({});
   const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
   const [buyerOptions, setBuyerOptions] = useState<SelectItem[]>([]);
-  const [filters1, setFilters1] = useState<DataTableFilterMeta>({});
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
   const { fetchBuyersSelectOption } = useUtilityData();
   const [styles, setStyle] = useState<Style[]>([]);
-  // const { styles, isFetchStyleLoading } = useStylePage();
 
   const clearPageFilter = () => {
     setPageFilter({ ...pageFilter, keyword: '' });
@@ -116,7 +106,7 @@ const StylesPage = () => {
   useEffect(() => {
     fetchStyles();
   }, [fetchStyles]);
-  
+
   useEffect(() => {
     initData();
   }, []);
@@ -145,7 +135,7 @@ const StylesPage = () => {
   const onStyleSelectionChange = (data: any) => {
     setSelectedStyles(data.value)
   }
-  
+
   const handleDelete = async () => {
     try {
       await StyleService.deleteStyle(pageState.deleteId as string);
@@ -177,7 +167,6 @@ const StylesPage = () => {
         showGridlines
         rows={10}
         dataKey="id"
-        filters={filters1}
         scrollable
         loading={loading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
@@ -186,16 +175,17 @@ const StylesPage = () => {
         onSelectionChange={onStyleSelectionChange}
         header={tableHeader}
       >
-        <Column
+        {/* <Column
           selectionMode="multiple"
           headerStyle={{ width: '3em' }}
-        />
+        /> */}
         <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
         <Column field="style_number" header="Style#" style={{ minWidth: '12rem' }} />
         <Column field="buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />
         <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
         <Column header="Japan Date" field="ship_date_from_japan" />
         <Column field="ship_date_from_cebu" header="Cebu Date" />
+        <Column field="season" header="Season" style={{ minWidth: '12rem' }} />
         <Column header="Actions" body={actionBodyTemplate}></Column>
       </DataTable>
 
@@ -208,11 +198,8 @@ const StylesPage = () => {
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>
-      <SinglePrintBarcode style={selectedStyle} onHide={() => setPageState({ ...pageState, showSinglePrintBarcode: false })} visible={pageState.showSinglePrintBarcode} />
       <UploadStyles onHide={() => setPageState({ ...pageState, showUploading: false })} visible={pageState.showUploading} />
-      <MultiplePrintBarcode styles={selectedStyles} onHide={() => setPageState({ ...pageState, showMultiPrintBarcode: false })} visible={pageState.showMultiPrintBarcode} />
     </>
-
   );
 };
 

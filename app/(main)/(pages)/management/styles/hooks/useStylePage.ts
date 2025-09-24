@@ -1,7 +1,7 @@
 import { StyleService } from '@/app/services/StyleService';
 import { ItemFabricCreatePayload, ItemStyleCreatePayload, StyleCreatePayload, StylePaginatedResponse } from '@/app/types/api/styles';
 import { DefaultFormData } from '@/app/types/form';
-import { Style, StyleItem } from '@/app/types/styles';
+import { Style } from '@/app/types/styles';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 
@@ -34,7 +34,7 @@ export const useStylePage = () => {
       style_number: data.style_number ?? "",
       pleats_name: data.pleats_name ?? null,
       item_type: data.item_type ?? null,
-
+      season: data.season ?? null,
       noumae: data.noumae ?? null,
       sample: data.sample ?? null,
       pattern: data.pattern ?? null,

@@ -13,6 +13,7 @@ export interface Style {
   noumae: string;
   sample: string;
   pattern: string;
+  season: string;
 }
 
 export interface StyleItem {

@@ -26,11 +26,12 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
   const [buyers, setBuyers] = useState<SelectItem[]>([]);
   const { isBuyerLoading, fetchBuyerOptions } = useUtilityData();
   const [style, setStyle] = useState<DefaultFormData | undefined>();
-  
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+
   useEffect(() => {
     initData();
   }, []);
-  
+
   const initData = async () => {
     fetchBuyerOptions().then((data: SelectItem[]) => setBuyers(data));
   }
@@ -38,11 +39,18 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
   const styleOptions: SelectItem[] = [
     { label: 'Type 1', value: 'type-1' }
   ];
-  
+
   const getStyle = useCallback(async () => {
-    setStyle((await StyleService.getStyle(params?.id)).data as DefaultFormData);
+    try {
+      setIsFetching(true);
+      setStyle((await StyleService.getStyle(params?.id)).data as DefaultFormData);
+    } catch (error) {
+      showApiError(error, "Error fetching style.");
+    } finally {
+      setIsFetching(false);
+    }
   }, [params?.id]);
-  
+
   useEffect(() => {
     if (params?.id) {
       getStyle();
@@ -76,16 +84,17 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
           <div className='p-fluid'>
             <FormStyle
               onSubmit={handleSubmit}
+     
               value={style}
               styleOptions={styleOptions}
-              loading={{ buyerField: isBuyerLoading }}
+              loading={{ buyerField: isBuyerLoading, fields: isFetching }}
               buyerOptions={buyers}
             >
               <div className='grid mt-5'>
                 <div className='ml-auto'>
-                  <FormAction 
-                    loadingSave={isSaveLoading} 
-                    actionCancel={() => router.push(ROUTES.USERS.INDEX)} 
+                  <FormAction
+                    loadingSave={isSaveLoading}
+                    actionCancel={() => router.push(ROUTES.USERS.INDEX)}
                     actions={[FormActions.CANCEL, FormActions.SAVE]} />
                 </div>
               </div>

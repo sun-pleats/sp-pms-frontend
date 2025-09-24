@@ -11,7 +11,8 @@ import FormStyleItemTable from './FormStyleItemTable';
 import FormStyleFabricTable from './FormStyleFabricTable';
 import { Divider } from 'primereact/divider';
 import FormDropdown from '../form/dropdown/component';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { STYLE_SEASONS } from '@/app/constants/styles';
 
 interface FormStyleProps {
   value?: DefaultFormData;
@@ -22,6 +23,7 @@ interface FormStyleProps {
   buyerOptions?: SelectItem[];
   loading?: {
     buyerField?: boolean;
+    fields?: boolean;
   };
 }
 
@@ -36,12 +38,18 @@ interface FormData extends DefaultFormData {
   noumae?: string | null;
   sample?: string | null;
   pattern?: string | null;
+  season?: string | null;
   name?: string;
   style_items: StyleItem[];
   style_fabrics: FormStyleFabric[];
 }
 
 const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormStyleProps) => {
+  const [seasonOptions] = useState<SelectItem[]>([
+    { label: 'SS', value: STYLE_SEASONS.SS },
+    { label: 'AW', value: STYLE_SEASONS.AW }
+  ]);
+
   const emptyStyleItem = (): StyleItem => ({
     id: generateSimpleId(),
     item_name: '',
@@ -76,6 +84,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
       ship_date_from_cebu: '', // ISO date string
       noumae: '',
       sample: '',
+      season: '',
       pattern: '',
       name: '',
       style_items: [emptyStyleItem()],
@@ -98,6 +107,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
         ship_date_from_cebu: toDate(value?.ship_date_from_cebu) ?? null, // convert to Date
         noumae: value?.noumae,
         sample: value?.sample,
+        season: value?.season,
         pattern: value?.pattern,
         name: value?.name,
         style_items: value?.style_items.map((s: any) => {
@@ -153,7 +163,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
             rules={{ required: 'Buyer name is required' }}
             render={({ fieldState, field }) => (
               <FormDropdown
-                loading={loading?.buyerField}
+                loading={loading?.buyerField || loading?.fields}
                 label="Buyer"
                 value={field.value}
                 onChange={(e: any) => field.onChange(e.value)}
@@ -203,7 +213,26 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
             )}
           />
         </div>
-        <div className="col-12 md:col-3"></div>
+        <div className="col-12 md:col-3">
+          <Controller
+            name="season"
+            control={control}
+            rules={{ required: 'Season is required' }}
+            render={({ fieldState, field }) => (
+              <FormDropdown
+                label="Season"
+                value={field.value}
+                onChange={(e: any) => field.onChange(e.value)}
+                filter={true}
+                placeholder="Select"
+                options={seasonOptions}
+                optionValue="label"
+                errorMessage={fieldState.error?.message}
+                isError={fieldState.error ? true : false}
+              />
+            )}
+          />
+        </div>
       </div>
 
       <Divider align="center" className="mb-5">
