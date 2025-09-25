@@ -1,15 +1,37 @@
 'use client';
 
-import { Image } from 'primereact/image';
 import './DashboardTable.css';
+import { Image } from 'primereact/image';
 import { MachinePleatsDashboard } from '@/app/types/dashboard';
+import { useEffect } from 'react';
 import ScanHereIcon from '../icons/ScanHereIcon';
 
 interface DashboardTableProps {
   buyers: MachinePleatsDashboard[];
+  onScanActualClick: () => void;
+  onScanDefectClick: () => void;
 }
 
-const DashboardTable = ({ buyers = [] }: DashboardTableProps) => {
+const DashboardTable = ({ buyers = [], onScanActualClick, onScanDefectClick }: DashboardTableProps) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'F8') {
+        event.preventDefault();
+        onScanActualClick();
+      } else if (event.key === 'F9') {
+        event.preventDefault();
+        onScanDefectClick();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    // cleanup on unmount
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   return (
     <>
       {buyers && buyers.length > 0
@@ -73,15 +95,27 @@ const DashboardTable = ({ buyers = [] }: DashboardTableProps) => {
                   <div className="dashboard-card-content font-bold text-red-500">{buyer.balance}</div>
                 </div>
               </div>
-              <div className="col-12 lg:col-4 xl:col-2 border-1 surface-border surface-card">
-                <div className="dashboard-card">
-                  <div className="dashboard-card-title">Scan Here</div>
-                  <div className="dashboard-card-content font-bold">
-                    <ScanHereIcon />
+              <div className="col-12 lg:col-4 xl:col-2 border-1 surface-border surface-card cursor-pointer" onClick={onScanActualClick}>
+                {idx == 0 ? (
+                  <div className="dashboard-card">
+                    <div className="dashboard-card-title text-green-500">Scan Actual [F8]</div>
+                    <div className="dashboard-card-content font-bold">
+                      <ScanHereIcon />
+                    </div>
                   </div>
-                </div>
+                ) : null}
               </div>
-              <div className="col-12 lg:col-8 xl:col-4 border-1 surface-border surface-card">
+              <div className="col-12 lg:col-4 xl:col-2 border-1 surface-border surface-card cursor-pointer" onClick={onScanDefectClick}>
+                {idx == 0 ? (
+                  <div className="dashboard-card">
+                    <div className="dashboard-card-title text-red-500">Scan Defects [F9]</div>
+                    <div className="dashboard-card-content font-bold">
+                      <ScanHereIcon />
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+              <div className="col-12 lg:col-8 xl:col-2 border-1 surface-border surface-card">
                 <div className="dashboard-card">
                   <div className="dashboard-card-title"></div>
                   <div className="dashboard-card-content font-bold"></div>
