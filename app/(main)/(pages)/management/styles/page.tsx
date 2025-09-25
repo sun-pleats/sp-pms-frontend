@@ -73,7 +73,6 @@ const StylesPage = () => {
             onChange={handlePageFilter}
             filter
             options={buyerOptions}
-            optionValue="label"
             placeholder="Filter Buyer"
             className="w-full"
           />
@@ -214,7 +213,7 @@ const StylesPage = () => {
         /> */}
         <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
         <Column field="style_number" header="Style#" style={{ minWidth: '12rem' }} />
-        <Column field="buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />
+        <Column header="Buyer" dataType='string' style={{ minWidth: '12rem' }} body={(style: Style) => style?.buyer?.name} />
         <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
         <Column header="Japan Date" field="ship_date_from_japan" />
         <Column field="ship_date_from_cebu" header="Cebu Date" />
