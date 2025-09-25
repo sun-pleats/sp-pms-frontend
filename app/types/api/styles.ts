@@ -3,7 +3,7 @@ import { Style, StyleBundle, StylePlannedFabric, StylePlannedFabricSize } from '
 
 export interface StyleCreatePayload {
   control_number: string;
-  buyer_name: string;
+  buyer_id: string;
   style_number: string;
   pleats_name?: string | null;
   item_type?: string | null;

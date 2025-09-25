@@ -1,10 +1,11 @@
+import { Buyer } from './buyers';
 import { Department } from './department';
 import { User } from './users';
 
 export interface Style {
   id: string;
   control_number: string;
-  buyer_name: string;
+  buyer_id: string;
   style_number: string;
   pleats_name: string;
   item_type: string;
@@ -15,6 +16,7 @@ export interface Style {
   pattern: string;
   season: string;
   status: string;
+  buyer?: Buyer;
 }
 
 export interface StyleItem {

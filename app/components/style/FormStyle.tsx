@@ -29,7 +29,7 @@ interface FormStyleProps {
 
 interface FormData extends DefaultFormData {
   control_number: string;
-  buyer_name: string;
+  buyer_id: string;
   style_number: string;
   pleats_name?: string | null;
   item_type?: string | null;
@@ -76,7 +76,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
   const { control, handleSubmit, reset } = useForm<FormData>({
     defaultValues: {
       control_number: '',
-      buyer_name: '',
+      buyer_id: '',
       style_number: '',
       pleats_name: '',
       item_type: '',
@@ -99,7 +99,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
       // @ts-ignore
       reset({
         control_number: value?.control_number,
-        buyer_name: value?.buyer_name,
+        buyer_id: value?.buyer_id,
         style_number: value?.style_number,
         pleats_name: value?.pleats_name,
         item_type: value?.item_type,
@@ -158,9 +158,9 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
         </div>
         <div className="col-12 md:col-6">
           <Controller
-            name="buyer_name"
+            name="buyer_id"
             control={control}
-            rules={{ required: 'Buyer name is required' }}
+            rules={{ required: 'Buyer is required' }}
             render={({ fieldState, field }) => (
               <FormDropdown
                 loading={loading?.buyerField || loading?.fields}
@@ -170,7 +170,6 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
                 filter={true}
                 placeholder="Select"
                 options={buyerOptions}
-                optionValue="label"
                 errorMessage={fieldState.error?.message}
                 isError={fieldState.error ? true : false}
               />
