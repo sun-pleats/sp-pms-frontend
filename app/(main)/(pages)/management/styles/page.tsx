@@ -18,13 +18,18 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import UploadStyles from './components/upload-styles';
 import useUtilityData from '@/app/hooks/useUtilityData';
+import useModelStatus from '@/app/hooks/useModelStatus';
+import { STATUSES, StatusModel } from '@/app/constants/status';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import StatusBadge from '@/app/components/status/component';
 
 interface StylePageState {
   deleteModalShow?: boolean;
+  completeStyleModelShow?: boolean;
   showMultiPrintBarcode?: boolean;
   showSinglePrintBarcode?: boolean;
   showUploading?: boolean;
-  deleteId?: string | number;
+  selectedId?: string | number;
 }
 
 interface PageFilter {
@@ -43,6 +48,8 @@ const StylesPage = () => {
 
   const router = useRouter();
   const { fetchBuyersSelectOption } = useUtilityData();
+  const { updateStatus, isSaving } = useModelStatus();
+
   const [styles, setStyle] = useState<Style[]>([]);
 
   const clearPageFilter = () => {
@@ -119,17 +126,31 @@ const StylesPage = () => {
     setPageState({
       ...pageState,
       deleteModalShow: true,
-      deleteId: id
+      selectedId: id
+    })
+  }
+
+  const onActionCompletelick = (id: string | number) => {
+    setPageState({
+      ...pageState,
+      completeStyleModelShow: true,
+      selectedId: id
     })
   }
 
   const actionBodyTemplate = (rowData: Style) => {
     return (
-      <div className='flex flex-row gap-2'>
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size='small' severity="warning" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} size='small' severity="danger" />
-      </div>
+      rowData.status != STATUSES.STYLE.COMPLETED ?
+        <div className='flex flex-row gap-2'>
+          <Button icon="pi pi-check" onClick={() => onActionCompletelick(rowData.id)} size='small' severity="success" />
+          <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size='small' severity="warning" />
+          <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} size='small' severity="danger" />
+        </div> : null
     );
+  };
+
+  const statusTemplate = (rowData: Style) => {
+    return (<StatusBadge status={rowData.status} />);
   };
 
   const onStyleSelectionChange = (data: any) => {
@@ -138,7 +159,7 @@ const StylesPage = () => {
 
   const handleDelete = async () => {
     try {
-      await StyleService.deleteStyle(pageState.deleteId as string);
+      await StyleService.deleteStyle(pageState.selectedId as string);
       showSuccess('Style successfully deleted.');
       setPageState({ ...pageState, deleteModalShow: false });
       fetchStyles();
@@ -146,6 +167,18 @@ const StylesPage = () => {
       showApiError(error, 'Failed to delete Style.');
     }
   };
+
+  const handleCompleteStyle = async () => {
+    try {
+      if (isSaving) return;
+      await updateStatus(pageState.selectedId?.toString() ?? '', STATUSES.STYLE.COMPLETED, StatusModel.Style);
+      showSuccess('Style successfully updated.');
+      setPageState({ ...pageState, completeStyleModelShow: false });
+      fetchStyles();
+    } catch (error: any) {
+      showApiError(error, 'Failed to update Style.');
+    }
+  }
 
   return (
     <>
@@ -186,6 +219,7 @@ const StylesPage = () => {
         <Column header="Japan Date" field="ship_date_from_japan" />
         <Column field="ship_date_from_cebu" header="Cebu Date" />
         <Column field="season" header="Season" style={{ minWidth: '12rem' }} />
+        <Column header="Status" body={statusTemplate}></Column>
         <Column header="Actions" body={actionBodyTemplate}></Column>
       </DataTable>
 
@@ -197,6 +231,21 @@ const StylesPage = () => {
         onConfirm={handleDelete}
       >
         <p>Are you sure you want to delete the record?</p>
+      </Modal>
+
+      <Modal
+        title='Complete Style'
+        visible={pageState.completeStyleModelShow}
+        onHide={() => setPageState({ ...pageState, completeStyleModelShow: false })}
+        confirmSeverity='info'
+        onConfirm={handleCompleteStyle}
+      >
+        <p>Are you sure you want to update the status to complete?</p>
+        {isSaving && (
+          <div className="col-12 flex justify-content-center align-items-center">
+            <ProgressSpinner style={{ width: '50px', height: '50px' }} />
+          </div>
+        )}
       </Modal>
       <UploadStyles onHide={() => setPageState({ ...pageState, showUploading: false })} visible={pageState.showUploading} />
     </>

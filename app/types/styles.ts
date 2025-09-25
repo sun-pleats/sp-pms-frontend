@@ -14,6 +14,7 @@ export interface Style {
   sample: string;
   pattern: string;
   season: string;
+  status: string;
 }
 
 export interface StyleItem {
