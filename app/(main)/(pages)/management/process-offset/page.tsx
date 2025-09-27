@@ -157,7 +157,7 @@ const ProcessOffsetsPage = () => {
       <DataTable
         value={processOffsets}
         paginator
-        className="p-datatable-gridlines"
+        className="custom-table p-datatable-gridlines"
         showGridlines
         rows={10}
         dataKey="id"

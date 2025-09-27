@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 export const useBuyerPage = () => {
   const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const saveBuyer = async (e: DefaultFormData) => {
     try {
@@ -46,6 +47,8 @@ export const useBuyerPage = () => {
   return {
     saveBuyer,
     updateBuyer,
-    isSaveLoading
+    isSaveLoading,
+    isFetching,
+    setIsFetching
   };
 };

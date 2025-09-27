@@ -47,7 +47,7 @@ const BundleSinglePrintBarcode = ({ bundle, visible, onHide }: BundleSinglePrint
     if (bundle) {
       setDetails([
         { name: 'Style', value: bundle?.style?.style_number ?? '' },
-        { name: 'Buyer', value: bundle?.style?.buyer_name ?? '' },
+        { name: 'Buyer', value: bundle?.style?.buyer?.name ?? '' },
         { name: 'Roll No.', value: bundle.roll_number?.toString() ?? '' },
         { name: 'Size', value: bundle.style_planned_fabric_size?.size_number.toString() ?? '' },
         { name: 'Release Quantity', value: bundle.quantity.toString() ?? '' }

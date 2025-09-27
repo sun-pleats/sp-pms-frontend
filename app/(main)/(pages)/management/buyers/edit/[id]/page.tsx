@@ -17,12 +17,19 @@ interface EditBuyerPageProps {
 
 const EditBuyerPage = ({ params }: EditBuyerPageProps) => {
   const router = useRouter();
-  const { updateBuyer, isSaveLoading } = useBuyerPage();
+  const { updateBuyer, isSaveLoading, isFetching, setIsFetching } = useBuyerPage();
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const [buyer, setBuyer] = useState<BuyerForm | undefined>();
 
   const getBuyer = useCallback(async () => {
-    setBuyer((await BuyerService.getBuyer(params?.id)).data as BuyerForm);
+    try {
+      setIsFetching(true);
+      setBuyer((await BuyerService.getBuyer(params?.id)).data as BuyerForm);
+    } catch (error) {
+      showApiError(error, 'Failed fetch buyer.');
+    } finally {
+      setIsFetching(false);
+    }
   }, [params?.id]);
 
   const handleSubmit = async (data: BuyerForm) => {
@@ -54,7 +61,7 @@ const EditBuyerPage = ({ params }: EditBuyerPageProps) => {
                   <div className="flex">
                     <div className="ml-auto">
                       <FormAction
-                        loadingSave={isSaveLoading}
+                        loadingUpdate={isSaveLoading || isFetching}
                         actionCancel={() => router.push(ROUTES.BUYER.INDEX)}
                         actions={[FormActions.CANCEL, FormActions.UPDATE]}
                       />

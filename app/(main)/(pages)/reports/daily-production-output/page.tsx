@@ -170,7 +170,7 @@ const DailyProductionOutputsPage = () => {
           <DataTable
             value={dailyProductionOutputs}
             paginator
-            className="p-datatable-gridlines"
+            className="custom-table p-datatable-gridlines"
             showGridlines
             rows={10}
             dataKey="id"

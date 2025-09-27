@@ -7,28 +7,19 @@ import { DataTable } from 'primereact/datatable';
 import { FormData, useProductionOperations } from './hooks/useProductionOperations';
 import { ProductionTrack } from '@/app/types/production-track';
 import { ROUTES } from '@/app/constants/routes';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import FormCalendar from '@/app/components/form/calendar/component';
 import FormDropdown from '@/app/components/form/dropdown/component';
 import FormInputNumber from '@/app/components/form/input-number/component';
 import FormInputText from '@/app/components/form/input-text/component';
 import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
 import moment from 'moment';
-import OperatorOutput from './components/operator-output';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
 
-interface ProductionOperationPageState {
-  showOperatorOutput?: boolean;
-  selectedSection?: any;
-}
-
 const ProductionOperationPage = () => {
-  const [state, setState] = useState<ProductionOperationPageState>({});
-
   const {
     operatorsOption,
-    selectedOperatorProcess,
     loadings,
     getProcessOptions,
     handleSubmit,
@@ -51,11 +42,6 @@ const ProductionOperationPage = () => {
     initData();
   }, []);
 
-  const onShowOutput = (rowData: any) => {
-    // setSelectedOperatorProcess(rowData);
-    // setState({ ...state, showOperatorOutput: true });
-  };
-
   const onNextDateClick = () => {
     setTrackFilter({
       ...trackFilter,
@@ -77,14 +63,6 @@ const ProductionOperationPage = () => {
   const actionBodyTemplate = (rowData: ProductionTrack, options: { rowIndex: number }) => {
     return (
       <>
-        <Button
-          size="small"
-          type="button"
-          icon="pi pi-list"
-          className="mr-2"
-          onClick={() => onShowOutput && onShowOutput(rowData)}
-          severity="warning"
-        />
         <Button size="small" type="button" onClick={() => removeTrack(rowData, options.rowIndex)} icon="pi pi-trash" severity="danger" />
       </>
     );
@@ -200,10 +178,10 @@ const ProductionOperationPage = () => {
             editMode="row"
             value={items}
             loading={loadings.fetchingOperator || loadings.fetchingTracks}
-            className="p-datatable-gridlines"
+            className="custom-table p-datatable-gridlines"
             showGridlines
             dataKey="id"
-            emptyMessage="No record provided."
+            emptyMessage="Please select a section to show records."
             scrollable
           >
             <Column
@@ -321,11 +299,6 @@ const ProductionOperationPage = () => {
           </DataTable>
         </div>
       </form>
-      <OperatorOutput
-        operator_proceess_id={selectedOperatorProcess?.id}
-        visible={state.showOperatorOutput}
-        onHide={() => setState({ ...state, showOperatorOutput: false })}
-      />
     </>
   );
 };

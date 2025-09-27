@@ -157,7 +157,7 @@ const BundlesPage = () => {
       <DataTable
         value={bundles}
         paginator
-        className="p-datatable-gridlines"
+        className="custom-table p-datatable-gridlines"
         showGridlines
         rows={10}
         dataKey="id"
@@ -173,7 +173,7 @@ const BundlesPage = () => {
         <Column selectionMode="multiple" headerStyle={{ width: '3em' }} />
         <Column field="bundle_number" header="Bundle#" style={{ minWidth: '12rem' }} />
         <Column field="style.style_number" header="Style#" style={{ minWidth: '12rem' }} />
-        <Column field="style.buyer_name" header="Buyer" style={{ minWidth: '12rem' }} />
+        <Column field="style.buyer.name" header="Buyer" style={{ minWidth: '12rem' }} />
         <Column field="style.ship_date_from_cebu" header="Cebu Date" />
         <Column field="style.ship_date_from_japan" header="Japan Date" />
         <Column header="Color" field="style_planned_fabric.color" />

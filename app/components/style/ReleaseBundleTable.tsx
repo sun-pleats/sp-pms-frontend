@@ -96,7 +96,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
       editMode="row"
       header={tableHeader()}
       value={items}
-      className="p-datatable-gridlines"
+      className="custom-table p-datatable-gridlines"
       showGridlines
       dataKey="id"
       loading={loading}

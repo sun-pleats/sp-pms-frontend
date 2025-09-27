@@ -73,7 +73,7 @@ const BuyerOutputTable = ({ processOutputs = [] }: BuyerOutputTableProps) => {
       rows={10}
       value={operatorOutputs}
       paginator
-      className="p-datatable-gridlines"
+      className="custom-table p-datatable-gridlines"
       showGridlines
       dataKey="id"
       filterDisplay="menu"

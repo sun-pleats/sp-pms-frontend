@@ -8,7 +8,7 @@ import { ProductionTrackService } from '@/app/services/ProductionTrackService';
 import { SelectItem } from 'primereact/selectitem';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import moment from 'moment';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import useUtilityData from '@/app/hooks/useUtilityData';
 
 interface TrackFilter {
@@ -41,6 +41,7 @@ export const useProductionOperations = () => {
   const [trackFilter, setTrackFilter] = useState<TrackFilter>({
     date: new Date()
   });
+  const [isInitDataLoaded, setIsInitDataLoaded] = useState<boolean>(false);
   const [selectedOperatorProcess, setSelectedOperatorProcess] = useState<OperatorProcess | undefined>();
   const [productionTracks, setProductionTracks] = useState<ProductionTrack[]>([]);
   const [operators, setOperators] = useState<Operator[]>([]);
@@ -146,68 +147,71 @@ export const useProductionOperations = () => {
     }
   };
 
-  const fetchTracks = async () => {
-    try {
-      setLoading({ fetchingTracks: true });
+  const fetchTracks = useCallback(async () => {
+    if (isInitDataLoaded && trackFilter.section_id) {
+      try {
+        setLoading({ fetchingTracks: true });
 
-      const { data } = await ProductionTrackService.getTracks(trackFilter.section_id, {
-        track_date: moment(trackFilter.date).format('YYYY-MM-DD'),
-        process_ids: trackFilter.process_ids
-      });
-
-      reset();
-
-      data.forEach((d) => {
-        append({
-          id: d.id,
-          date: d.date,
-          section_id: d.section_id,
-          operator_id: d.operator_id,
-          process_id: d.process_id,
-          target: d.target,
-          remarks: d.remarks,
-          time: d.time
+        const { data } = await ProductionTrackService.getTracks(trackFilter.section_id, {
+          track_date: moment(trackFilter.date).format('YYYY-MM-DD'),
+          process_ids: trackFilter.process_ids
         });
-      });
-      addNewItem();
-    } catch (e: any) {
-      showApiError(e, 'Error fetching production process.');
-    } finally {
-      setLoading({ fetchingTracks: false });
+
+        // Reset first
+        reset();
+
+        // Load the fetched data
+        data.forEach((d) => {
+          append({
+            id: d.id,
+            date: d.date,
+            section_id: d.section_id,
+            operator_id: d.operator_id,
+            process_id: d.process_id,
+            target: d.target,
+            remarks: d.remarks,
+            time: d.time
+          });
+        });
+
+        // Add only new item if not data fetched
+        if (!data.length) {
+          addNewItem();
+        }
+      } catch (e: any) {
+        showApiError(e, 'Error fetching production process.');
+      } finally {
+        setLoading({ fetchingTracks: false });
+      }
     }
-  };
+  }, [isInitDataLoaded, trackFilter]);
 
   useEffect(() => {
-    if (trackFilter.section_id) fetchTracks();
-  }, [trackFilter]);
+    fetchTracks();
+  }, [fetchTracks]);
 
-  const initData = () => {
-    setLoading({ fetchingProcesses: true, fetchingOperator: true, fetchingSections: true });
+  const initData = async () => {
+    try {
+      setLoading({ fetchingProcesses: true, fetchingOperator: true, fetchingSections: true });
 
-    // Fetch processes
-    fetchProcessOptions()
-      .then((data) => {
-        setProcessOptions(data);
-      })
-      .finally(() => setLoading({ fetchingProcesses: false }));
+      // Fetch processes
+      const processes = await fetchProcessOptions();
+      setProcessOptions(processes);
 
-    // Fetch processes
-    fetchOperators()
-      .then((data) => {
-        setOperators(data);
-      })
-      .finally(() => setLoading({ fetchingOperator: false }));
+      // Fetch processes
+      const ops = await fetchOperators();
+      setOperators(ops);
 
-    // Fetch sections
-    fetchSectionSelectOption()
-      .then((data) => {
-        setSectionOptions(data);
-      })
-      .finally(() =>
-        setTimeout(() => {
-          setLoading({ fetchingSections: false });
-        }, 1000)
-      );
+      // Fetch sections
+      const sections = await fetchSectionSelectOption();
+      setSectionOptions(sections);
+
+      setIsInitDataLoaded(true);
+    } catch (error) {
+      console.log('Error init data', error);
+    } finally {
+      setLoading({ fetchingProcesses: false, fetchingOperator: false, fetchingSections: false });
+    }
   };
 
   const onProcessDeleteClick = (id: any) => {

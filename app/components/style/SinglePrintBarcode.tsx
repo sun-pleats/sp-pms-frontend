@@ -36,7 +36,7 @@ const SinglePrintBarcode = ({ style, visible, onHide }: SinglePrintBarcodeProps)
     if (style) {
       setDetails([
         { name: 'Style Number', value: style.style_number },
-        { name: 'Buyer', value: style.buyer_name }
+        { name: 'Buyer', value: style.buyer?.name ?? '' }
       ]);
     }
   }, [style]);

@@ -160,13 +160,12 @@ const UsersPage = () => {
       <DataTable
         value={users}
         paginator
-        className="p-datatable-gridlines"
+        className="custom-table p-datatable-gridlines"
         showGridlines
         rows={10}
         dataKey="id"
         filterDisplay="menu"
         loading={loading}
-        responsiveLayout="scroll"
         emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
       >

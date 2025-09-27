@@ -153,7 +153,7 @@ const ProcessesPage = () => {
       <DataTable
         value={processes}
         paginator
-        className="p-datatable-gridlines"
+        className="custom-table p-datatable-gridlines"
         showGridlines
         rows={10}
         dataKey="id"

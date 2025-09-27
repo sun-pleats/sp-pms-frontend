@@ -65,7 +65,7 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
       editMode="row"
       header={tableHeader()}
       value={items}
-      className="p-datatable-gridlines"
+      className="custom-table p-datatable-gridlines"
       showGridlines
       dataKey="id"
       filterDisplay="menu"

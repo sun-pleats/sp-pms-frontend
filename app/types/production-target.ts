@@ -3,12 +3,15 @@ import { Buyer } from './buyers';
 
 export interface ProductionTarget {
   id?: string;
+  order: number;
   buyer?: Buyer;
   date?: string;
   buyer_id: string;
   target: number;
-  actual_count: number;
-  defects_count: number;
+  flow_department_id_1?: string;
+  flow_department_id_2?: string;
+  actual_count?: number;
+  defects_count?: number;
 }
 
 export interface ProductionTargetLog {
