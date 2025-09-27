@@ -11,16 +11,13 @@ import { ProductionTargetService } from '@/app/services/ProductionTargetService'
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-interface StyleDetail {
-  name: string;
-  value: string;
-}
+const INTERVAL_RELOAD = 60000; // 60 Seconds
 
 const LandingPage = () => {
   const [isLoggerBarcodeShow, setIsLoggerBarcodeShow] = useState(false);
   const userBarcodeRef = useRef<HTMLInputElement>(null);
   const [scannedBarcode, setScannedBarcode] = useState('');
-  const [logType, setLogType] = useState<'defect' | 'actual' | undefined>();
+  const [logType, setLogType] = useState<'defects' | 'actual' | undefined>();
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [dashboard, setDashboard] = useState<MachinePleatsDashboard[]>([]);
   const { showApiError, showSuccess } = useContext(LayoutContext);
@@ -33,14 +30,25 @@ const LandingPage = () => {
     fetchMachinePleatsStats();
   }, [fetchMachinePleatsStats]);
 
+  useEffect(() => {
+    setInterval(() => {
+      // Reload every 5 seconds
+      fetchMachinePleatsStats();
+    }, INTERVAL_RELOAD);
+  }, []);
+
   const onLoggerBarcodeEnter = async (value: string) => {
     try {
+      if (!value.length) return;
       setIsSaving(true);
       await ProductionTargetService.counterLog({
         barcode: value,
         log_type: logType?.toString() ?? ''
       });
       showSuccess('Target has been logged successfully.');
+      setIsLoggerBarcodeShow(false);
+      fetchMachinePleatsStats();
+      setScannedBarcode('');
     } catch (error) {
       showApiError(error, 'Error logging barcode.');
     } finally {
@@ -68,7 +76,7 @@ const LandingPage = () => {
               setIsLoggerBarcodeShow(true);
             }}
             onScanDefectClick={() => {
-              setLogType('defect');
+              setLogType('defects');
               setIsLoggerBarcodeShow(true);
             }}
             buyers={dashboard}
