@@ -76,7 +76,18 @@ const DashboardStatistics = ({ value, loading }: DashboardStatisticsProps) => {
               {loading ? (
                 <Skeleton width="10rem" className="mb-2"></Skeleton>
               ) : (
-                <div className="text-900 font-medium text-xl">{value?.styles_completed ?? 0}</div>
+                <>
+                  <div className="text-900 font-medium text-xl flex gap-3">
+                    <span className="flex align-items-center">
+                      <i className="pi pi-sun text-yellow-500" style={{ fontSize: '1.5rem', marginRight: '10px' }}></i> SS{' '}
+                      {value?.styles_completed?.SS ?? 0}
+                    </span>
+                    <span className="flex align-items-center">
+                      <i className="pi pi-cloud text-blue-500" style={{ fontSize: '1.5rem', marginRight: '10px' }}></i> AW{' '}
+                      {value?.styles_completed?.AW ?? 0}
+                    </span>
+                  </div>
+                </>
               )}
             </div>
             <div className="flex align-items-center justify-content-center bg-green-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
@@ -84,7 +95,7 @@ const DashboardStatistics = ({ value, loading }: DashboardStatisticsProps) => {
             </div>
           </div>
           <span className="text-green-500 font-medium">Styles </span>
-          <span className="text-500">completed</span>
+          <span className="text-500">completed by season</span>
         </div>
       </div>
     </>

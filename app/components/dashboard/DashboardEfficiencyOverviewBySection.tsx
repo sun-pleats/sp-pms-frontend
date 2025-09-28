@@ -142,16 +142,14 @@ const DashboardEfficiencyOverviewBySection = ({
         <h5>
           Efficiency By Section <Tag severity="success" value="Yearly"></Tag>
         </h5>
-        <div>
-          <FormDropdown
-            loading={loadingSections}
-            value={selectedSection}
-            onChange={handleSectionChange}
-            filter={true}
-            placeholder="Select Section"
-            options={sectionOptions}
-          />
-        </div>
+        <FormDropdown
+          loading={loadingSections}
+          value={selectedSection}
+          onChange={handleSectionChange}
+          filter={true}
+          placeholder="Select Section"
+          options={sectionOptions}
+        />
       </div>
       {loading ? <Skeleton width="100%" height="150px"></Skeleton> : <Chart type="line" data={lineData} options={lineOptions} />}
     </div>

@@ -1,3 +1,4 @@
+import { addLocale } from 'primereact/api';
 import { Calendar, CalendarSelectionMode } from 'primereact/calendar';
 import { classNames } from 'primereact/utils';
 import React, { forwardRef } from 'react';
@@ -13,19 +14,33 @@ interface FormRangeCalendarProps extends React.InputHTMLAttributes<HTMLInputElem
   selectionMode?: CalendarSelectionMode;
   readOnlyInput?: boolean;
   hideOnRangeSelection?: boolean;
-  isRange?: boolean;
+  showIcon?: boolean;
+  firstDayOfWeek?: number;
 }
 
-const FormRangeCalendar = forwardRef<HTMLInputElement, FormRangeCalendarProps>(
-  ({ label = 'Label', value, isError, isRange, readOnlyInput, hideOnRangeSelection, onChange, errorMessage, className }, ref) => (
-    <div className="field">
-      <label htmlFor="name">{label}</label>
+addLocale('en-MondayStart', {
+  firstDayOfWeek: 1, // 1 = Monday
+  dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+  dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  dayNamesMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+  monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+  monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  today: 'Today',
+  clear: 'Clear'
+});
 
+const FormRangeCalendar = forwardRef<HTMLInputElement, FormRangeCalendarProps>(
+  ({ label, value, isError, readOnlyInput, placeholder, firstDayOfWeek, showIcon, hideOnRangeSelection, onChange, errorMessage, className }, ref) => (
+    <div className="field">
+      {label && <label htmlFor="name">{label}</label>}
       <Calendar
         inputRef={ref}
         value={value}
         selectionMode="range"
         readOnlyInput={readOnlyInput}
+        placeholder={placeholder}
+        showIcon={showIcon}
+        locale="en-MondayStart"
         hideOnRangeSelection={hideOnRangeSelection}
         className={classNames(
           className,

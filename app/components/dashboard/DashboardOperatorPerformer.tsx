@@ -26,8 +26,11 @@ const DashboardOperatorPerformer = ({ value, loading }: DashboardStatisticsProps
             <Skeleton width="100%" height="30px"></Skeleton>
           </div>
         ) : (
-          value?.map((operator) => (
-            <li className="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+          value?.map((operator, index) => (
+            <li
+              key={`dashboard-operator-performer-${index}`}
+              className="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4"
+            >
               <div>
                 <span className="text-900 font-medium mr-2 mb-1 md:mb-0">{operator.operator_name}</span>
                 <div className="mt-1 text-600">{operator.section_name}</div>

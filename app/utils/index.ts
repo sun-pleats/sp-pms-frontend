@@ -1,4 +1,6 @@
 import moment from 'moment';
+import { subYears, format } from 'date-fns';
+import { SelectItem } from 'primereact/selectitem';
 
 export function generateSimpleId() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 11)}`; // same 9-char slice
@@ -33,4 +35,16 @@ export function currentMonthDates(): Date[] {
   // End of this month
   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   return [startOfMonth, endOfMonth];
+}
+
+export function getListOfYears() {
+  const currentYear = new Date();
+  return Array.from({ length: 10 }, (_, i) => format(subYears(currentYear, i), 'yyyy'));
+}
+
+export function getListOfYearOptions(): SelectItem[] {
+  return getListOfYears().map((year) => ({
+    label: year,
+    value: Number(year)
+  }));
 }

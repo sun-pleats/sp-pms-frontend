@@ -18,6 +18,8 @@ const Dashboard = () => {
     isFetchingRecentBundles,
     isFetchingStats,
     isFetchingYearlyEfficiency,
+    isFetchingMonthlyEfficiency,
+    isFetchingWeeklyEfficiency,
     isFetchingOperatorEff,
     isFetchingSections,
     sectionOptions,
@@ -25,7 +27,10 @@ const Dashboard = () => {
     operatorEfficiency,
     setSelectedSection,
     yearlyEfficiencyBySection,
-    isFetchingYearlyEfficiencyBySection
+    isFetchingYearlyEfficiencyBySection,
+    weeklyEfficiency,
+    monthlyEfficiency,
+    setPageFilter
   } = useDashboard();
 
   const handleSectionChange = (item: SelectItem) => {
@@ -41,7 +46,45 @@ const Dashboard = () => {
           <DashboardOperatorPerformer loading={isFetchingOperatorEff} value={operatorEfficiency} />
         </div>
         <div className="col-12 xl:col-6">
-          <DashboardEfficiencyOverview loading={isFetchingYearlyEfficiency} year={pageFilter.year} value={yearlyEfficiency} />
+          <DashboardEfficiencyOverview
+            loading={isFetchingYearlyEfficiency || isFetchingMonthlyEfficiency || isFetchingWeeklyEfficiency}
+            valueYear={yearlyEfficiency}
+            valueMonth={monthlyEfficiency}
+            valueWeek={weeklyEfficiency}
+            onMonthlyChange={(year, month) =>
+              setPageFilter({
+                ...pageFilter,
+                efficiency_overview: {
+                  ...pageFilter?.efficiency_overview,
+                  monthly: {
+                    year,
+                    month
+                  }
+                }
+              })
+            }
+            onYearlyChange={(year) =>
+              setPageFilter({
+                ...pageFilter,
+                efficiency_overview: {
+                  ...pageFilter?.efficiency_overview,
+                  yearly: year
+                }
+              })
+            }
+            onWeeklyChange={(from, to) =>
+              setPageFilter({
+                ...pageFilter,
+                efficiency_overview: {
+                  ...pageFilter?.efficiency_overview,
+                  weekly: {
+                    from,
+                    to
+                  }
+                }
+              })
+            }
+          />
           <DashboardEfficiencyOverviewBySection
             sectionOptions={sectionOptions}
             sectionId={selectedSection}
