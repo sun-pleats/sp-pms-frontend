@@ -1,7 +1,13 @@
 import { AxiosPromise } from 'axios';
 import apiClient from '../api/http-common';
-import { ProductionMonthlyEfficiencyResponse, ReportProductionDailyOutputResponse, ReportStyleBundleEntryLogResponse } from '../types/api/reports';
+import {
+  ProductionMonthlyEfficiencyResponse,
+  ReportProductionDailyOutputResponse,
+  ReportShipmentStatusResponse,
+  ReportStyleBundleEntryLogResponse
+} from '../types/api/reports';
 import { SystemAudit } from '../types/system-audit';
+import { ReportShipmentStatus } from '../types/reports';
 
 const BASE_URL = '/api/reports';
 
@@ -15,6 +21,9 @@ export const ReportService = {
   getAllBundleEntryLogs(params?: Record<string, any>, options?: any): AxiosPromise<ReportStyleBundleEntryLogResponse> {
     return apiClient.get(`${BASE_URL}/bundle-entry-logs`, { params, ...options });
   },
+  getAllShipmentStatus(params?: Record<string, any>, options?: any): AxiosPromise<ReportShipmentStatusResponse> {
+    return apiClient.get(`${BASE_URL}/shipment-status`, { params, ...options });
+  },
   exportProductionDailyOutput(params?: Record<string, any>): AxiosPromise<Blob> {
     return apiClient.get(`${BASE_URL}/exports/production-daily-outputs`, { params, responseType: 'blob' });
   },
@@ -26,5 +35,8 @@ export const ReportService = {
   },
   exportProductionMonthlyEfficiency(params?: Record<string, any>): AxiosPromise<Blob> {
     return apiClient.get(`${BASE_URL}/exports/production-monthly-efficiency`, { params, responseType: 'blob' });
+  },
+  exportShipmentStatus(params?: Record<string, any>): AxiosPromise<Blob> {
+    return apiClient.get(`${BASE_URL}/exports/shipment-status`, { params, responseType: 'blob' });
   }
 };

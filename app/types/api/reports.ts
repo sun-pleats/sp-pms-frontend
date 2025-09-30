@@ -1,5 +1,5 @@
 import { PaginatedResponse } from '.';
-import { ProductionDailyOutput, ProductionMonthlyEfficiency, ReportStyleBundleEntryLog } from '../reports';
+import { ProductionDailyOutput, ProductionMonthlyEfficiency, ReportShipmentStatus, ReportStyleBundleEntryLog } from '../reports';
 
 export interface ReportProductionDailyOutputResponse extends PaginatedResponse {
   data?: ProductionDailyOutput[];
@@ -11,4 +11,8 @@ export interface ProductionMonthlyEfficiencyResponse extends PaginatedResponse {
 
 export interface ReportStyleBundleEntryLogResponse extends PaginatedResponse {
   data?: ReportStyleBundleEntryLog[];
+}
+
+export interface ReportShipmentStatusResponse extends PaginatedResponse {
+  data?: ReportShipmentStatus[];
 }

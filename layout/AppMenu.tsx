@@ -44,7 +44,8 @@ const AppMenu = () => {
         { label: 'Daily Production Output', icon: 'pi pi-fw pi-circle-fill', to: '/reports/daily-production-output' },
         { label: 'Monthly Efficiency Report', icon: 'pi pi-fw pi-circle-fill', to: '/reports/monthly-production-efficiency' },
         { label: 'Bundle Releases', icon: 'pi pi-fw pi-circle-fill', to: '/reports/bundle-releases' },
-        { label: 'System Audit', icon: 'pi pi-fw pi-circle-fill', to: '/reports/system-audit' }
+        { label: 'System Audit', icon: 'pi pi-fw pi-circle-fill', to: '/reports/system-audit' },
+        { label: 'Shipment Status', icon: 'pi pi-fw pi-circle-fill', to: '/reports/shipment-status' }
       ]
     },
     {

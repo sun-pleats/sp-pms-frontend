@@ -69,3 +69,21 @@ export interface ReportStyleBundleEntryLog {
   entry_by_name?: string;
   exit_by_name?: string;
 }
+
+export interface ReportShipmentStatus {
+  style_id: number; // ss.id
+  shipment_date: string; // DATE(ss.ship_date_from_cebu), use string if MySQL returns 'YYYY-MM-DD'
+  style_no: string; // ss.style_number
+  order_quantity: number; // SUM(sb.quantity)
+  saidan: number; // SUM(CASE WHEN d.name = 'SAIDAN' ...)
+  at_machine: number; // SUM(CASE WHEN d.name = 'AT MACHINE' ...)
+  maekoutei_sewing: number; // SUM(CASE WHEN d.name = 'MAEKOUTEI SEWING' ...)
+  maekoutei_chuukan_qc: number; // SUM(CASE WHEN d.name = 'MAEKOUTEI CHUUKAN QC' ...)
+  flat_iron: number; // SUM(CASE WHEN d.name = 'FLAT IRON' ...)
+  shitsuke: number; // SUM(CASE WHEN d.name = 'SHITSUKE' ...)
+  machine_pleats: number; // SUM(CASE WHEN d.name = 'MACHINE PLEATS' ...)
+  handpleats: number; // SUM(CASE WHEN d.name = 'HANDPLEATS' ...)
+  kumitate_sewing: number; // SUM(CASE WHEN d.name = 'KUMITATE SEWING' ...)
+  kumitate_chuukan_qc: number; // SUM(CASE WHEN d.name = 'KUMITATE CHUUKAN QC' ...)
+  final_qc: number; // SUM(CASE WHEN d.name = 'FINAL QC' ...)
+}
