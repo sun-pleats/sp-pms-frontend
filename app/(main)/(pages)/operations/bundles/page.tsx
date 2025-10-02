@@ -1,26 +1,24 @@
 'use client';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
+
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
-import { InputText } from 'primereact/inputtext';
-import React, { useEffect, useState } from 'react';
-import PageCard from '@/app/components/page-card/component';
-import { useRouter } from 'next/navigation';
-import { ROUTES } from '@/app/constants/routes';
-import PageAction from '@/app/components/page-action/component';
-import Modal from '@/app/components/modal/component';
-import FormDropdown from '@/app/components/form/dropdown/component';
-import BundleSinglePrintBarcode from '@/app/components/style/BundleSinglePrintBarcode';
-import ReleaseBundles from './components/release-bundle';
-import { StyleBundleService } from '@/app/services/StyleBundleService';
-import { StyleBundle } from '@/app/types/styles';
-import PageHeader from '@/app/components/page-header/component';
-import TableHeader from '@/app/components/table-header/component';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import { PRINTING_MODELS } from '@/app/constants/barcode';
+import { ROUTES } from '@/app/constants/routes';
+import { StyleBundle } from '@/app/types/styles';
+import { StyleBundleService } from '@/app/services/StyleBundleService';
+import { useRouter } from 'next/navigation';
+import BundleSinglePrintBarcode from '@/app/components/style/BundleSinglePrintBarcode';
+import Modal from '@/app/components/modal/component';
+import PageAction from '@/app/components/page-action/component';
+import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
 import PrintBarcode from '@/app/components/barcode/PrintBarcode';
-import { PRINTING_MODELS } from '@/app/constants/barcode';
+import React, { useEffect, useState } from 'react';
+import ReleaseBundles from './components/release-bundle';
+import TableHeader from '@/app/components/table-header/component';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
@@ -119,9 +117,16 @@ const BundlesPage = () => {
   const actionBodyTemplate = (rowData: StyleBundle) => {
     return (
       <div className="flex flex-row gap-2">
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id?.toString() ?? '')} size="small" severity="warning" />
-        <Button icon="pi pi-print" onClick={() => onSinglePrintBarcodeClick(rowData)} size="small" severity="help" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick()} size="small" severity="danger" />
+        <Button
+          icon="pi pi-pencil"
+          outlined
+          rounded
+          onClick={() => onActionEditClick(rowData.id?.toString() ?? '')}
+          size="small"
+          severity="warning"
+        />
+        <Button icon="pi pi-print" outlined rounded onClick={() => onSinglePrintBarcodeClick(rowData)} size="small" severity="help" />
+        <Button icon="pi pi-trash" outlined rounded onClick={() => onActionDeleteClick()} size="small" severity="danger" />
       </div>
     );
   };
@@ -169,19 +174,26 @@ const BundlesPage = () => {
         selection={selectedBundles}
         onSelectionChange={onBundleSelectionChange}
         header={header1}
+        scrollable
       >
         <Column selectionMode="multiple" headerStyle={{ width: '3em' }} />
-        <Column field="bundle_number" header="Bundle#" style={{ minWidth: '12rem' }} />
-        <Column field="style.style_number" header="Style#" style={{ minWidth: '12rem' }} />
-        <Column field="style.buyer.name" header="Buyer" style={{ minWidth: '12rem' }} />
-        <Column field="style.ship_date_from_cebu" header="Cebu Date" />
-        <Column field="style.ship_date_from_japan" header="Japan Date" />
-        <Column header="Color" field="style_planned_fabric.color" />
-        <Column field="roll_number" header="Roll No." />
-        <Column header="Size" field="style_planned_fabric_size.size_number" />
-        <Column field="quantity" header="Quantity" />
-        <Column field="quantity" header="Location" />
-        <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
+        <Column field="bundle_number" header="Bundle#" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="style.style_number" header="Style#" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="style.buyer.name" header="Buyer" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="style.ship_date_from_cebu" header="Cebu Date" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="style.ship_date_from_japan" header="Japan Date" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column header="Color" field="style_planned_fabric.color" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="roll_number" header="Roll No." style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column header="Size" field="style_planned_fabric_size.size_number" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="quantity" header="Quantity" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column
+          field="balance"
+          header="Action"
+          body={actionBodyTemplate}
+          bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }}
+          alignFrozen="right"
+          frozen
+        ></Column>
       </DataTable>
 
       <Modal

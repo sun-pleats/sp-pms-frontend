@@ -114,7 +114,7 @@ const SystemAuditPage = () => {
 
   return (
     <>
-      <PageTile title="System Audit" icon="pi pi-fw pi-sitemap" url={ROUTES.REPORTS.SYSTEM_AUDIT.INDEX} />
+      <PageTile title="System Audit" icon="pi pi-fw pi-flag" url={ROUTES.REPORTS.SYSTEM_AUDIT.INDEX} />
       <PageHeader titles={['Reports', 'System Audit']} />
       <DataTable
         value={SystemAudits}
@@ -127,6 +127,7 @@ const SystemAuditPage = () => {
         loading={loading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
+        scrollable
       >
         <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
         <Column header="User" dataType="string" style={{ minWidth: '12rem' }} body={(data: SystemAudit) => data?.user?.name} />
@@ -134,7 +135,15 @@ const SystemAuditPage = () => {
         <Column field="model" header="Model" style={{ minWidth: '12rem' }} />
         <Column field="meta" header="Meta" style={{ minWidth: '12rem' }} body={metaBodyTemplate} />
         <Column field="ip" header="IP" style={{ minWidth: '12rem' }} />
-        <Column field="created_at" header="Created At" dataType="date" style={{ minWidth: '12rem' }} body={dateBodyTemplate} />
+        <Column
+          field="created_at"
+          header="Created At"
+          dataType="date"
+          headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }}
+          frozen
+          alignFrozen="right"
+          body={dateBodyTemplate}
+        />
       </DataTable>
       <Dialog header="Meta Data" visible={metaDialogVisible} style={{ width: '50vw' }} onHide={() => setMetaDialogVisible(false)} modal>
         <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{metaDialogContent}</pre>

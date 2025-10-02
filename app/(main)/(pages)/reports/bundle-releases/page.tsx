@@ -107,7 +107,7 @@ const BundleReleasePage = () => {
 
   return (
     <>
-      <PageTile title="Bundle Releases" icon="pi pi-fw pi-sitemap" url={ROUTES.REPORTS.SYSTEM_AUDIT.INDEX} />
+      <PageTile title="Bundle Releases" icon="pi pi-fw pi-box" url={ROUTES.REPORTS.SYSTEM_AUDIT.INDEX} />
       <PageHeader titles={['Reports', 'Bundle Releases']} />
       <div className="flex flex-align-items-center">
         <div className="flex flex-align-items-center mr-2">
@@ -152,18 +152,18 @@ const BundleReleasePage = () => {
         emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
       >
-        <Column field="style_number" header="Style #" />
-        <Column field="bundle_number" header="Bundle #" />
-        <Column field="quantity" header="Released QTY" />
-        <Column field="roll_number" header="Roll No." />
-        <Column field="size_number" header="Size No." />
-        <Column field="remarks" header="Bundle Remarks" />
-        <Column field="color" header="Color" />
-        <Column field="department_name" header="Department" />
-        <Column field="entry_time" header="Entry" />
-        <Column field="exit_time" header="Exit" />
-        <Column field="hours_stayed" header="Hours Stayed" />
-        <Column field="log_remarks" header="Log Remarks" />
+        <Column field="style_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Style No." />
+        <Column field="bundle_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Bundle No." />
+        <Column field="quantity" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Released QTY" />
+        <Column field="roll_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Roll No." />
+        <Column field="size_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Size No." />
+        <Column field="remarks" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Bundle Remarks" />
+        <Column field="color" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Color" />
+        <Column field="department_name" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Department" />
+        <Column field="entry_time" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Entry" />
+        <Column field="exit_time" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Exit" />
+        <Column field="hours_stayed" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Hours Stayed" />
+        <Column field="log_remarks" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Log Remarks" />
       </DataTable>
     </>
   );

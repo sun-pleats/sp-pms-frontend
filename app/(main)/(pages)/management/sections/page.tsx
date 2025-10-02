@@ -4,7 +4,6 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
-import { formatDate } from '@/app/utils';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ROUTES } from '@/app/constants/routes';
 import { Section } from '@/app/types/section';
@@ -116,8 +115,16 @@ const SectionsPage = () => {
   const actionBodyTemplate = (rowData: Section) => {
     return (
       <>
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id ?? '')} size="small" severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id ?? '')} size="small" severity="danger" />
+        <Button
+          icon="pi pi-pencil"
+          outlined
+          rounded
+          onClick={() => onActionEditClick(rowData.id ?? '')}
+          size="small"
+          severity="warning"
+          className="mr-2"
+        />
+        <Button icon="pi pi-trash" outlined rounded onClick={() => onActionDeleteClick(rowData.id ?? '')} size="small" severity="danger" />
       </>
     );
   };
@@ -151,6 +158,7 @@ const SectionsPage = () => {
         loading={loading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
+        scrollable
       >
         <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
@@ -161,7 +169,7 @@ const SectionsPage = () => {
         <Column field="shift_end" header="Shift End" style={{ minWidth: '12rem' }} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(section: Section) => section?.created_by?.name} />
         <Column field="created_at" header="Created At" body={dateBodyTemplate} />
-        <Column header="Actions" body={actionBodyTemplate} style={{ minWidth: '10rem' }}></Column>
+        <Column header="Actions" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} body={actionBodyTemplate} frozen alignFrozen="right"></Column>
       </DataTable>
       <Modal
         title="Delete Record"

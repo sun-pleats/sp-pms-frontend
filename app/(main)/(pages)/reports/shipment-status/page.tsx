@@ -86,8 +86,8 @@ const ShipmentStatusPage = () => {
 
   return (
     <>
-      <PageTile title="Bundle Releases" icon="pi pi-fw pi-sitemap" url={ROUTES.REPORTS.SYSTEM_AUDIT.INDEX} />
-      <PageHeader titles={['Reports', 'Bundle Releases']} />
+      <PageTile title="Shipment Status" icon="pi pi-fw pi-building" url={ROUTES.REPORTS.SYSTEM_AUDIT.INDEX} />
+      <PageHeader titles={['Reports', 'Shipment Status']} />
       <div className="flex flex-align-items-center">
         <div className="flex flex-align-items-center mr-2">
           <div className="flex align-items-center gap-2">
@@ -123,20 +123,20 @@ const ShipmentStatusPage = () => {
         emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
       >
-        <Column field="style_no" header="Style #" />
-        <Column field="shipment_date" header="Shipment Date" />
-        <Column field="order_quantity" header="Order QTY" />
-        <Column field="saidan" header="SAIDAN" />
-        <Column field="at_machine" header="AT MACHINE" />
-        <Column field="maekoutei_sewing" header="MAEKOUTEI SEWING" />
-        <Column field="maekoutei_chuukan_qc" header="MAEKOUTEI CHUUKAN QC" />
-        <Column field="flat_iron" header="FLAT IRON" />
-        <Column field="shitsuke" header="SHITSUKE" />
-        <Column field="machine_pleats" header="MACHINE PLEATS" />
-        <Column field="handpleats" header="HANDPLEATS" />
-        <Column field="kumitate_sewing" header="KUMITATE SEWING" />
-        <Column field="kumitate_chuukan_qc" header="KUMITATE CHUUKAN QC" />
-        <Column field="final_qc" header="Final QC" />
+        <Column field="style_no" header="Style No." style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="shipment_date" header="Shipment Date" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="order_quantity" header="Order QTY" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="saidan" header="Saidan" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="at_machine" header="AT Machine" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="maekoutei_sewing" header="Maekoutei Sewing" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="maekoutei_chuukan_qc" header="Maekoutei Chuukan QC" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="flat_iron" header="Flat Iron" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="shitsuke" header="Shitsuke" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="machine_pleats" header="Machine Pleats" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="handpleats" header="Handpleats" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="kumitate_sewing" header="Kumitate Sewing" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="kumitate_chuukan_qc" header="Kumitate Chuukan QC" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="final_qc" header="Final QC" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
       </DataTable>
     </>
   );

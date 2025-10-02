@@ -121,7 +121,7 @@ const OperatorsPage = () => {
 
   const actionBodyTemplate = (rowData: Operator) => {
     return (
-      <>
+      <div className="flex flex-row gap-2">
         <Button
           icon="pi pi-print"
           onClick={() => {
@@ -131,12 +131,13 @@ const OperatorsPage = () => {
           title="Print Process Codes"
           size="small"
           severity="success"
-          className="mr-2"
+          outlined
+          rounded
           disabled={!rowData.operator_processes?.length}
         />
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} size="small" severity="danger" />
-      </>
+        <Button icon="pi pi-pencil" outlined rounded onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" />
+        <Button icon="pi pi-trash" outlined rounded onClick={() => onActionDeleteClick(rowData.id)} size="small" severity="danger" />
+      </div>
     );
   };
 
@@ -168,6 +169,7 @@ const OperatorsPage = () => {
         loading={loading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
+        scrollable
       >
         <Column header="ID" field="id" />
         <Column header="Name" field="name" style={{ minWidth: '10rem' }} />
@@ -176,7 +178,7 @@ const OperatorsPage = () => {
         <Column field="line_id" header="Processes" style={{ minWidth: '12rem' }} body={processTemplate} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(operator: Operator) => operator?.created_by?.name} />
         <Column header="Created At" field="created_at" dataType="created_at" body={dateBodyTemplate} />
-        <Column header="Actions" body={actionBodyTemplate} style={{ minWidth: '13rem' }}></Column>
+        <Column header="Actions" body={actionBodyTemplate} bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} frozen alignFrozen="right"></Column>
       </DataTable>
       <Modal
         title="Delete Record"

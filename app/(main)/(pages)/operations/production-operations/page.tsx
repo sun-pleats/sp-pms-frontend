@@ -63,7 +63,15 @@ const ProductionOperationPage = () => {
   const actionBodyTemplate = (rowData: ProductionTrack, options: { rowIndex: number }) => {
     return (
       <>
-        <Button size="small" type="button" onClick={() => removeTrack(rowData, options.rowIndex)} icon="pi pi-trash" severity="danger" />
+        <Button
+          size="small"
+          outlined
+          rounded
+          type="button"
+          onClick={() => removeTrack(rowData, options.rowIndex)}
+          icon="pi pi-trash"
+          severity="danger"
+        />
       </>
     );
   };
@@ -295,7 +303,7 @@ const ProductionOperationPage = () => {
               )}
             />
             <Column field="total_output" header="Total Ouput" />
-            <Column alignFrozen="right" frozen body={actionBodyTemplate}></Column>
+            <Column header bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} alignFrozen="right" frozen body={actionBodyTemplate}></Column>
           </DataTable>
         </div>
       </form>

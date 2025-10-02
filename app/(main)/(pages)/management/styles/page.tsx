@@ -141,9 +141,9 @@ const StylesPage = () => {
     return (
       rowData.status != STATUSES.STYLE.COMPLETED ?
         <div className='flex flex-row gap-2'>
-          <Button icon="pi pi-check" onClick={() => onActionCompletelick(rowData.id)} size='small' severity="success" />
-          <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size='small' severity="warning" />
-          <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} size='small' severity="danger" />
+          <Button icon="pi pi-check" outlined rounded onClick={() => onActionCompletelick(rowData.id)} size='small' severity="success" />
+          <Button icon="pi pi-pencil" outlined rounded onClick={() => onActionEditClick(rowData.id)} size='small' severity="warning" />
+          <Button icon="pi pi-trash" outlined rounded onClick={() => onActionDeleteClick(rowData.id)} size='small' severity="danger" />
         </div> : null
     );
   };
@@ -214,12 +214,12 @@ const StylesPage = () => {
         <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
         <Column field="style_number" header="Style#" style={{ minWidth: '12rem' }} />
         <Column header="Buyer" dataType='string' style={{ minWidth: '12rem' }} body={(style: Style) => style?.buyer?.name} />
-        <Column field="pleats_name" header="Pleats" style={{ minWidth: '12rem' }} />
-        <Column header="Japan Date" field="ship_date_from_japan" />
-        <Column field="ship_date_from_cebu" header="Cebu Date" />
-        <Column field="season" header="Season" style={{ minWidth: '12rem' }} />
-        <Column header="Status" body={statusTemplate}></Column>
-        <Column header="Actions" body={actionBodyTemplate}></Column>
+        <Column field="pleats_name" header="Pleats" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column header="Japan Date" field="ship_date_from_japan" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }}  />
+        <Column field="ship_date_from_cebu" header="Cebu Date"  headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="season" header="Season"   headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column header="Status" body={statusTemplate} headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} frozen alignFrozen='right'></Column>
+        <Column header="Actions" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} frozen alignFrozen='right' body={actionBodyTemplate}></Column>
       </DataTable>
 
       <Modal

@@ -126,8 +126,8 @@ const ProcessesPage = () => {
   const actionBodyTemplate = (rowData: Process) => {
     return (
       <>
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} severity="danger" />
+        <Button icon="pi pi-pencil" outlined rounded onClick={() => onActionEditClick(rowData.id)} severity="warning" className="mr-2" />
+        <Button icon="pi pi-trash" outlined rounded onClick={() => onActionDeleteClick(rowData.id)} severity="danger" />
       </>
     );
   };
@@ -161,12 +161,13 @@ const ProcessesPage = () => {
         loading={loading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
+        scrollable
       >
         <Column field="id" header="ID" />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(process: Process) => process?.created_by?.name} />
         <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
-        <Column header="Actions" body={actionBodyTemplate} style={{ minWidth: '10rem' }}></Column>
+        <Column header="Actions" body={actionBodyTemplate} bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} frozen alignFrozen="right"></Column>
       </DataTable>
       <Modal
         title="Delete Record"

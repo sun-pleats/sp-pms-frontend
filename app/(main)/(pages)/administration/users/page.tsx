@@ -133,11 +133,11 @@ const UsersPage = () => {
 
   const actionBodyTemplate = (rowData: User) => {
     return (
-      <>
-        <Button icon="pi pi-print" onClick={() => onPrintClick(rowData)} className="mr-2" />
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} severity="danger" />
-      </>
+      <div className="flex flex-row gap-2">
+        <Button icon="pi pi-print" outlined rounded onClick={() => onPrintClick(rowData)} size="small" />
+        <Button icon="pi pi-pencil" outlined rounded onClick={() => onActionEditClick(rowData.id)} severity="warning" size="small" />
+        <Button icon="pi pi-trash" outlined rounded onClick={() => onActionDeleteClick(rowData.id)} severity="danger" size="small" />
+      </div>
     );
   };
 
@@ -168,6 +168,7 @@ const UsersPage = () => {
         loading={loading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
+        scrollable
       >
         <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
@@ -176,7 +177,7 @@ const UsersPage = () => {
         <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(user: User) => user?.created_by?.name} />
         <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
-        <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
+        <Column body={actionBodyTemplate} header="Actions" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} alignFrozen="right" frozen></Column>
       </DataTable>
       <Modal
         title="Delete Record"

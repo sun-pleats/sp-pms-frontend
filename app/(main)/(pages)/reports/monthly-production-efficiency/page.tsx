@@ -103,7 +103,7 @@ const ProductionMonthlyEfficiencyPage = () => {
 
   return (
     <>
-      <PageTile title="Monthly Efficiency Report" icon="pi pi-fw pi-sitemap" url={ROUTES.REPORTS.PRODUCTION_DAILY_OUTPUT.INDEX} />
+      <PageTile title="Monthly Efficiency Report" icon="pi pi-fw pi-chart-bar" url={ROUTES.REPORTS.PRODUCTION_DAILY_OUTPUT.INDEX} />
       <div className="flex flex-align-items-center">
         <div className="flex flex-align-items-center mr-2">
           <div className="flex align-items-center gap-2">

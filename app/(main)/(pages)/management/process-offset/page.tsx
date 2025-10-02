@@ -129,9 +129,11 @@ const ProcessOffsetsPage = () => {
           size="small"
           severity="success"
           className="mr-2"
+          outlined
+          rounded
         />
-        <Button icon="pi pi-pencil" onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" className="mr-2" />
-        <Button icon="pi pi-trash" onClick={() => onActionDeleteClick(rowData.id)} size="small" severity="danger" />
+        <Button icon="pi pi-pencil" outlined rounded onClick={() => onActionEditClick(rowData.id)} size="small" severity="warning" className="mr-2" />
+        <Button icon="pi pi-trash" outlined rounded onClick={() => onActionDeleteClick(rowData.id)} size="small" severity="danger" />
       </>
     );
   };
@@ -165,13 +167,14 @@ const ProcessOffsetsPage = () => {
         loading={loading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
+        scrollable
       >
         <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
         <Column field="description" header="Description" style={{ minWidth: '12rem' }} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(data: ProcessOffset) => data?.created_by?.name} />
         <Column field="created_at" header="Created At" body={dateBodyTemplate} />
-        <Column header="Actions" body={actionBodyTemplate} style={{ minWidth: '13rem' }}></Column>
+        <Column header="Actions" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} body={actionBodyTemplate} frozen alignFrozen="right"></Column>
       </DataTable>
       <Modal
         title="Delete Record"

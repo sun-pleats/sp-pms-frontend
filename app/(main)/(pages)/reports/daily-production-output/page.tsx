@@ -115,7 +115,7 @@ const DailyProductionOutputsPage = () => {
 
   return (
     <>
-      <PageTile title="Daily Production Outputs" icon="pi pi-fw pi-sitemap" url={ROUTES.REPORTS.PRODUCTION_DAILY_OUTPUT.INDEX} />
+      <PageTile title="Daily Production Outputs" icon="pi pi-fw pi-clock" url={ROUTES.REPORTS.PRODUCTION_DAILY_OUTPUT.INDEX} />
       <div className="flex flex-align-items-center">
         <div className="flex flex-align-items-center mr-2">
           <div className="flex align-items-center gap-2">
@@ -177,39 +177,40 @@ const DailyProductionOutputsPage = () => {
             filterDisplay="menu"
             loading={loadings.fetchingOutputs}
             emptyMessage={EMPTY_TABLE_MESSAGE}
+            scrollable
           >
-            <Column field="id" header="ID" style={{ minWidth: '12rem' }} frozen={true} />
-            <Column field="operator_name" header="Operator" style={{ minWidth: '12rem' }} />
-            <Column field="process_name" header="Process" style={{ minWidth: '12rem' }} />
-            <Column field="log_date" header="Date" style={{ minWidth: '12rem' }} />
-            <Column field="12AM" header="12AM" />
-            <Column field="1AM" header="1AM" />
-            <Column field="2AM" header="2AM" />
-            <Column field="3AM" header="3AM" />
-            <Column field="4AM" header="4AM" />
-            <Column field="5AM" header="5AM" />
-            <Column field="6AM" header="6AM" />
-            <Column field="7AM" header="7AM" />
-            <Column field="8AM" header="8AM" />
-            <Column field="9AM" header="9AM" />
-            <Column field="10AM" header="10AM" />
-            <Column field="11AM" header="11AM" />
-            <Column field="12PM" header="12PM" />
-            <Column field="1PM" header="1PM" />
-            <Column field="3PM" header="3PM" />
-            <Column field="4PM" header="4PM" />
-            <Column field="5PM" header="5PM" />
-            <Column field="6PM" header="6PM" />
-            <Column field="7PM" header="7PM" />
-            <Column field="8PM" header="8PM" />
-            <Column field="9PM" header="9PM" />
-            <Column field="10PM" header="10PM" />
-            <Column field="11PM" header="11PM" />
-            <Column field="total_output" header="Total Output" style={{ width: '10rem' }} frozen alignFrozen="right" />
-            <Column field="hour_ratio" header="Break Time" style={{ width: '10rem' }} frozen alignFrozen="right" />
-            <Column field="efficiency_count" header="Efficiency Count" style={{ width: '12rem' }} frozen alignFrozen="right" />
-            <Column field="efficiency_summary_count" header="Efficiency Summary" style={{ width: '14rem' }} frozen alignFrozen="right" />
-            <Column field="efficiency_target" header="Target" style={{ width: '9rem' }} frozen alignFrozen="right" />
+            <Column field="id" header="ID" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
+            <Column field="operator_name" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Operator" style={{ minWidth: '12rem' }} />
+            <Column field="process_name" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Process" style={{ minWidth: '12rem' }} />
+            <Column field="log_date" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Date" style={{ minWidth: '12rem' }} />
+            <Column field="12AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="12AM" />
+            <Column field="1AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="1AM" />
+            <Column field="2AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="2AM" />
+            <Column field="3AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="3AM" />
+            <Column field="4AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="4AM" />
+            <Column field="5AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="5AM" />
+            <Column field="6AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="6AM" />
+            <Column field="7AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="7AM" />
+            <Column field="8AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="8AM" />
+            <Column field="9AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="9AM" />
+            <Column field="10AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="10AM" />
+            <Column field="11AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="11AM" />
+            <Column field="12PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="12PM" />
+            <Column field="1PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="1PM" />
+            <Column field="3PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="3PM" />
+            <Column field="4PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="4PM" />
+            <Column field="5PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="5PM" />
+            <Column field="6PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="6PM" />
+            <Column field="7PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="7PM" />
+            <Column field="8PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="8PM" />
+            <Column field="9PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="9PM" />
+            <Column field="10PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="10PM" />
+            <Column field="11PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="11PM" />
+            <Column field="total_output" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Total Output" />
+            <Column field="hour_ratio" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Break Time" />
+            <Column field="efficiency_count" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Efficiency Count" />
+            <Column field="efficiency_summary_count" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Efficiency Summary" />
+            <Column field="efficiency_target" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Target" frozen alignFrozen="right" />
             <Column
               field="efficiency"
               header="Efficiency"

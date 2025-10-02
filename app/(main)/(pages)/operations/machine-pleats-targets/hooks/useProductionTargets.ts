@@ -19,7 +19,7 @@ export interface FormData extends DefaultFormData {
   targets: ProductionTarget[];
 }
 
-export const useMachinePleatsTargets = () => {
+export const useProductionTargets = () => {
   const [loadings, setLoadings] = useState<{
     fetchingBuyers: boolean;
     storingTargets: boolean;

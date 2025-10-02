@@ -41,11 +41,11 @@ const AppMenu = () => {
     {
       label: 'Reports',
       items: [
-        { label: 'Daily Production Output', icon: 'pi pi-fw pi-circle-fill', to: '/reports/daily-production-output' },
-        { label: 'Monthly Efficiency Report', icon: 'pi pi-fw pi-circle-fill', to: '/reports/monthly-production-efficiency' },
-        { label: 'Bundle Releases', icon: 'pi pi-fw pi-circle-fill', to: '/reports/bundle-releases' },
-        { label: 'System Audit', icon: 'pi pi-fw pi-circle-fill', to: '/reports/system-audit' },
-        { label: 'Shipment Status', icon: 'pi pi-fw pi-circle-fill', to: '/reports/shipment-status' }
+        { label: 'Daily Production Output', icon: 'pi pi-fw pi-clock', to: '/reports/daily-production-output' },
+        { label: 'Monthly Efficiency Report', icon: 'pi pi-fw pi-chart-bar', to: '/reports/monthly-production-efficiency' },
+        { label: 'Bundle Releases', icon: 'pi pi-fw pi-box', to: '/reports/bundle-releases' },
+        { label: 'System Audit', icon: 'pi pi-fw pi-flag', to: '/reports/system-audit' },
+        { label: 'Shipment Status', icon: 'pi pi-fw pi-building', to: '/reports/shipment-status' }
       ]
     },
     {

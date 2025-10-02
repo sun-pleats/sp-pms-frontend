@@ -116,15 +116,16 @@ const DepartmentsPage = () => {
 
   const actionBodyTemplate = (rowData: Department) => {
     return (
-      <>
+      <div className="flex flex-row gap-2">
         <Button
           icon="pi pi-pencil"
           onClick={() => onActionEditClick(rowData.id)}
           size="small"
           severity="warning"
-          className="mr-2"
           disabled={rowData.immutable}
           tooltip={rowData.immutable ? 'Immutable record and could not be edited.' : undefined}
+          rounded
+          outlined
         />
         <Button
           icon="pi pi-trash"
@@ -133,8 +134,10 @@ const DepartmentsPage = () => {
           severity="danger"
           disabled={rowData.immutable}
           tooltip={rowData.immutable ? 'Immutable record and could not be deleted.' : undefined}
+          rounded
+          outlined
         />
-      </>
+      </div>
     );
   };
 
@@ -166,12 +169,13 @@ const DepartmentsPage = () => {
         loading={loading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
+        scrollable
       >
         <Column field="id" header="ID" />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(department: Department) => department?.created_by?.name} />
         <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
-        <Column header="Actions" body={actionBodyTemplate} style={{ minWidth: '10rem' }}></Column>
+        <Column header="Actions" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} body={actionBodyTemplate} frozen alignFrozen="right"></Column>
       </DataTable>
       <Modal
         title="Delete Record"

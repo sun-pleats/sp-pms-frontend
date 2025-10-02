@@ -4,19 +4,19 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { Controller } from 'react-hook-form';
 import { DataTable } from 'primereact/datatable';
-import { FormData, useMachinePleatsTargets } from './hooks/useMachinePleatsTargets';
+import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 import { ProductionTarget } from '@/app/types/production-target';
 import { ROUTES } from '@/app/constants/routes';
 import { useEffect } from 'react';
+import { useProductionTargets, FormData } from './hooks/useProductionTargets';
 import FormCalendar from '@/app/components/form/calendar/component';
 import FormDropdown from '@/app/components/form/dropdown/component';
 import FormInputNumber from '@/app/components/form/input-number/component';
 import moment from 'moment';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
-import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 
-const ProductionOperationPage = () => {
+const ProductionTargetPage = () => {
   const {
     buyersOption,
     handleSubmit,
@@ -33,7 +33,7 @@ const ProductionOperationPage = () => {
     departmentOptions,
     fetchingTargets,
     isInitDataLoading
-  } = useMachinePleatsTargets();
+  } = useProductionTargets();
 
   useEffect(() => {
     initData();
@@ -60,7 +60,15 @@ const ProductionOperationPage = () => {
   const actionBodyTemplate = (rowData: ProductionTarget, options: { rowIndex: number }) => {
     return (
       <div className="mb-3">
-        <Button size="small" type="button" onClick={() => removeTarget(rowData, options.rowIndex)} icon="pi pi-trash" severity="danger" />
+        <Button
+          size="small"
+          outlined
+          rounded
+          type="button"
+          onClick={() => removeTarget(rowData, options.rowIndex)}
+          icon="pi pi-trash"
+          severity="danger"
+        />
       </div>
     );
   };
@@ -220,7 +228,7 @@ const ProductionOperationPage = () => {
                 />
               )}
             />
-            <Column alignFrozen="right" frozen body={actionBodyTemplate}></Column>
+            <Column header="Actions" alignFrozen="right" frozen body={actionBodyTemplate}></Column>
           </DataTable>
         </div>
       </form>
@@ -228,4 +236,4 @@ const ProductionOperationPage = () => {
   );
 };
 
-export default ProductionOperationPage;
+export default ProductionTargetPage;

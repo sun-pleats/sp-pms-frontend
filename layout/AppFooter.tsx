@@ -9,8 +9,8 @@ const AppFooter = () => {
   return (
     <div className="layout-footer">
       <img src={`/layout/images/logo-${layoutConfig.colorScheme === 'light' ? 'dark' : 'white'}.svg`} alt="Logo" height="20" className="mr-2" />
-      designed by
-      <span className="font-medium ml-2">Kevin Loquencio</span>
+      Sunpleats PMS
+      <span className="font-medium ml-2">by Kevin Loquencio</span>
     </div>
   );
 };

@@ -185,7 +185,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
             control={control}
             rules={{ required: 'Style number is required' }}
             render={({ fieldState, field }) => (
-              <FormInputText {...field} label="Style #" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+              <FormInputText {...field} label="Style No." errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
             )}
           />
         </div>
