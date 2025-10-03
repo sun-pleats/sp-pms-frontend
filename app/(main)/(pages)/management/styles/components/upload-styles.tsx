@@ -1,17 +1,23 @@
 'use client';
-import { Button } from 'primereact/button';
-import React, { useEffect, useState } from 'react';
-import Modal from '@/app/components/modal/component';
-import Barcode from '@/app/components/barcode/Barcode';
-import { Style } from '@/app/types/styles';
-import { ListBox } from 'primereact/listbox';
-import FormInputFile from '@/app/components/form/browse/component';
 
-interface SinglePrintBarcodeState {
+import { Button } from 'primereact/button';
+import { Controller, useForm } from 'react-hook-form';
+import { DefaultFormData } from '@/app/types/form';
+import { FileUploadSelectEvent } from 'primereact/fileupload';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { Style } from '@/app/types/styles';
+import { StyleService } from '@/app/services/StyleService';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import FormInputFile from '@/app/components/form/browse/component';
+import Modal from '@/app/components/modal/component';
+import React, { useContext, useEffect, useState } from 'react';
+
+interface UploadStylesState {
   show?: boolean;
 }
 
-interface SinglePrintBarcodeProps {
+interface UploadStylesProps {
   style?: Style;
   visible?: boolean;
   onHide?: any;
@@ -22,54 +28,103 @@ interface StyleDetail {
   value: string;
 }
 
-const UploadStyles = ({ style, visible, onHide }: SinglePrintBarcodeProps) => {
-  const [state, setState] = useState<SinglePrintBarcodeState>({});
-  const [details, setDetails] = useState<StyleDetail[]>([]);
+const schema = yup.object().shape({
+  file: yup
+    .mixed()
+    .nullable()
+    .test('fileType', 'Only csv files are allowed', (value: any) => {
+      if (!value) return true; // allow empty
+      return value && value.type === 'text/csv';
+    })
+});
+
+const UploadStyles = ({ style, visible, onHide }: UploadStylesProps) => {
+  const [state, setState] = useState<UploadStylesState>({});
+  const [loading, setLoading] = useState(false);
+  const {
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+    register,
+    setValue,
+    control
+  } = useForm({
+    resolver: yupResolver(schema)
+  });
+
+  const { showApiError, showSuccess } = useContext(LayoutContext);
 
   useEffect(() => {
     setState({ ...state, show: visible });
   }, [visible]);
 
-  useEffect(() => {
-    if (style) {
-      setDetails([
-        { name: "Style Number", value: style.style_number },
-        { name: "Buyer", value: style.buyer?.name ?? '' },
-      ])
-    }
-  }, [style])
 
   const onHideModal = () => {
     setState({ ...state, show: false });
     if (onHide) onHide();
   };
 
-  const itemTemplate = (item: StyleDetail) => {
-    return (
-      <div className="flex flex-wrap p-2 align-items-center gap-3">
-        <div className="flex-1 flex flex-column gap-2 xl:mr-8">
-          <span className="font-bold">   <i className="pi pi-tag text-sm"></i> {item.name}</span>
-        </div>
-        <span className="font-bold text-900">${item.value}</span>
-      </div>
-    );
+  const onSubmit = async (data: DefaultFormData) => {
+    try {
+      await importStyles(data);
+      showSuccess('Styles imported successfully created.');
+      setTimeout(() => {
+        onHideModal();
+      }, 2000);
+    } catch (error: any) {
+      showApiError(error, 'Failed to import styles.');
+    }
+  };
+
+  const importStyles = async (e: DefaultFormData) => {
+    try {
+      const form = new FormData();
+      form.append('csv_file', e.file);
+      setLoading(true);
+      const response = await StyleService.import(form);
+      setLoading(false);
+      return response;
+    } catch (error) {
+      setLoading(false);
+      throw error;
+    }
   };
 
   return (
     <Modal title="Upload Styles" visible={state.show} onHide={onHideModal} confirmSeverity="danger" hideActions={true}>
-      <div className="flex m-5">
-        <div className="flex flex-column align-items-center m-auto">
-          <p>Please choose a file and make sure you provide the suggested format.</p>
-          <FormInputFile/>
-           <p><a href="#">Click here to download</a> the suggested format.</p>
-
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex m-5">
+          <div className="flex flex-column align-items-center m-auto">
+            <p>Please choose a file and make sure you provide the suggested format.</p>
+            <div className="mb-4">
+              <Controller
+                name="file"
+                control={control}
+                render={({ field }) => (
+                  <FormInputFile
+                    accept=".csv,text/csv"
+                    auto={false}
+                    chooseLabel="Select CSV"
+                    disabled={loading}
+                    customUpload
+                    onSelect={(e: FileUploadSelectEvent) => {
+                      const file = e.files[0];
+                      field.onChange(file);
+                    }}
+                  />
+                )}
+              />
+              {errors.file && <p className="text-red-500 text-sm">{errors.file.message}</p>}
+            </div>
+            <p><a href="/formats/style-import-format.csv" target='_blank'>Click here to download</a> the suggested format.</p>
+          </div>
         </div>
-      </div>
-      <div className="flex">
-        <div className="ml-auto">
-          <Button onClick={() => { }} icon="pi pi-upload" severity="info" label="Upload" className="mr-2" />
+        <div className="flex">
+          <div className="ml-auto">
+            <Button loading={loading} type='submit' icon="pi pi-upload" severity="info" label="Upload" className="mr-2" />
+          </div>
         </div>
-      </div>
+      </form>
     </Modal>
   );
 };

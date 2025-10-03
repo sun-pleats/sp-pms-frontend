@@ -23,5 +23,10 @@ export const StyleService = {
   },
   deleteStyle(id: string) {
     return apiClient.delete(`${BASE_URL}/${id}`);
+  },
+  import(payload: FormData) {
+    return apiClient.post(`${BASE_URL}/import`, payload, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
   }
 };

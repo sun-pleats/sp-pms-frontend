@@ -1,11 +1,14 @@
 'use client';
+
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 import { LayoutContext } from '@/layout/context/layoutcontext';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
+import { STATUSES, StatusModel } from '@/app/constants/status';
 import { Style } from '@/app/types/styles';
 import { StyleService } from '@/app/services/StyleService';
 import { useRouter } from 'next/navigation';
@@ -15,13 +18,11 @@ import PageAction, { PageActions } from '@/app/components/page-action/component'
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import StatusBadge from '@/app/components/status/component';
 import TableHeader from '@/app/components/table-header/component';
 import UploadStyles from './components/upload-styles';
-import useUtilityData from '@/app/hooks/useUtilityData';
 import useModelStatus from '@/app/hooks/useModelStatus';
-import { STATUSES, StatusModel } from '@/app/constants/status';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import StatusBadge from '@/app/components/status/component';
+import useUtilityData from '@/app/hooks/useUtilityData';
 
 interface StylePageState {
   deleteModalShow?: boolean;
@@ -125,6 +126,7 @@ const StylesPage = () => {
     setPageState({
       ...pageState,
       deleteModalShow: true,
+      completeStyleModelShow: false,
       selectedId: id
     })
   }
@@ -132,6 +134,7 @@ const StylesPage = () => {
   const onActionCompletelick = (id: string | number) => {
     setPageState({
       ...pageState,
+      showUploading: false,
       completeStyleModelShow: true,
       selectedId: id
     })
@@ -246,7 +249,10 @@ const StylesPage = () => {
           </div>
         )}
       </Modal>
-      <UploadStyles onHide={() => setPageState({ ...pageState, showUploading: false })} visible={pageState.showUploading} />
+      <UploadStyles onHide={() => {
+        setPageState({ ...pageState, showUploading: false });
+        fetchStyles();
+      }} visible={pageState.showUploading} />
     </>
   );
 };

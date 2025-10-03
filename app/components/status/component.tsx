@@ -16,7 +16,7 @@ const StatusBadge = ({ status }: StatusBadgeProps) => {
     .join(' ');
 
   const statusSevirity = useMemo<'success' | 'info' | 'warning' | 'danger' | 'secondary' | 'contrast' | null | undefined>(() => {
-    let sevirity: any = 'success';
+    let sevirity: any = 'contrast';
 
     if (success.includes(status)) sevirity = 'success';
     else if (danger.includes(status)) sevirity = 'danger';

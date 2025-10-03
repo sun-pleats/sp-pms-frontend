@@ -5,18 +5,53 @@ interface FormInputFilePros extends React.InputHTMLAttributes<HTMLInputElement> 
   value?: any;
   isError?: boolean;
   errorMessage?: string;
+  auto?: boolean;
   autoFocus?: boolean;
   required?: boolean;
   name?: any;
   onUpload?: any;
+  onSelect?: any;
   accept?: string;
   maxFileSize?: number;
+  chooseLabel?: string;
+  customUpload?: any;
+  disabled?: boolean;
 }
 
 const FormInputFile = forwardRef<HTMLInputElement, FormInputFilePros>(
-  ({ name, accept, value, maxFileSize = 100000, isError, required, autoFocus, onUpload, errorMessage, ...rest }, ref) => (
+  (
+    {
+      name,
+      accept,
+      value,
+      maxFileSize = 100000,
+      isError,
+      onSelect,
+      disabled,
+      chooseLabel,
+      customUpload,
+      required,
+      auto,
+      autoFocus,
+      onUpload,
+      errorMessage,
+      ...rest
+    },
+    ref
+  ) => (
     <div className="field">
-      <FileUpload mode="basic" name={name} accept={accept} maxFileSize={maxFileSize} onUpload={onUpload} />
+      <FileUpload
+        mode="basic"
+        disabled={disabled}
+        name={name}
+        chooseLabel={chooseLabel}
+        auto={auto}
+        customUpload={customUpload}
+        onSelect={onSelect}
+        accept={accept}
+        maxFileSize={maxFileSize}
+        onUpload={onUpload}
+      />
       {isError && <small className="text-red-500">{errorMessage}</small>}
     </div>
   )
