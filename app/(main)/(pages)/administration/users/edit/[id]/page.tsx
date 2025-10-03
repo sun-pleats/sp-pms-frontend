@@ -2,7 +2,7 @@
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
-import { User, UserForm } from '@/app/types/users';
+import { User, UserForm, UserRole } from '@/app/types/users';
 import { useRouter } from 'next/navigation';
 import { useUserPage } from '../../hooks/useUserPage';
 import FormAction, { FormActions } from '@/app/components/form-action/component';
@@ -23,9 +23,10 @@ const EditUserPage = ({ params }: EditUserPageProps) => {
   const [user, setUser] = useState<UserForm | undefined>();
 
   const userTypes: SelectItem[] = [
-    { label: 'Operator', value: 'operator' },
-    { label: 'Administrator', value: 'administrator' },
-    { label: 'Administrator', value: 'manager' }
+    { label: 'Operator', value: UserRole.OPERATOR },
+    { label: 'Administrator', value: UserRole.ADMIN },
+    { label: 'Bundle Logger', value: UserRole.BUNDLE_LOGGER },
+    { label: 'Manager', value: UserRole.MANAGER },
   ];
 
   const getUser = useCallback(async () => {
@@ -41,7 +42,7 @@ const EditUserPage = ({ params }: EditUserPageProps) => {
   const handleSubmit = async (data: User) => {
     try {
       await updateUser(params?.id as string, data);
-      showSuccess('User successfully created.');
+      showSuccess('User successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.USERS.INDEX);
       }, 2000);

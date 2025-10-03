@@ -19,7 +19,7 @@ const CreateProcessPage = () => {
   const handleSubmit = async (data: DefaultFormData) => {
     try {
       await saveProcess(data);
-      showSuccess('Process offset successfully created.');
+      showSuccess('Process offset successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.PROCESS.INDEX);
       }, 2000);

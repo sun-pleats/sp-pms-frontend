@@ -19,7 +19,7 @@ const CreateDepartmentPage = () => {
   const handleSubmit = async (data: DefaultFormData) => {
     try {
       await saveDepartment(data);
-      showSuccess('Department successfully created.');
+      showSuccess('Department successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.DEPARTMENTS.INDEX);
       }, 2000);

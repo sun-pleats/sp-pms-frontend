@@ -35,7 +35,7 @@ const EditBuyerPage = ({ params }: EditBuyerPageProps) => {
   const handleSubmit = async (data: BuyerForm) => {
     try {
       await updateBuyer(params?.id as string, data);
-      showSuccess('Buyer successfully created.');
+      showSuccess('Buyer successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.BUYER.INDEX);
       }, 2000);

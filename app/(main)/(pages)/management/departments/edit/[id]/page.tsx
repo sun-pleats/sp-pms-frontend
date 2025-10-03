@@ -43,7 +43,7 @@ const EditDepartmentPage = ({ params }: EditDepartmentPageProps) => {
   const handleSubmit = async (data: DepartmentForm) => {
     try {
       await updateDepartment(params?.id as string, data);
-      showSuccess('Department successfully created.');
+      showSuccess('Department successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.DEPARTMENTS.INDEX);
       }, 2000);

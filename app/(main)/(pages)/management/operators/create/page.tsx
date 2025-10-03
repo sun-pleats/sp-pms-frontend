@@ -34,7 +34,7 @@ const CreateOperatorPage = () => {
   const handleSubmit = async (data: DefaultFormData) => {
     try {
       await saveOperator(data);
-      showSuccess('Operator successfully created.');
+      showSuccess('Operator successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.OPERATORS.INDEX);
       }, 2000);

@@ -33,7 +33,7 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
   const handleSubmit = async (data: SectionForm) => {
     try {
       await updateSection(params?.id as string, data);
-      showSuccess('Section successfully created.');
+      showSuccess('Section successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.SECTION.INDEX);
       }, 2000);

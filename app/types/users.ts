@@ -1,7 +1,8 @@
 export enum UserRole {
   OPERATOR = 'operator',
   ADMIN = 'admin',
-  MANAGER = 'manager'
+  MANAGER = 'manager',
+  BUNDLE_LOGGER = 'bundle-logger',
 }
 export interface User {
   id: string;
@@ -24,6 +25,7 @@ export interface UserForm {
   username: string;
   password: string;
   role: UserRole;
+  barcode_id?: string;
   created_by?: string;
   created_at: string;
   updated_at: string;

@@ -34,7 +34,7 @@ const CreateStylePage = () => {
   const handleSubmit = async (e: DefaultFormData) => {
     try {
       await saveStyle(e);
-      showSuccess("Style successfully created.");
+      showSuccess("Style successfully saved.");
       setTimeout(() => {
         router.push(ROUTES.STYLES_INDEX);
       }, 2000);

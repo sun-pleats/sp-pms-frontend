@@ -24,7 +24,7 @@ const CreateSectionPage = () => {
   const handleSubmit = async (data: SectionForm) => {
     try {
       await saveSection(data);
-      showSuccess('Section offset successfully created.');
+      showSuccess('Section offset successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.SECTION.INDEX);
       }, 2000);

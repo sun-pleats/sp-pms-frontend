@@ -49,7 +49,7 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
   const handleSubmit = async (data: OperatorForm) => {
     try {
       await updateOperator(params?.id as string, data);
-      showSuccess('Operator successfully created.');
+      showSuccess('Operator successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.OPERATORS.INDEX);
       }, 2000);

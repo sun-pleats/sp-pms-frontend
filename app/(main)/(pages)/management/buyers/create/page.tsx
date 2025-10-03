@@ -19,7 +19,7 @@ const CreateBuyerPage = () => {
   const handleSubmit = async (data: DefaultFormData) => {
     try {
       await saveBuyer(data);
-      showSuccess('Buyer offset successfully created.');
+      showSuccess('Buyer offset successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.BUYER.INDEX);
       }, 2000);

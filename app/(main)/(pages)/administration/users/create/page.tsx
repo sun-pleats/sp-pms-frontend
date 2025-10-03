@@ -26,7 +26,7 @@ const CreateUserPage = () => {
   const handleSubmit = async (payload: any) => {
     try {
       await saveUser(payload);
-      showSuccess('User successfully created.');
+      showSuccess('User successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.USERS.INDEX);
       }, 2000);

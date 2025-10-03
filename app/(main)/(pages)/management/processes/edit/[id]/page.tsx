@@ -28,7 +28,7 @@ const EditProcessPage = ({ params }: EditProcessPageProps) => {
   const handleSubmit = async (data: ProcessForm) => {
     try {
       await updateProcess(params?.id as string, data);
-      showSuccess('Process successfully created.');
+      showSuccess('Process successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.PROCESS.INDEX);
       }, 2000);
