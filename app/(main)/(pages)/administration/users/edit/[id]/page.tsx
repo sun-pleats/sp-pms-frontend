@@ -61,7 +61,7 @@ const EditUserPage = ({ params }: EditUserPageProps) => {
                   <div className="flex">
                     <div className="ml-auto">
                       <FormAction
-                        loadingSave={isSaveLoading}
+                        loadingUpdate={isSaveLoading || !user}
                         actionCancel={() => router.push(ROUTES.USERS.INDEX)}
                         actions={[FormActions.CANCEL, FormActions.UPDATE]}
                       />
