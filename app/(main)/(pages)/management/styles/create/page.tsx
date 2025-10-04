@@ -64,7 +64,7 @@ const CreateStylePage = () => {
             >
               <div className='grid mt-5'>
                 <div className='ml-auto'>
-                  <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.USERS.INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
+                  <FormAction loadingSave={isSaveLoading} actionCancel={() => router.push(ROUTES.STYLES_INDEX)} actions={[FormActions.CANCEL, FormActions.SAVE]} />
                 </div>
               </div>
             </FormStyle>

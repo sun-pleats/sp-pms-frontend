@@ -40,7 +40,7 @@ const CreateProcessPage = () => {
                     <div className="ml-auto">
                       <FormAction
                         loadingSave={isSaveLoading}
-                        actionCancel={() => router.push(ROUTES.PROCESS_OFFSETS.INDEX)}
+                        actionCancel={() => router.push(ROUTES.PROCESS.INDEX)}
                         actions={[FormActions.CANCEL, FormActions.SAVE]}
                       />
                     </div>
