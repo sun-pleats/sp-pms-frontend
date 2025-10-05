@@ -1,6 +1,6 @@
 'use client';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { OperatorForm } from '@/app/types/operator';
+import { Operator, OperatorForm } from '@/app/types/operator';
 import { OperatorService } from '@/app/services/OperatorService';
 import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
@@ -37,7 +37,13 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
   };
 
   const getOperator = useCallback(async () => {
-    setOperator((await OperatorService.getOperator(params?.id)).data as OperatorForm);
+    const operator = (await OperatorService.getOperator(params?.id)).data as Operator;
+    setOperator({
+      id: operator.id,
+      name: operator.name,
+      section_id: operator.section_id,
+      operator_processes: operator.operator_processes?.map((r) => r.process) ?? []
+    });
   }, [params?.id]);
 
   useEffect(() => {
@@ -65,7 +71,13 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormOperator processesOptions={processes} lines={lines} value={operator} onSubmit={handleSubmit} loading={{ lineField: isSectionLoading, processField: isProcessLoading }}>
+                <FormOperator
+                  processesOptions={processes}
+                  lines={lines}
+                  value={operator}
+                  onSubmit={handleSubmit}
+                  loading={{ lineField: isSectionLoading, processField: isProcessLoading }}
+                >
                   <div className="flex mt-2">
                     <div className="ml-auto">
                       <FormAction

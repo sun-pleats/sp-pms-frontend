@@ -26,7 +26,7 @@ const EditUserPage = ({ params }: EditUserPageProps) => {
     { label: 'Operator', value: UserRole.OPERATOR },
     { label: 'Administrator', value: UserRole.ADMIN },
     { label: 'Bundle Logger', value: UserRole.BUNDLE_LOGGER },
-    { label: 'Manager', value: UserRole.MANAGER },
+    { label: 'Manager', value: UserRole.MANAGER }
   ];
 
   const getUser = useCallback(async () => {

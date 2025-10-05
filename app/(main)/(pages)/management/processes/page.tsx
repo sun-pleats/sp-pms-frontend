@@ -164,6 +164,7 @@ const ProcessesPage = () => {
         scrollable
       >
         <Column field="id" header="ID" />
+        <Column field="code" header="Code" style={{ minWidth: '12rem' }} />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(process: Process) => process?.created_by?.name} />
         <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />

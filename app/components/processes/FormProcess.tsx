@@ -15,6 +15,7 @@ interface FormProcessProps {
 }
 
 const schema = yup.object().shape({
+  code: yup.string().required('Code is required'),
   name: yup.string().required('Name is required')
 });
 
@@ -26,19 +27,31 @@ const FormProcess = ({ value, onSubmit, children }: FormProcessProps) => {
     register,
     setValue
   } = useForm({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
+    defaultValues: {
+      code: '',
+      name: ''
+    }
   });
 
   useEffect(() => {
     if (value) {
       reset({
-        name: value?.name
+        name: value?.name,
+        code: value?.code
       });
     }
   }, [value]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <FormInputText
+        placeholder="Process Code"
+        {...register('code')}
+        label="Code"
+        errorMessage={errors.code?.message}
+        isError={errors.code ? true : false}
+      />
       <FormInputText
         placeholder="Process name"
         {...register('name')}

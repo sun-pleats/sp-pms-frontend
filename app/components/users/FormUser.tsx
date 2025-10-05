@@ -31,7 +31,7 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
       email: '',
       password: '',
       user_type: '',
-      barcode_id: '',
+      barcode_id: ''
     }
   });
 
@@ -43,7 +43,7 @@ const FormUser = ({ userTypes = [], value, onSubmit, children }: FormUserProps) 
         username: value?.username,
         password: '',
         user_type: value?.role,
-        barcode_id: value?.barcode_id,
+        barcode_id: value?.barcode_id
       });
     }
   }, [value, reset]);

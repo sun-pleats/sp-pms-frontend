@@ -2,7 +2,7 @@ export enum UserRole {
   OPERATOR = 'operator',
   ADMIN = 'admin',
   MANAGER = 'manager',
-  BUNDLE_LOGGER = 'bundle-logger',
+  BUNDLE_LOGGER = 'bundle-logger'
 }
 export interface User {
   id: string;

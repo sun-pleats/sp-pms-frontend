@@ -67,7 +67,7 @@ const UploadStyles = ({ style, visible, onHide }: UploadStylesProps) => {
   const onSubmit = async (data: DefaultFormData) => {
     try {
       await importStyles(data);
-      showSuccess('Styles imported successfully created.');
+      showSuccess('Styles imported successfully save.');
       setTimeout(() => {
         onHideModal();
       }, 2000);
