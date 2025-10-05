@@ -68,7 +68,7 @@ const OperatorsPage = () => {
         const { data } = await OperatorService.getOperators(search ? { search } : {}, { signal: controller.signal });
         setOperators(getOperators(data.data ?? []));
       } catch (error: any) {
-        if (error.name !== 'AbortError') {
+        if (error.name !== 'CanceledError') {
           console.error(error);
         }
       } finally {
@@ -144,11 +144,11 @@ const OperatorsPage = () => {
   const handleDelete = async () => {
     try {
       await OperatorService.deleteOperator(pageState.deleteId as string);
-      showSuccess('Department successfully deleted.');
+      showSuccess('Operator successfully deleted.');
       setPageState({ ...pageState, deleteModalShow: false });
       fetchOperators();
     } catch (error: any) {
-      showApiError(error, 'Failed to delete Department.');
+      showApiError(error, 'Failed to delete Operator.');
     }
   };
 

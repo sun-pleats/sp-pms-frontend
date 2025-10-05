@@ -65,7 +65,7 @@ const SectionsPage = () => {
         const data = await SectionService.getSections(search ? { search } : {}, { signal: controller.signal });
         setSections(getSections(data.data.data ?? []));
       } catch (error: any) {
-        if (error.name !== 'AbortError') {
+        if (error.name !== 'CanceledError') {
           console.error(error);
         }
       } finally {

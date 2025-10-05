@@ -143,11 +143,11 @@ const BuyersPage = () => {
   const handleDelete = async () => {
     try {
       await BuyerService.deleteBuyer(pageState.deleteId as string);
-      showSuccess('Offset successfully deleted.');
+      showSuccess('Buyer successfully deleted.');
       setPageState({ ...pageState, deleteModalShow: false });
       fetchBuyers();
     } catch (error: any) {
-      showApiError(error, 'Failed to delete offset.');
+      showApiError(error, 'Failed to delete buyer.');
     }
   };
 

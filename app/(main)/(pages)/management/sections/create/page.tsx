@@ -24,12 +24,12 @@ const CreateSectionPage = () => {
   const handleSubmit = async (data: SectionForm) => {
     try {
       await saveSection(data);
-      showSuccess('Section offset successfully saved.');
+      showSuccess('Section successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.SECTION.INDEX);
       }, 2000);
     } catch (error: any) {
-      showApiError(error, 'Failed to process offset.');
+      showApiError(error, 'Failed to save section.');
     }
   };
 

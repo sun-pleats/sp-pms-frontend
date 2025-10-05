@@ -67,7 +67,7 @@ const DepartmentsPage = () => {
         const { data } = await DepartmentService.getDepartmentes(search ? { search } : {}, { signal: controller.signal });
         setDepartments(getDepartments(data.data ?? []));
       } catch (error: any) {
-        if (error.name !== 'AbortError') {
+        if (error.name !== 'CanceledError') {
           console.error(error);
         }
       } finally {
