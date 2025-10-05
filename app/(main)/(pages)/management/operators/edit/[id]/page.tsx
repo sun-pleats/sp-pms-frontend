@@ -65,11 +65,11 @@ const EditOperatorPage = ({ params }: EditOperatorPageProps) => {
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormOperator processesOptions={processes} lines={lines} value={operator} onSubmit={handleSubmit}>
+                <FormOperator processesOptions={processes} lines={lines} value={operator} onSubmit={handleSubmit} loading={{ lineField: isSectionLoading, processField: isProcessLoading }}>
                   <div className="flex mt-2">
                     <div className="ml-auto">
                       <FormAction
-                        loadingSave={isSaveLoading}
+                        loadingUpdate={isSaveLoading || isSectionLoading || isProcessLoading}
                         actionCancel={() => router.push(ROUTES.OPERATORS.INDEX)}
                         actions={[FormActions.CANCEL, FormActions.UPDATE]}
                       />

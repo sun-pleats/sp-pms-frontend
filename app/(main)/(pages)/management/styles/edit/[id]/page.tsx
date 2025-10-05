@@ -84,7 +84,6 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
           <div className='p-fluid'>
             <FormStyle
               onSubmit={handleSubmit}
-     
               value={style}
               styleOptions={styleOptions}
               loading={{ buyerField: isBuyerLoading, fields: isFetching }}
@@ -93,8 +92,8 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
               <div className='grid mt-5'>
                 <div className='ml-auto'>
                   <FormAction
-                    loadingSave={isSaveLoading}
-                    actionCancel={() => router.push(ROUTES.USERS.INDEX)}
+                    loadingSave={isSaveLoading || isFetching || isBuyerLoading}
+                    actionCancel={() => router.push(ROUTES.STYLES_INDEX)}
                     actions={[FormActions.CANCEL, FormActions.SAVE]} />
                 </div>
               </div>

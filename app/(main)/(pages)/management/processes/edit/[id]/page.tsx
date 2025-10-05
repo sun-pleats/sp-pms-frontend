@@ -54,7 +54,7 @@ const EditProcessPage = ({ params }: EditProcessPageProps) => {
                   <div className="flex">
                     <div className="ml-auto">
                       <FormAction
-                        loadingSave={isSaveLoading}
+                        loadingUpdate={isSaveLoading || !process}
                         actionCancel={() => router.push(ROUTES.PROCESS.INDEX)}
                         actions={[FormActions.CANCEL, FormActions.UPDATE]}
                       />
