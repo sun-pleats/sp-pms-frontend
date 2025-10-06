@@ -57,7 +57,7 @@ export const useProcessOffsetPage = (id?: any) => {
         description: e.description
       });
 
-      showSuccess('Process offset successfully updated.');
+      showSuccess('Process offset successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.PROCESS_OFFSETS.INDEX);
       }, 2000);

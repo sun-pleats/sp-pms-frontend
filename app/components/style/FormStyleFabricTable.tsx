@@ -15,7 +15,7 @@ interface FormStyleProps {
 
 const FormStyleFabricTable = ({ control }: FormStyleProps) => {
   const emptyItem = (): FormStyleFabric => ({
-    id: 1,
+    id: generateSimpleId(),
     col_number: '',
     color: '',
     size_one: 0,

@@ -19,12 +19,12 @@ const CreateBuyerPage = () => {
   const handleSubmit = async (data: DefaultFormData) => {
     try {
       await saveBuyer(data);
-      showSuccess('Buyer offset successfully saved.');
+      showSuccess('Buyer successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.BUYER.INDEX);
       }, 2000);
     } catch (error: any) {
-      showApiError(error, 'Failed to buyer offset.');
+      showApiError(error, 'Failed to save buyer.');
     }
   };
 

@@ -19,12 +19,12 @@ const CreateProcessPage = () => {
   const handleSubmit = async (data: DefaultFormData) => {
     try {
       await saveProcess(data);
-      showSuccess('Process offset successfully saved.');
+      showSuccess('Process successfully saved.');
       setTimeout(() => {
         router.push(ROUTES.PROCESS.INDEX);
       }, 2000);
     } catch (error: any) {
-      showApiError(error, 'Failed to process offset.');
+      showApiError(error, 'Failed to save process.');
     }
   };
 

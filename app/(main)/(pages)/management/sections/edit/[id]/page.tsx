@@ -38,7 +38,7 @@ const EditSectionPage = ({ params }: EditSectionPageProps) => {
         router.push(ROUTES.SECTION.INDEX);
       }, 2000);
     } catch (error: any) {
-      showApiError(error, 'Failed to process section.');
+      showApiError(error, 'Failed to save section.');
     }
   };
 

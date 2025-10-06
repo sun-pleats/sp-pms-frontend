@@ -9,6 +9,7 @@ export const useProcessPage = () => {
     try {
       setIsSaveLoading(true);
       const response = await ProcessService.createProcess({
+        code: e.code,
         name: e.name
       });
       return response;
@@ -22,6 +23,7 @@ export const useProcessPage = () => {
     try {
       setIsSaveLoading(true);
       const response = await ProcessService.updateProcess(id, {
+        code: e.code,
         name: e.name
       });
       return response;

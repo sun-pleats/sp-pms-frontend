@@ -39,7 +39,7 @@ const CreateOperatorPage = () => {
         router.push(ROUTES.OPERATORS.INDEX);
       }, 2000);
     } catch (error: any) {
-      showApiError(error, 'Failed to operator.');
+      showApiError(error, 'Failed to save operator.');
     }
   };
 
