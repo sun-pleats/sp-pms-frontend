@@ -120,7 +120,7 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
                     <div className="ml-auto">
                       <FormAction
                         loadingSave={state.loadings?.saving || state.loadings?.fetching}
-                        actionCancel={() => router.push(ROUTES.PRODUCTION_OPERATION.INDEX)}
+                        actionCancel={() => router.push(ROUTES.BUNDLES.INDEX)}
                         actions={[FormActions.CANCEL, FormActions.SAVE]}
                       />
                     </div>

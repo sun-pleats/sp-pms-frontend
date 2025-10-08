@@ -19,6 +19,7 @@ import PrintBarcode from '@/app/components/barcode/PrintBarcode';
 import React, { useEffect, useState } from 'react';
 import ReleaseBundles from './components/release-bundle';
 import TableHeader from '@/app/components/table-header/component';
+import { formatDate } from '@/app/utils';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
@@ -64,6 +65,10 @@ const BundlesPage = () => {
     });
     initFilters1();
   }, []);
+
+  const dateBodyTemplate = (rowData: StyleBundle) => {
+    return formatDate(new Date(rowData.created_at ?? ''));
+  };
 
   const initFilters1 = () => {
     setFilters1({
@@ -186,6 +191,7 @@ const BundlesPage = () => {
         <Column field="roll_number" header="Roll No." style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column header="Size" field="style_planned_fabric_size.size_number" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="quantity" header="Quantity" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="created_at" header="Released At" body={dateBodyTemplate} style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column
           field="balance"
           header="Action"

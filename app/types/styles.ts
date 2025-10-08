@@ -85,6 +85,9 @@ export interface StyleBundle {
   style?: Style;
   style_planned_fabric?: StylePlannedFabric;
   style_planned_fabric_size?: StylePlannedFabricSize;
+  belong_style_bundle_id?: number;
+  belong_style_bundle?: StyleBundle;
+  created_at?: string;
 }
 
 export interface StyleBundleEntryLog {

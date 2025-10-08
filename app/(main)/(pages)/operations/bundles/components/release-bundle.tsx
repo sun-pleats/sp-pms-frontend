@@ -122,10 +122,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
     }
   };
 
-  const loadFabricBundles = async () => {
-    StyleBundleService.getStyleBundles(selectedStyleNumber?.value.toString() ?? '');
-  };
-
+ 
   useEffect(() => {
     setState({ ...state, show: visible });
     if (visible) initData();
@@ -133,7 +130,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
 
   const initData = async () => {
     setPrinterOptions(await fetchPrintersSelectOptions());
-    await loadFabricBundles();
+ 
   };
 
   const resetAllState = () => {
