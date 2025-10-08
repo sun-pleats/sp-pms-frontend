@@ -17,11 +17,16 @@ const DashboardRecentBundles = ({ value, loading }: DashboardStatisticsProps) =>
 
   const renderBundleNumber = (bundle: StyleBundle) => {
     return (
-      <Badge value={bundle.bundle_number} severity="contrast" className='cursor-pointer'  onClick={() => {
-         router.push(`/operations/bundle-flow?bundle=${bundle?.bundle_number}&bundle_id=${bundle?.id}`)
-      }} />
-    )
-  }
+      <Badge
+        value={bundle.bundle_number}
+        severity="contrast"
+        className="cursor-pointer"
+        onClick={() => {
+          router.push(`/operations/bundle-flow?bundle=${bundle?.bundle_number}&bundle_id=${bundle?.id}`);
+        }}
+      />
+    );
+  };
 
   return (
     <div className="card">

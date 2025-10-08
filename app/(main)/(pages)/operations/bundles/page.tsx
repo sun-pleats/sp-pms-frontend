@@ -49,28 +49,23 @@ const BundlesPage = () => {
     setFilters({});
   };
 
-  const fetchBundles = useCallback(
-    async () => {
-      setLoading(true);
-      try {
-        const search = filters.keyword?.trim() || '';
-        const data = await StyleBundleService.getBundles(search ? { search } : {});
+  const fetchBundles = useCallback(async () => {
+    setLoading(true);
+    try {
+      const search = filters.keyword?.trim() || '';
+      const data = await StyleBundleService.getBundles(search ? { search } : {});
 
-        setBundles(data.data.data ?? []);
-
-
-      } catch (error: any) {
-        showApiError(error, "Error fetching bundles");
-      } finally {
-        setLoading(false);
-      }
-    },
-    [filters.keyword]
-  );
+      setBundles(data.data.data ?? []);
+    } catch (error: any) {
+      showApiError(error, 'Error fetching bundles');
+    } finally {
+      setLoading(false);
+    }
+  }, [filters.keyword]);
 
   useEffect(() => {
     fetchBundles();
-  }, [fetchBundles])
+  }, [fetchBundles]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters({ keyword: e.target.value });
@@ -127,16 +122,31 @@ const BundlesPage = () => {
   const header1 = renderHeader1();
 
   const bundleBodyTemplate = (rowData: StyleBundle) => {
-    return (<>
-      <span className='cursor-pointer' onClick={() => {
-        router.push(`/operations/bundle-flow?bundle=${rowData?.bundle_number}&bundle_id=${rowData?.id}`)
-      }}>{rowData.bundle_number}</span>
-      {rowData.belong_style_bundle ? <div className='mt-2 cursor-pointer' onClick={() => {
-        router.push(`/operations/bundle-flow?bundle=${rowData.belong_style_bundle?.bundle_number}&bundle_id=${rowData.belong_style_bundle?.id}`)
-      }}><Badge value={`#${rowData.belong_style_bundle.bundle_number}`} size="normal" severity="success"></Badge></div> : null}
-    </>)
+    return (
+      <>
+        <span
+          className="cursor-pointer"
+          onClick={() => {
+            router.push(`/operations/bundle-flow?bundle=${rowData?.bundle_number}&bundle_id=${rowData?.id}`);
+          }}
+        >
+          {rowData.bundle_number}
+        </span>
+        {rowData.belong_style_bundle ? (
+          <div
+            className="mt-2 cursor-pointer"
+            onClick={() => {
+              router.push(
+                `/operations/bundle-flow?bundle=${rowData.belong_style_bundle?.bundle_number}&bundle_id=${rowData.belong_style_bundle?.id}`
+              );
+            }}
+          >
+            <Badge value={`#${rowData.belong_style_bundle.bundle_number}`} size="normal" severity="success"></Badge>
+          </div>
+        ) : null}
+      </>
+    );
   };
-
 
   return (
     <>

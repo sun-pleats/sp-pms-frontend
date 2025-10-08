@@ -43,7 +43,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
     style_planned_fabric_size_id: '',
     quantity: 0,
     remarks: '',
-    belong_style_bundle_id: '',
+    belong_style_bundle_id: ''
   });
 
   const { append, remove } = useFieldArray({

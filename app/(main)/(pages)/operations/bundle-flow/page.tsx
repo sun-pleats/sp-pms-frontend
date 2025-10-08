@@ -31,7 +31,7 @@ const StyleFlowPage = () => {
       setIsStaticRender(true);
       fetchBundleFlow(bundleId);
     }
-  }, [bundleNumber, bundleId])
+  }, [bundleNumber, bundleId]);
 
   const { showApiError } = useContext(LayoutContext);
 
@@ -58,10 +58,22 @@ const StyleFlowPage = () => {
   return (
     <>
       <PageTile title="Bundle Flow" icon="pi pi-fw pi-share-alt" url={ROUTES.BUNDLE_FLOW.INDEX} />
-      {!isStaticRender && <RemoteStyleBundleDropdown value={selectedStyleNumber} onSelect={handleSelectedStyle} onChange={(option) => setSelectedStyleNumber(option)} />}
-      {isStaticRender && <p className=''>Selected Bundle: <Badge value={bundleNumber} severity="success" /> <Badge onClick={() => {
-        setIsStaticRender(false)
-      }} className='cursor-pointer' value="Clear" severity="secondary" /></p>}
+      {!isStaticRender && (
+        <RemoteStyleBundleDropdown value={selectedStyleNumber} onSelect={handleSelectedStyle} onChange={(option) => setSelectedStyleNumber(option)} />
+      )}
+      {isStaticRender && (
+        <p className="">
+          Selected Bundle: <Badge value={bundleNumber} severity="success" />{' '}
+          <Badge
+            onClick={() => {
+              setIsStaticRender(false);
+            }}
+            className="cursor-pointer"
+            value="Clear"
+            severity="secondary"
+          />
+        </p>
+      )}
       <p className="mt-2">Visualizes how a bundle moves across departments, showing entry/exit times, user, and duration for each step.</p>
       <BundleEntryFlow loading={isFetching} records={bundleMovement} />
     </>

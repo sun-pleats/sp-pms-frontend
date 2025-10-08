@@ -50,7 +50,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
     style_planned_fabric_size_id: '',
     quantity: 0,
     remarks: '',
-    belong_style_bundle_id: '',
+    belong_style_bundle_id: ''
   });
 
   const { control, handleSubmit, reset } = useForm<FormData>({
@@ -97,7 +97,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
             style_planned_fabric_size_id: r.style_planned_fabric_size_id,
             quantity: r.quantity,
             remarks: r.remarks,
-            belong_style_bundle_id: r.belong_style_bundle_id,
+            belong_style_bundle_id: r.belong_style_bundle_id
           }))
         },
         selectedStyleNumber?.value.toString() ?? ''
@@ -124,7 +124,6 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
     }
   };
 
- 
   useEffect(() => {
     setState({ ...state, show: visible });
     if (visible) initData();
@@ -132,7 +131,6 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
 
   const initData = async () => {
     setPrinterOptions(await fetchPrintersSelectOptions());
- 
   };
 
   const resetAllState = () => {
