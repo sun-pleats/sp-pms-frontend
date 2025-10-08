@@ -4,7 +4,6 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
-import { InputText } from 'primereact/inputtext';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Process } from '@/app/types/process';
 import { ProcessService } from '@/app/services/ProcessService';
@@ -12,7 +11,6 @@ import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
 import Modal from '@/app/components/modal/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
-import PageCard from '@/app/components/page-card/component';
 import PageHeader from '@/app/components/page-header/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
@@ -44,15 +42,6 @@ const ProcessesPage = () => {
   const clearFilter = () => {
     setFilter({
       keyword: ''
-    });
-    fetchProcesses();
-  };
-
-  const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setFilter({
-      ...filter,
-      keyword: value
     });
     fetchProcesses();
   };

@@ -42,7 +42,8 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
     style_planned_fabric_id: '',
     style_planned_fabric_size_id: '',
     quantity: 0,
-    remarks: ''
+    remarks: '',
+    belong_style_bundle_id: '',
   });
 
   const { append, remove } = useFieldArray({
@@ -199,6 +200,19 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
             name={`bundles.${options.rowIndex}.remarks` as const}
             render={({ field, fieldState }) => (
               <FormInputText {...field} placeholder="e.g. Notes" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+            )}
+          />
+        )}
+      />
+      <Column
+        field="belong_style_bundle_id"
+        header="Tagged To"
+        body={(_row: any, options: { rowIndex: number }) => (
+          <Controller
+            control={control}
+            name={`bundles.${options.rowIndex}.belong_style_bundle_id` as const}
+            render={({ field, fieldState }) => (
+              <FormInputText {...field} placeholder="Bundle No." errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
             )}
           />
         )}

@@ -71,6 +71,7 @@ export interface FormReleaseBundle {
   style_planned_fabric_size_id?: string;
   quantity?: number;
   remarks?: string;
+  belong_style_bundle_id?: string;
 }
 
 export interface StyleBundle {

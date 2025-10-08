@@ -16,10 +16,12 @@ import PageAction from '@/app/components/page-action/component';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
 import PrintBarcode from '@/app/components/barcode/PrintBarcode';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import ReleaseBundles from './components/release-bundle';
 import TableHeader from '@/app/components/table-header/component';
 import { formatDate } from '@/app/utils';
+import { LayoutContext } from '@/layout/context/layoutcontext';
+import { Badge } from 'primereact/badge';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
@@ -29,75 +31,57 @@ interface BundlePageState {
   showUploading?: boolean;
 }
 
+interface SearchFilter {
+  keyword?: string;
+}
+
 const BundlesPage = () => {
   const [pageState, setPageState] = useState<BundlePageState>({});
   const [selectedBundle, setSelectedBundle] = useState<StyleBundle | undefined>(undefined);
-
   const [bundles, setBundles] = useState<StyleBundle[]>([]);
   const [selectedBundles, setSelectedBundles] = useState<StyleBundle[]>([]);
-
-  const [filters1, setFilters1] = useState<DataTableFilterMeta>({});
-  const [loading1, setLoading1] = useState(true);
-  const [globalFilterValue1, setGlobalFilterValue1] = useState('');
+  const [filters, setFilters] = useState<SearchFilter>({});
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { showApiError } = useContext(LayoutContext);
 
   const clearFilter1 = () => {
-    initFilters1();
+    setFilters({});
   };
 
-  const onGlobalFilterChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    let _filters1 = { ...filters1 };
-    (_filters1['global'] as any).value = value;
+  const fetchBundles = useCallback(
+    async () => {
+      setLoading(true);
+      try {
+        const search = filters.keyword?.trim() || '';
+        const data = await StyleBundleService.getBundles(search ? { search } : {});
 
-    setFilters1(_filters1);
-    setGlobalFilterValue1(value);
+        setBundles(data.data.data ?? []);
+
+
+      } catch (error: any) {
+        showApiError(error, "Error fetching bundles");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [filters.keyword]
+  );
+
+  useEffect(() => {
+    fetchBundles();
+  }, [fetchBundles])
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilters({ keyword: e.target.value });
   };
 
   const renderHeader1 = () => {
-    return <TableHeader onClear={clearFilter1} />;
+    return <TableHeader onClear={clearFilter1} onSearchChange={handleSearchChange} />;
   };
-
-  useEffect(() => {
-    StyleBundleService.getBundles().then(({ data }) => {
-      setBundles(data.data ?? []);
-      setLoading1(false);
-    });
-    initFilters1();
-  }, []);
 
   const dateBodyTemplate = (rowData: StyleBundle) => {
     return formatDate(new Date(rowData.created_at ?? ''));
-  };
-
-  const initFilters1 = () => {
-    setFilters1({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      name: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }]
-      },
-      'country.name': {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }]
-      },
-      representative: { value: null, matchMode: FilterMatchMode.IN },
-      date: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }]
-      },
-      balance: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }]
-      },
-      status: {
-        operator: FilterOperator.OR,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }]
-      },
-      activity: { value: null, matchMode: FilterMatchMode.BETWEEN },
-      verified: { value: null, matchMode: FilterMatchMode.EQUALS }
-    });
-    setGlobalFilterValue1('');
   };
 
   const onActionEditClick = (id: string | number) => {
@@ -142,6 +126,18 @@ const BundlesPage = () => {
 
   const header1 = renderHeader1();
 
+  const bundleBodyTemplate = (rowData: StyleBundle) => {
+    return (<>
+      <span className='cursor-pointer' onClick={() => {
+        router.push(`/operations/bundle-flow?bundle=${rowData?.bundle_number}&bundle_id=${rowData?.id}`)
+      }}>{rowData.bundle_number}</span>
+      {rowData.belong_style_bundle ? <div className='mt-2 cursor-pointer' onClick={() => {
+        router.push(`/operations/bundle-flow?bundle=${rowData.belong_style_bundle?.bundle_number}&bundle_id=${rowData.belong_style_bundle?.id}`)
+      }}><Badge value={`#${rowData.belong_style_bundle.bundle_number}`} size="normal" severity="success"></Badge></div> : null}
+    </>)
+  };
+
+
   return (
     <>
       <PageTile title="Release Bundles" icon="pi pi-fw pi-box" url={ROUTES.BUNDLES.INDEX} />
@@ -171,9 +167,8 @@ const BundlesPage = () => {
         showGridlines
         rows={10}
         dataKey="id"
-        filters={filters1}
         filterDisplay="menu"
-        loading={loading1}
+        loading={loading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         selectionMode={'checkbox'}
         selection={selectedBundles}
@@ -182,7 +177,7 @@ const BundlesPage = () => {
         scrollable
       >
         <Column selectionMode="multiple" headerStyle={{ width: '3em' }} />
-        <Column field="bundle_number" header="Bundle#" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="bundle_number" header="Bundle#" body={bundleBodyTemplate} style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="style.style_number" header="Style#" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="style.buyer.name" header="Buyer" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="style.ship_date_from_cebu" header="Cebu Date" style={{ width: 'auto', whiteSpace: 'nowrap' }} />

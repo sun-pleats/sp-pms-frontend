@@ -49,7 +49,8 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
     style_planned_fabric_id: '',
     style_planned_fabric_size_id: '',
     quantity: 0,
-    remarks: ''
+    remarks: '',
+    belong_style_bundle_id: '',
   });
 
   const { control, handleSubmit, reset } = useForm<FormData>({
@@ -95,7 +96,8 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
             style_planned_fabric_id: r.style_planned_fabric_id,
             style_planned_fabric_size_id: r.style_planned_fabric_size_id,
             quantity: r.quantity,
-            remarks: r.remarks
+            remarks: r.remarks,
+            belong_style_bundle_id: r.belong_style_bundle_id,
           }))
         },
         selectedStyleNumber?.value.toString() ?? ''
