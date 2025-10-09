@@ -88,6 +88,11 @@ const ProductionPage = () => {
           resetPageState();
         }
       })
+      .catch((error) => {
+        showApiError(error, "Error logger")
+        setKioskFilters({...kioskFilters, logger_barcode: ''});
+        resetPageState();
+      })
       .finally(() => setIsLogging(false));
   };
 
