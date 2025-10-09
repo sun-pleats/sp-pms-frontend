@@ -23,6 +23,7 @@ interface BarcodeDetail {
   name: string;
   value: string;
   checked: boolean;
+  barcode: string;
 }
 
 const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeProps) => {
@@ -45,6 +46,7 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
       setDetails(
         operator.operator_processes?.map((r) => ({
           name: r.process.name,
+          barcode: r.barcode ?? '',
           value: r.id?.toString() ?? '',
           checked: false
         })) ?? []
@@ -99,7 +101,7 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
                 checked={selectedProcesses.some((item) => item.value === category.value)}
               />
               <label htmlFor={`process-${index}`} className="ml-2">
-                {category.name}
+                {category.name} / Code: {category.barcode}
               </label>
             </div>
           );

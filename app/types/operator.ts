@@ -15,6 +15,7 @@ export interface Operator {
     process_id?: number;
     section_id?: number;
     time?: number;
+    barcode?: string;
     process: Process;
   }[];
 }
