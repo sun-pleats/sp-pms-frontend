@@ -6,22 +6,22 @@ import { DataTable } from 'primereact/datatable';
 import { Department } from '@/app/types/department';
 import { DepartmentService } from '@/app/services/DepartmentService';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
-import { InputText } from 'primereact/inputtext';
 import { LayoutContext } from '@/layout/context/layoutcontext';
+import { PRINTING_MODELS } from '@/app/constants/barcode';
 import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
 import Modal from '@/app/components/modal/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
-import PageCard from '@/app/components/page-card/component';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
+import PrintBarcode from '@/app/components/barcode/PrintBarcode';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
-import type { Demo } from '@/types';
 
 interface DepartmentPageState {
   deleteModalShow?: boolean;
   deleteId?: string | number;
+  showPrint?: boolean;
 }
 
 interface SearchFilter {
@@ -35,6 +35,7 @@ const DepartmentsPage = () => {
   const [filter, setFilter] = useState<SearchFilter>({});
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const abortControllerRef = React.useRef<AbortController | null>(null);
+  const [selectedDepartment, setSelectedDepartment] = useState<Department | undefined>();
 
   const router = useRouter();
 
@@ -90,6 +91,11 @@ const DepartmentsPage = () => {
     });
   };
 
+  const onPrintClick = (user: Department) => {
+    setSelectedDepartment(user);
+    setPageState({ ...pageState, showPrint: true });
+  };
+
   const formatDate = (value: Date) => {
     return value.toLocaleDateString('en-US', {
       day: '2-digit',
@@ -117,6 +123,7 @@ const DepartmentsPage = () => {
   const actionBodyTemplate = (rowData: Department) => {
     return (
       <div className="flex flex-row gap-2">
+        <Button icon="pi pi-print" outlined rounded onClick={() => onPrintClick(rowData)} size="small" />
         <Button
           icon="pi pi-pencil"
           onClick={() => onActionEditClick(rowData.id)}
@@ -173,10 +180,17 @@ const DepartmentsPage = () => {
       >
         <Column field="id" header="ID" />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
+        <Column field="barcode" header="Barcode" style={{ minWidth: '12rem' }} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(department: Department) => department?.created_by?.name} />
         <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
         <Column header="Actions" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} body={actionBodyTemplate} frozen alignFrozen="right"></Column>
       </DataTable>
+      <PrintBarcode
+        visible={pageState.showPrint}
+        ids={[selectedDepartment?.id ?? '']}
+        model={PRINTING_MODELS.DEPARTMENT}
+        onHide={() => setPageState({ ...pageState, showPrint: false })}
+      />
       <Modal
         title="Delete Record"
         visible={pageState.deleteModalShow}
