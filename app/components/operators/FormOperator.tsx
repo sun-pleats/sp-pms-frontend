@@ -74,6 +74,7 @@ const FormOperator = ({ value, onSubmit, children, lines, processesOptions, load
             errorMessage={fieldState.error?.message}
             isError={fieldState.error ? true : false}
             options={lines}
+            filter={true}
           />
         )}
       />
@@ -93,6 +94,7 @@ const FormOperator = ({ value, onSubmit, children, lines, processesOptions, load
             errorMessage={fieldState.error?.message}
             isError={fieldState.error ? true : false}
             options={processesOptions}
+            filter={true}
           />
         )}
       />
