@@ -30,6 +30,7 @@ interface BundlePageState {
   showRelease?: boolean;
   showMultiPrintBarcode?: boolean;
   showUploading?: boolean;
+  deleteId?: string | number;
 }
 
 interface SearchFilter {
@@ -85,10 +86,11 @@ const BundlesPage = () => {
     router.push(`${ROUTES.BUNDLES.EDIT}/${id}`);
   };
 
-  const onActionDeleteClick = () => {
+  const onActionDeleteClick = (id: string | number) => {
     setPageState({
       ...pageState,
-      deleteModalShow: true
+      deleteModalShow: true,
+      deleteId: id
     });
   };
 
@@ -132,7 +134,7 @@ const BundlesPage = () => {
           severity="warning"
         />
         <Button icon="pi pi-print" outlined rounded onClick={() => onSinglePrintBarcodeClick(rowData)} size="small" severity="help" />
-        <Button icon="pi pi-trash" outlined rounded onClick={() => onActionDeleteClick()} size="small" severity="danger" />
+        <Button icon="pi pi-trash" outlined rounded onClick={() => onActionDeleteClick(rowData.id?.toString() ?? '')} size="small" severity="danger" />
       </div>
     );
   };
@@ -168,6 +170,17 @@ const BundlesPage = () => {
         ) : null}
       </>
     );
+  };
+
+  const handleDelete = async () => {
+    try {
+      await StyleBundleService.deleteBundle(pageState.deleteId as string);
+      showSuccess('Release Bundle successfully deleted.');
+      setPageState({ ...pageState, deleteModalShow: false });
+      fetchBundles();
+    } catch (error: any) {
+      showApiError(error, 'Failed to delete record.');
+    }
   };
 
   return (
@@ -244,6 +257,7 @@ const BundlesPage = () => {
         visible={pageState.deleteModalShow}
         onHide={() => setPageState({ ...pageState, deleteModalShow: false })}
         confirmSeverity="danger"
+        onConfirm={handleDelete}
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>

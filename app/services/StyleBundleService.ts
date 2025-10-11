@@ -27,5 +27,8 @@ export const StyleBundleService = {
   },
   getBundleFlow(id: string): AxiosPromise<ReportStyleBundleEntryLog[]> {
     return apiClient.get(`${BASE_URL}/${id}/bundle-flow`);
+  },
+  deleteBundle(id: string): AxiosPromise<void> {
+    return apiClient.delete(`${BASE_URL}/${id}`);
   }
 };

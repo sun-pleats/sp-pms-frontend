@@ -72,7 +72,7 @@ export interface FormReleaseBundle {
   style_planned_fabric_size_id?: string;
   quantity?: number;
   remarks?: string;
-  belong_style_bundle_id?: string;
+  belong_style_bundle_id?: string | number;
 }
 
 export interface StyleBundle {
@@ -83,11 +83,12 @@ export interface StyleBundle {
   roll_number?: number;
   bundle_number: string; // change to number if your DB uses int
   quantity: number;
+  postfix?: string;
   remarks?: string | null;
   style?: Style;
   style_planned_fabric?: StylePlannedFabric;
   style_planned_fabric_size?: StylePlannedFabricSize;
-  belong_style_bundle_id?: number;
+  belong_style_bundle_id?: string | number;
   belong_style_bundle?: StyleBundle;
   created_at?: string;
   released?: boolean;
