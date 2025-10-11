@@ -25,6 +25,7 @@ import { Badge } from 'primereact/badge';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
+  releaseModalShow?: boolean;
   showSinglePrintBarcode?: boolean;
   showRelease?: boolean;
   showMultiPrintBarcode?: boolean;
@@ -43,7 +44,7 @@ const BundlesPage = () => {
   const [filters, setFilters] = useState<SearchFilter>({});
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { showApiError } = useContext(LayoutContext);
+  const { showApiError, showSuccess } = useContext(LayoutContext);
 
   const clearFilter1 = () => {
     setFilters({});
@@ -76,7 +77,8 @@ const BundlesPage = () => {
   };
 
   const dateBodyTemplate = (rowData: StyleBundle) => {
-    return formatDate(new Date(rowData.created_at ?? ''));
+    if(!rowData.released_at) return null;
+    return formatDate(new Date(rowData.released_at ?? ''));
   };
 
   const onActionEditClick = (id: string | number) => {
@@ -98,9 +100,29 @@ const BundlesPage = () => {
     });
   };
 
+  const onReleaseBundle = (rowData: StyleBundle) => {
+    setSelectedBundle(rowData);
+    setPageState({
+      ...pageState,
+      releaseModalShow: true
+    });
+  };
+
+  const releaseBundle = async () => {
+    try {
+      await StyleBundleService.releaseFabricBundle(selectedBundle?.id?.toString() ?? '');
+      showSuccess('Bundle successfully released.');
+      setPageState({ ...pageState, releaseModalShow: false });
+      fetchBundles();
+    } catch (error: any) {
+      showApiError(error, 'Failed to release bundle.');
+    }
+  };
+
   const actionBodyTemplate = (rowData: StyleBundle) => {
     return (
       <div className="flex flex-row gap-2">
+        { !rowData.released && <Button icon="pi pi-arrow-up-right" outlined rounded onClick={() => onReleaseBundle(rowData)} size="small" severity="info" /> }
         <Button
           icon="pi pi-pencil"
           outlined
@@ -196,7 +218,7 @@ const BundlesPage = () => {
         <Column field="roll_number" header="Roll No." style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column header="Size" field="style_planned_fabric_size.size_number" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="quantity" header="Quantity" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
-        <Column field="created_at" header="Released At" body={dateBodyTemplate} style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="released_at" header="Released At" body={dateBodyTemplate} style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column
           field="balance"
           header="Action"
@@ -206,6 +228,16 @@ const BundlesPage = () => {
           frozen
         ></Column>
       </DataTable>
+
+      <Modal
+        title="Release Bundle"
+        visible={pageState.releaseModalShow}
+        onHide={() => setPageState({ ...pageState, releaseModalShow: false })}
+        confirmSeverity="info"
+        onConfirm={releaseBundle}
+      >
+        <p>Do you want to release this bundle?</p>
+      </Modal>
 
       <Modal
         title="Delete Record"

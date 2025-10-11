@@ -43,6 +43,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
     style_planned_fabric_size_id: '',
     quantity: 0,
     remarks: '',
+    postfix: '',
     belong_style_bundle_id: ''
   });
 
@@ -71,16 +72,21 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
   };
 
   const handleBundleFabricSizeSelect = (field: any, e: any, index: number) => {
-    const item = items[index];
-    let filterdItem = [...items];
-    filterdItem.splice(index, 1);
-    const find = filterdItem.find((i: any) => i.roll_number == item.roll_number && i.style_planned_fabric_size_id == e);
-    if (find && find.style_planned_fabric_size_id) {
-      field.onChange(undefined);
-      showError(`Size already selected by bundle no. ${item.roll_number}`);
-      return;
-    }
     field.onChange(e);
+  };
+
+  const handleQuantityChange = (field: any, e: any, index: number) => {
+    // const item = items[index];
+    // let filterdItem = [...items];
+    // filterdItem.splice(index, 1);
+    // const find = filterdItem.find((i: any) => i.roll_number == item.roll_number && i.quantity == e);
+    // if (find) {
+    //   field.onChange(undefined);
+    //   showError(`Size already selected by bundle no. ${item.roll_number}`);
+    //   return;
+    // }
+
+    field.onChange(e ?? null);
   };
 
   const onAddOperatorClick = () => {
@@ -115,6 +121,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
             rules={{ required: 'Roll number is required' }}
             render={({ field, fieldState }) => (
               <FormInputNumber
+                style={{ width: '80px' }}
                 value={field.value as number | null}
                 onValueChange={(e) => field.onChange(e.value ?? null)}
                 placeholder="Roll"
@@ -175,22 +182,39 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
         field="quantity"
         header="Quantity"
         body={(_row: any, options: { rowIndex: number }) => (
-          <Controller
-            control={control}
-            name={`bundles.${options.rowIndex}.quantity` as const}
-            rules={{ required: 'Quantity is required', min: { value: 1, message: 'Minimum is 1' } }}
-            render={({ field, fieldState }) => (
-              <FormInputNumber
-                value={field.value as number | null}
-                onValueChange={(e) => field.onChange(e.value ?? null)}
-                placeholder="Qty"
-                errorMessage={fieldState.error?.message}
-                isError={fieldState.error ? true : false}
-              />
-            )}
-          />
+          <div className="flex gap-2">
+            <Controller
+              control={control}
+              name={`bundles.${options.rowIndex}.quantity` as const}
+              rules={{ required: 'Quantity is required', min: { value: 1, message: 'Minimum is 1' } }}
+              render={({ field, fieldState }) => (
+                <FormInputNumber
+                  style={{ width: '50px' }}
+                  value={field.value as number | null}
+                  onValueChange={(e) => handleQuantityChange(field, e.value, options.rowIndex)}
+                  placeholder="Qty"
+                  errorMessage={fieldState.error?.message}
+                  isError={fieldState.error ? true : false}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name={`bundles.${options.rowIndex}.postfix` as const}
+              render={({ field, fieldState }) => (
+                <FormInputText
+                  {...field}
+                  style={{ width: '80px' }}
+                  placeholder="Postfix"
+                  errorMessage={fieldState.error?.message}
+                  isError={fieldState.error ? true : false}
+                />
+              )}
+            />
+          </div>
         )}
       />
+
       <Column
         field="remarks"
         header="Remarks"

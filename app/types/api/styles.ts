@@ -60,5 +60,7 @@ export interface SaveStyleFabricPayload {
   style_planned_fabric_size_id?: string;
   quantity?: number;
   remarks?: string;
+  postfix?: string;
   belong_style_bundle_id?: string;
+  is_save_only?: boolean;
 }

@@ -67,6 +67,7 @@ export interface FormStyleFabric {
 export interface FormReleaseBundle {
   id?: string | number;
   roll_number?: number;
+  postfix?: string;
   style_planned_fabric_id?: string;
   style_planned_fabric_size_id?: string;
   quantity?: number;
@@ -89,6 +90,9 @@ export interface StyleBundle {
   belong_style_bundle_id?: number;
   belong_style_bundle?: StyleBundle;
   created_at?: string;
+  released?: boolean;
+  status?: string;
+  released_at?: string;
 }
 
 export interface StyleBundleEntryLog {

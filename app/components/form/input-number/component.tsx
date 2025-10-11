@@ -1,6 +1,6 @@
 import { InputNumber, InputNumberChangeEvent, InputNumberValueChangeEvent } from 'primereact/inputnumber';
 import { classNames } from 'primereact/utils';
-import React, { forwardRef } from 'react';
+import React, { CSSProperties, forwardRef } from 'react';
 
 interface FormInputNumberProps {
   value?: any;
@@ -12,13 +12,28 @@ interface FormInputNumberProps {
   inputClassName?: string;
   className?: string;
   placeholder?: string;
+  style?: CSSProperties;
   onChange?: (event: InputNumberChangeEvent) => void;
   onValueChange?: (event: InputNumberValueChangeEvent) => void;
 }
 
 const FormInputNumber = forwardRef<any, FormInputNumberProps>(
   (
-    { label, className = 'field', inputClassName, value, isError, required, placeholder, autoFocus, onChange, onValueChange, errorMessage, ...rest },
+    {
+      label,
+      className = 'field',
+      inputClassName,
+      style,
+      value,
+      isError,
+      required,
+      placeholder,
+      autoFocus,
+      onChange,
+      onValueChange,
+      errorMessage,
+      ...rest
+    },
     ref
   ) => (
     <div className={className}>
@@ -26,6 +41,7 @@ const FormInputNumber = forwardRef<any, FormInputNumberProps>(
       <InputNumber
         ref={ref}
         {...rest}
+        inputStyle={style}
         value={value}
         onChange={onChange}
         required={required}

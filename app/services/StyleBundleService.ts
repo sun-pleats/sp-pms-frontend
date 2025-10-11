@@ -1,7 +1,7 @@
 import { SaveStyleFabricPayload, StyleBundlePaginatedResponse, StyleReleaseFabricPayload } from '../types/api/styles';
 import apiClient from '../api/http-common';
 import { AxiosPromise } from 'axios';
-import { StyleBundle } from '../types/styles';
+import { StyleBundle, StyleBundleEntryLog } from '../types/styles';
 import { ReportStyleBundleEntryLog } from '../types/reports';
 
 const BASE_URL = '/api/style-bundles';
@@ -18,6 +18,9 @@ export const StyleBundleService = {
   },
   updateFabricBundle(id: string, payload: SaveStyleFabricPayload): AxiosPromise<StyleBundle> {
     return apiClient.put(`${BASE_URL}/${id}`, payload);
+  },
+  releaseFabricBundle(id: string): AxiosPromise<StyleBundleEntryLog> {
+    return apiClient.post(`${BASE_URL}/${id}/release`);
   },
   getFabricBundle(id: string): AxiosPromise<StyleBundle> {
     return apiClient.get(`${BASE_URL}/${id}`);

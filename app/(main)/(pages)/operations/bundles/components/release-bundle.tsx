@@ -41,6 +41,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
   const [sizesOptions, setSizesOptions] = useState<StylePlannedFabricSize[]>([]);
   const [isStyleSelected, setIsStyleSelected] = useState<boolean>(false);
   const [shouldPrint, setShouldPrint] = useState<boolean>(false);
+  const [isSaveOnly, setIsSaveOnly] = useState<boolean>(true);
   const { showApiError, showSuccess, showError } = useContext(LayoutContext);
   const { queuePrintStyleBundle, fetchPrintersSelectOptions } = useBarcodePrinting();
 
@@ -50,6 +51,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
     style_planned_fabric_size_id: '',
     quantity: 0,
     remarks: '',
+    postfix: '',
     belong_style_bundle_id: ''
   });
 
@@ -97,7 +99,9 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
             style_planned_fabric_size_id: r.style_planned_fabric_size_id,
             quantity: r.quantity,
             remarks: r.remarks,
-            belong_style_bundle_id: r.belong_style_bundle_id
+            postfix: r.postfix,
+            belong_style_bundle_id: r.belong_style_bundle_id,
+            is_save_only: isSaveOnly
           }))
         },
         selectedStyleNumber?.value.toString() ?? ''
@@ -151,6 +155,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
   };
 
   const submit = (e: FormData) => {
+    console.log(e);
     releaseFabrics(e);
   };
 
@@ -183,14 +188,24 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
               disabled={!isStyleSelected}
               onClick={() => setShouldPrint(true)}
               icon="pi pi-print"
-              severity="info"
-              label="Release & Print"
+              severity="warning"
+              label="Save & Print"
               className="mr-2"
             />
             <Button
               loading={state.loadingSave}
               type="submit"
               disabled={!isStyleSelected}
+              icon="pi pi-save"
+              severity="success"
+              label="Save"
+              className="mr-2"
+            />
+            <Button
+              loading={state.loadingSave}
+              type="submit"
+              disabled={!isStyleSelected}
+              onClick={() => setIsSaveOnly(false)}
               icon="pi pi-arrow-up-right"
               severity="info"
               label="Release"
