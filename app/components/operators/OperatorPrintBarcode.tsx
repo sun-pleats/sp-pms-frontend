@@ -56,7 +56,10 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
 
   const onHideModal = () => {
     setState({ ...state, show: false });
-    if (onHide) onHide();
+    setSelectedProcesses([]);
+    if (onHide) {
+      onHide();
+    }
   };
 
   const initData = async () => {
