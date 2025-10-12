@@ -34,11 +34,11 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
   const [formData, setFormData] = useState<FormReleaseBundle>({
     roll_number: 0,
     postfix: '',
-    style_planned_fabric_id: '',
-    style_planned_fabric_size_id: '',
+    style_planned_fabric_id: 0,
+    style_planned_fabric_size_id: 0,
     quantity: 0,
     remarks: '',
-    belong_style_bundle_id: ''
+    belong_style_bundle_id: 0
   });
 
   const { showSuccess, showApiError } = useContext(LayoutContext);
@@ -109,11 +109,11 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
       setFormData({
         roll_number: styleBundle?.roll_number ?? 0,
         postfix: styleBundle?.postfix ?? '',
-        style_planned_fabric_id: styleBundle?.style_planned_fabric_id.toString() ?? '',
-        style_planned_fabric_size_id: styleBundle?.style_planned_fabric_size_id.toString() ?? '',
+        style_planned_fabric_id: styleBundle?.style_planned_fabric_id,
+        style_planned_fabric_size_id: styleBundle?.style_planned_fabric_size_id,
         quantity: styleBundle.quantity,
         remarks: styleBundle.remarks ?? '',
-        belong_style_bundle_id: styleBundle.belong_style_bundle_id ?? ''
+        belong_style_bundle_id: styleBundle.belong_style_bundle_id
       });
     }
   }, [styleBundle]);
@@ -131,10 +131,10 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormBundle 
-                  onSubmit={updateFabricBundle} 
-                  value={formData} 
-                  colorOptions={colorOptions} 
+                <FormBundle
+                  onSubmit={updateFabricBundle}
+                  value={formData}
+                  colorOptions={colorOptions}
                   sizesOptions={sizesOptions}
                   loading={{ colorField: state.loadings?.fetching, sizeField: state.loadings?.fetching }}
                 >

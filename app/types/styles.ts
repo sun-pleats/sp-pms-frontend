@@ -68,11 +68,11 @@ export interface FormReleaseBundle {
   id?: string | number;
   roll_number?: number;
   postfix?: string;
-  style_planned_fabric_id?: string;
-  style_planned_fabric_size_id?: string;
+  style_planned_fabric_id?: number;
+  style_planned_fabric_size_id?: number;
   quantity?: number;
   remarks?: string;
-  belong_style_bundle_id?: string | number;
+  belong_style_bundle_id?: number;
 }
 
 export interface StyleBundle {
@@ -88,7 +88,7 @@ export interface StyleBundle {
   style?: Style;
   style_planned_fabric?: StylePlannedFabric;
   style_planned_fabric_size?: StylePlannedFabricSize;
-  belong_style_bundle_id?: string | number;
+  belong_style_bundle_id?: number;
   belong_style_bundle?: StyleBundle;
   created_at?: string;
   released?: boolean;

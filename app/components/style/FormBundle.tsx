@@ -24,12 +24,12 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
   const { control, handleSubmit, reset } = useForm<FormReleaseBundle>({
     defaultValues: {
       roll_number: 0,
-      style_planned_fabric_id: '',
-      style_planned_fabric_size_id: '',
+      style_planned_fabric_id: 0,
+      style_planned_fabric_size_id: 0,
       quantity: 0,
       postfix: '',
       remarks: '',
-      belong_style_bundle_id: ''
+      belong_style_bundle_id: 0
     }
   });
 
@@ -57,7 +57,7 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
         render={({ field, fieldState }) => (
           <FormInputNumber
             value={field.value as number | null}
-            label='Roll No.'
+            label="Roll No."
             onValueChange={(e) => field.onChange(e.value ?? null)}
             placeholder="Roll"
             errorMessage={fieldState.error?.message}
@@ -103,7 +103,9 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
           />
         )}
       />
-      <label htmlFor='quantity' className="p-float-label" style={{ marginBottom: '0.5rem' }}>Quantity</label>
+      <label htmlFor="quantity" className="p-float-label" style={{ marginBottom: '0.5rem' }}>
+        Quantity
+      </label>
       <div className="flex gap-2">
         <Controller
           control={control}
@@ -151,12 +153,12 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
         control={control}
         name={`belong_style_bundle_id` as const}
         render={({ field, fieldState }) => (
-          <FormInputText 
-            {...field} 
+          <FormInputText
+            {...field}
             label="Tagged To"
-            placeholder="Bundle No." 
-            errorMessage={fieldState.error?.message} 
-            isError={fieldState.error ? true : false} 
+            placeholder="Bundle No."
+            errorMessage={fieldState.error?.message}
+            isError={fieldState.error ? true : false}
           />
         )}
       />

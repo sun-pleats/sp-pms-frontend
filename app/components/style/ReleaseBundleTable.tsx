@@ -39,12 +39,12 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
 
   const emptyItem = (): FormReleaseBundle => ({
     id: items?.length + 1,
-    style_planned_fabric_id: '',
-    style_planned_fabric_size_id: '',
+    style_planned_fabric_id: 0,
+    style_planned_fabric_size_id: 0,
     quantity: 0,
     remarks: '',
     postfix: '',
-    belong_style_bundle_id: ''
+    belong_style_bundle_id: 0
   });
 
   const { append, remove } = useFieldArray({

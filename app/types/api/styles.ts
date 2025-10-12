@@ -56,11 +56,11 @@ export interface StyleReleaseFabricPayload {
 
 export interface SaveStyleFabricPayload {
   roll_number?: number;
-  style_planned_fabric_id?: string;
-  style_planned_fabric_size_id?: string;
+  style_planned_fabric_id?: number;
+  style_planned_fabric_size_id?: number;
   quantity?: number;
   remarks?: string;
   postfix?: string;
-  belong_style_bundle_id?: string;
+  belong_style_bundle_id?: number;
   is_save_only?: boolean;
 }

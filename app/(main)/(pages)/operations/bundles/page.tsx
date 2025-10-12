@@ -78,7 +78,7 @@ const BundlesPage = () => {
   };
 
   const dateBodyTemplate = (rowData: StyleBundle) => {
-    if(!rowData.released_at) return null;
+    if (!rowData.released_at) return null;
     return formatDate(new Date(rowData.released_at ?? ''));
   };
 
@@ -124,7 +124,9 @@ const BundlesPage = () => {
   const actionBodyTemplate = (rowData: StyleBundle) => {
     return (
       <div className="flex flex-row gap-2">
-        { !rowData.released && <Button icon="pi pi-arrow-up-right" outlined rounded onClick={() => onReleaseBundle(rowData)} size="small" severity="info" /> }
+        {!rowData.released && (
+          <Button icon="pi pi-arrow-up-right" outlined rounded onClick={() => onReleaseBundle(rowData)} size="small" severity="info" />
+        )}
         <Button
           icon="pi pi-pencil"
           outlined
@@ -134,7 +136,14 @@ const BundlesPage = () => {
           severity="warning"
         />
         <Button icon="pi pi-print" outlined rounded onClick={() => onSinglePrintBarcodeClick(rowData)} size="small" severity="help" />
-        <Button icon="pi pi-trash" outlined rounded onClick={() => onActionDeleteClick(rowData.id?.toString() ?? '')} size="small" severity="danger" />
+        <Button
+          icon="pi pi-trash"
+          outlined
+          rounded
+          onClick={() => onActionDeleteClick(rowData.id?.toString() ?? '')}
+          size="small"
+          severity="danger"
+        />
       </div>
     );
   };
