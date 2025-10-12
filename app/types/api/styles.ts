@@ -61,6 +61,6 @@ export interface SaveStyleFabricPayload {
   quantity?: number;
   remarks?: string;
   postfix?: string;
-  belong_style_bundle_id?: number;
+  belong_style_bundle_id?: string;
   is_save_only?: boolean;
 }

@@ -44,7 +44,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
     quantity: 0,
     remarks: '',
     postfix: '',
-    belong_style_bundle_id: 0
+    belong_style_bundle_id: ''
   });
 
   const { append, remove } = useFieldArray({

@@ -38,7 +38,7 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
     style_planned_fabric_size_id: 0,
     quantity: 0,
     remarks: '',
-    belong_style_bundle_id: 0
+    belong_style_bundle_id: ''
   });
 
   const { showSuccess, showApiError } = useContext(LayoutContext);
@@ -113,7 +113,7 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
         style_planned_fabric_size_id: styleBundle?.style_planned_fabric_size_id,
         quantity: styleBundle.quantity,
         remarks: styleBundle.remarks ?? '',
-        belong_style_bundle_id: styleBundle.belong_style_bundle_id
+        belong_style_bundle_id: styleBundle.belong_style_bundle_id ?? ''
       });
     }
   }, [styleBundle]);

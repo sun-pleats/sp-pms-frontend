@@ -29,7 +29,7 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
       quantity: 0,
       postfix: '',
       remarks: '',
-      belong_style_bundle_id: 0
+      belong_style_bundle_id: ''
     }
   });
 

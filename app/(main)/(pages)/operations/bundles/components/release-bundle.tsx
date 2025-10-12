@@ -52,7 +52,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
     quantity: 0,
     remarks: '',
     postfix: '',
-    belong_style_bundle_id: 0
+    belong_style_bundle_id: ''
   });
 
   const { control, handleSubmit, reset } = useForm<FormData>({
