@@ -12,6 +12,7 @@ import FormBundle from '@/app/components/style/FormBundle';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import PageCard from '@/app/components/page-card/component';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { set } from 'lodash';
 
 interface EditBundlePageProps {
   params?: { id: any };
@@ -29,12 +30,15 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
   const [state, setState] = useState<EditBundlePageState>({});
   const [styleBundle, setStyleBunle] = useState<StyleBundle>();
   const [colorOptions, setColorOptions] = useState<SelectItem[]>([]);
-  const [sizesOptions, setSizesOptions] = useState<StylePlannedFabricSize[]>([]);
+  const [sizesOptions, setSizesOptions] = useState<SelectItem[]>([]);
   const [formData, setFormData] = useState<FormReleaseBundle>({
+    roll_number: 0,
+    postfix: '',
     style_planned_fabric_id: '',
     style_planned_fabric_size_id: '',
     quantity: 0,
-    remarks: ''
+    remarks: '',
+    belong_style_bundle_id: ''
   });
 
   const { showSuccess, showApiError } = useContext(LayoutContext);
@@ -53,7 +57,13 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
           value: col.id
         }))
       );
-      setSizesOptions(res.sizes);
+
+      setSizesOptions(
+        res.sizes.map((col) => ({
+          label: ` ${col.size_number} - ${col.quantity}`,
+          value: col.id
+        }))
+      );
     } catch (e: any) {
       showApiError(e, 'Error loading the planned fabric options.');
     } finally {
@@ -65,10 +75,13 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
     try {
       setLoading({ saving: true });
       await StyleBundleService.updateFabricBundle(styleBundle?.id?.toString() ?? '', {
+        roll_number: data.roll_number,
+        postfix: data.postfix,
         style_planned_fabric_id: data.style_planned_fabric_id,
         style_planned_fabric_size_id: data.style_planned_fabric_size_id,
         quantity: data.quantity,
-        remarks: data.remarks
+        remarks: data.remarks,
+        belong_style_bundle_id: data.belong_style_bundle_id
       });
       showSuccess('Bundle successfully saved.');
     } catch (e: any) {
@@ -92,13 +105,16 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
 
   useEffect(() => {
     if (styleBundle) {
+      fetchPlannedFabics(styleBundle.style_id.toString() ?? '');
       setFormData({
+        roll_number: styleBundle?.roll_number ?? 0,
+        postfix: styleBundle?.postfix ?? '',
         style_planned_fabric_id: styleBundle?.style_planned_fabric_id.toString() ?? '',
         style_planned_fabric_size_id: styleBundle?.style_planned_fabric_size_id.toString() ?? '',
         quantity: styleBundle.quantity,
-        remarks: styleBundle.remarks ?? ''
+        remarks: styleBundle.remarks ?? '',
+        belong_style_bundle_id: styleBundle.belong_style_bundle_id ?? ''
       });
-      fetchPlannedFabics(styleBundle.style_id.toString() ?? '');
     }
   }, [styleBundle]);
 
@@ -115,8 +131,14 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormBundle onSubmit={updateFabricBundle} value={formData} colorOptions={colorOptions} sizesOptions={sizesOptions}>
-                  <div className="grid">
+                <FormBundle 
+                  onSubmit={updateFabricBundle} 
+                  value={formData} 
+                  colorOptions={colorOptions} 
+                  sizesOptions={sizesOptions}
+                  loading={{ colorField: state.loadings?.fetching, sizeField: state.loadings?.fetching }}
+                >
+                  <div className="flex">
                     <div className="ml-auto">
                       <FormAction
                         loadingSave={state.loadings?.saving || state.loadings?.fetching}
