@@ -65,6 +65,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
     id: generateSimpleId(),
     col_number: '',
     color: '',
+    size_zero: 0,
     size_one: 0,
     size_two: 0,
     size_three: 0,
@@ -124,13 +125,14 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
         }) || [emptyStyleItem()],
         style_fabrics: value?.style_planned_fabrics.map((f: any) => {
           f.style_planned_fabric_sizes.forEach((size: any) => {
-            (f as any)[`size_${size.size_number + 1}`] = size.quantity || 0;
+            (f as any)[`size_${size.size_number}`] = size.quantity || 0;
           });
 
           return {
             id: f.id || generateSimpleId(),
             col_number: `${f.col_number}` || '',
             color: f.color || '',
+            size_zero: f.size_0 || 0,
             size_one: f.size_1 || 0,
             size_two: f.size_2 || 0,
             size_three: f.size_3 || 0,

@@ -59,6 +59,7 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
 
   const handleSubmit = async (data: DefaultFormData) => {
     try {
+      console.log(data);
       await updateStyle(params?.id as string, data);
       showSuccess("Style successfully updated.");
       setTimeout(() => {

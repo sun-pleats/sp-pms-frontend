@@ -28,6 +28,7 @@ export const useStylePage = () => {
   }
 
   const formatSavePayload = (data: DefaultFormData): StyleCreatePayload => {
+    console.log("DATA", data)
     return {
       control_number: data.control_number ?? "",
       buyer_id: data.buyer_id ?? "",

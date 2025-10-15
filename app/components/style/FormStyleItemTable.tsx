@@ -120,6 +120,8 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
                 value={field.value as number | null}
                 onValueChange={(e) => field.onChange(e.value ?? null)}
                 placeholder="Number"
+                mode="decimal"
+                maxFractionDigits={2} // Maximum decimal places allowed
                 errorMessage={fieldState.error?.message}
                 isError={fieldState.error ? true : false}
               />
@@ -131,14 +133,19 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
       <Column
         className="field-mb-0"
         field="specs_unit"
-        header="Specs"
+        header="Specs Unit"
         body={(_row: any, options: { rowIndex: number }) => (
           <Controller
             control={control}
             name={`style_items.${options.rowIndex}.specs_unit` as const}
             rules={{ required: 'Specs unit is required' }}
             render={({ field, fieldState }) => (
-              <FormInputText {...field} placeholder="Text" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+              <FormInputText
+                {...field}
+                placeholder="e.g. (cm, m)"
+                errorMessage={fieldState.error?.message}
+                isError={fieldState.error ? true : false}
+              />
             )}
           />
         )}
@@ -157,6 +164,8 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
                 value={field.value as number | null}
                 onValueChange={(e) => field.onChange(e.value ?? null)}
                 placeholder="Number"
+                mode="decimal"
+                maxFractionDigits={2} // Maximum decimal places allowed
                 errorMessage={fieldState.error?.message}
                 isError={fieldState.error ? true : false}
               />
@@ -168,14 +177,19 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
       <Column
         className="field-mb-0"
         field="youjyaku_unit"
-        header="Specs"
+        header="Youjyaku Unit"
         body={(_row: any, options: { rowIndex: number }) => (
           <Controller
             control={control}
             name={`style_items.${options.rowIndex}.youjyaku_unit` as const}
             rules={{ required: 'Youjyaku unit is required' }}
             render={({ field, fieldState }) => (
-              <FormInputText {...field} placeholder="Text" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+              <FormInputText
+                {...field}
+                placeholder="e.g. (cm, m)"
+                errorMessage={fieldState.error?.message}
+                isError={fieldState.error ? true : false}
+              />
             )}
           />
         )}
@@ -191,7 +205,12 @@ const FormStyleItemTable = ({ control }: FormStyleProps) => {
             name={`style_items.${options.rowIndex}.color_detail` as const}
             rules={{ required: 'Color detail is required' }}
             render={({ field, fieldState }) => (
-              <FormInputText {...field} placeholder="Text" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
+              <FormInputText
+                {...field}
+                placeholder="e.g. Color Detail"
+                errorMessage={fieldState.error?.message}
+                isError={fieldState.error ? true : false}
+              />
             )}
           />
         )}

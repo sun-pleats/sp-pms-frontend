@@ -30,6 +30,7 @@ export interface ItemStyleCreatePayload {
 export interface ItemFabricCreatePayload {
   col_number?: string;
   color?: string;
+  size_zero?: number;
   size_one?: number;
   size_two?: number;
   size_three?: number;

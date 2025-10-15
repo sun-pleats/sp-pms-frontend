@@ -13,6 +13,9 @@ interface FormInputNumberProps {
   className?: string;
   placeholder?: string;
   style?: CSSProperties;
+  minFractionDigits?: number;
+  maxFractionDigits?: number;
+  mode?: 'decimal' | 'currency';
   onChange?: (event: InputNumberChangeEvent) => void;
   onValueChange?: (event: InputNumberValueChangeEvent) => void;
 }
@@ -32,6 +35,9 @@ const FormInputNumber = forwardRef<any, FormInputNumberProps>(
       onChange,
       onValueChange,
       errorMessage,
+      minFractionDigits,
+      maxFractionDigits,
+      mode,
       ...rest
     },
     ref
@@ -43,6 +49,9 @@ const FormInputNumber = forwardRef<any, FormInputNumberProps>(
         {...rest}
         inputStyle={style}
         value={value}
+        mode={mode}
+        minFractionDigits={minFractionDigits}
+        maxFractionDigits={maxFractionDigits}
         onChange={onChange}
         required={required}
         onValueChange={onValueChange}

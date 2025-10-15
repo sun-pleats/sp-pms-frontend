@@ -18,6 +18,7 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
     id: generateSimpleId(),
     col_number: '',
     color: '',
+    size_zero: 0,
     size_one: 0,
     size_two: 0,
     size_three: 0,
@@ -104,6 +105,27 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
       />
       <Column
         className="field-mb-0"
+        field="size_zero"
+        header="00"
+        body={(_row: any, options: { rowIndex: number }) => (
+          <Controller
+            control={control}
+            name={`style_fabrics.${options.rowIndex}.size_zero` as const}
+            rules={{ required: 'Size 00 is required' }}
+            render={({ field, fieldState }) => (
+              <FormInputNumber
+                value={field.value as number | null}
+                onValueChange={(e) => field.onChange(e.value ?? null)}
+                placeholder="Number"
+                errorMessage={fieldState.error?.message}
+                isError={fieldState.error ? true : false}
+              />
+            )}
+          />
+        )}
+      />
+      <Column
+        className="field-mb-0"
         field="size_one"
         header="01"
         body={(_row: any, options: { rowIndex: number }) => (
@@ -171,26 +193,6 @@ const FormStyleFabricTable = ({ control }: FormStyleProps) => {
           <Controller
             control={control}
             name={`style_fabrics.${options.rowIndex}.size_four` as const}
-            render={({ field, fieldState }) => (
-              <FormInputNumber
-                value={field.value as number | null}
-                onValueChange={(e) => field.onChange(e.value ?? null)}
-                placeholder="Number"
-                errorMessage={fieldState.error?.message}
-                isError={fieldState.error ? true : false}
-              />
-            )}
-          />
-        )}
-      />
-      <Column
-        className="field-mb-0"
-        field="size_five"
-        header="05"
-        body={(_row: any, options: { rowIndex: number }) => (
-          <Controller
-            control={control}
-            name={`style_fabrics.${options.rowIndex}.size_five` as const}
             render={({ field, fieldState }) => (
               <FormInputNumber
                 value={field.value as number | null}
