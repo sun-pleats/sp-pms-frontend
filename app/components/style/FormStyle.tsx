@@ -249,7 +249,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
             render={({ fieldState, field }) => (
               <FormCalendar
                 {...field}
-                label="Ship Date form Cebu"
+                label="Ship Date From Cebu"
                 errorMessage={fieldState.error?.message}
                 isError={fieldState.error ? true : false}
               />
@@ -264,7 +264,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
             render={({ fieldState, field }) => (
               <FormCalendar
                 {...field}
-                label="Ship Date form Japan"
+                label="Ship Date From Japan"
                 errorMessage={fieldState.error?.message}
                 isError={fieldState.error ? true : false}
               />
