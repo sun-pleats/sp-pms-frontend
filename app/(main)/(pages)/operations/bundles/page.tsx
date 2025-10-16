@@ -1,10 +1,12 @@
 'use client';
 
+import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
-import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
+import { DataTable } from 'primereact/datatable';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import { formatDate } from '@/app/utils';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { PRINTING_MODELS } from '@/app/constants/barcode';
 import { ROUTES } from '@/app/constants/routes';
 import { StyleBundle } from '@/app/types/styles';
@@ -19,9 +21,6 @@ import PrintBarcode from '@/app/components/barcode/PrintBarcode';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import ReleaseBundles from './components/release-bundle';
 import TableHeader from '@/app/components/table-header/component';
-import { formatDate } from '@/app/utils';
-import { LayoutContext } from '@/layout/context/layoutcontext';
-import { Badge } from 'primereact/badge';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
@@ -35,6 +34,8 @@ interface BundlePageState {
 
 interface SearchFilter {
   keyword?: string;
+  page?: number;
+  per_page?: number;
 }
 
 const BundlesPage = () => {
@@ -43,6 +44,9 @@ const BundlesPage = () => {
   const [bundles, setBundles] = useState<StyleBundle[]>([]);
   const [selectedBundles, setSelectedBundles] = useState<StyleBundle[]>([]);
   const [filters, setFilters] = useState<SearchFilter>({});
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [first, setFirst] = useState(0);     // record offset
+  const [rows, setRows] = useState(10);      // page size
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { showApiError, showSuccess } = useContext(LayoutContext);
@@ -54,8 +58,14 @@ const BundlesPage = () => {
   const fetchBundles = useCallback(async () => {
     setLoading(true);
     try {
-      const search = filters.keyword?.trim() || '';
-      const data = await StyleBundleService.getBundles(search ? { search } : {});
+      const params = {
+        search: filters.keyword?.trim() || undefined,
+        page: filters.page,
+        per_page: filters.per_page,
+      };
+
+      const data = await StyleBundleService.getBundles(params);
+      setTotalRecords(data.data.total ?? 0)
 
       setBundles(data.data.data ?? []);
     } catch (error: any) {
@@ -63,7 +73,7 @@ const BundlesPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [filters.keyword]);
+  }, [filters]);
 
   useEffect(() => {
     fetchBundles();
@@ -148,6 +158,13 @@ const BundlesPage = () => {
     );
   };
 
+
+  const handleOnPageChange = (e: any) => {
+    setFilters({ ...filters, page: (e.page + 1), per_page: e.rows })
+    setFirst(e.first);
+    setRows(e.rows);
+  }
+
   const onBundleSelectionChange = (data: any) => {
     setSelectedBundles(data.value);
   };
@@ -219,15 +236,20 @@ const BundlesPage = () => {
         paginator
         className="custom-table p-datatable-gridlines"
         showGridlines
-        rows={10}
         dataKey="id"
+        lazy
+        first={first}
+        rows={rows}
+        rowsPerPageOptions={[5, 10, 20, 50]}
         filterDisplay="menu"
         loading={loading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         selectionMode={'checkbox'}
         selection={selectedBundles}
+        onPage={handleOnPageChange}
         onSelectionChange={onBundleSelectionChange}
         header={header1}
+        totalRecords={totalRecords}
         scrollable
       >
         <Column selectionMode="multiple" headerStyle={{ width: '3em' }} />
