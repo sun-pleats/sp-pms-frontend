@@ -21,6 +21,7 @@ import PrintBarcode from '@/app/components/barcode/PrintBarcode';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import ReleaseBundles from './components/release-bundle';
 import TableHeader from '@/app/components/table-header/component';
+import useDatatable from '@/app/hooks/useDatatable';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
@@ -32,46 +33,35 @@ interface BundlePageState {
   deleteId?: string | number;
 }
 
-interface SearchFilter {
-  keyword?: string;
-  page?: number;
-  per_page?: number;
-}
-
 const BundlesPage = () => {
   const [pageState, setPageState] = useState<BundlePageState>({});
   const [selectedBundle, setSelectedBundle] = useState<StyleBundle | undefined>(undefined);
   const [bundles, setBundles] = useState<StyleBundle[]>([]);
   const [selectedBundles, setSelectedBundles] = useState<StyleBundle[]>([]);
-  const [filters, setFilters] = useState<SearchFilter>({});
-  const [totalRecords, setTotalRecords] = useState(0);
-  const [first, setFirst] = useState(0);     // record offset
-  const [rows, setRows] = useState(10);      // page size
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
-  const clearFilter1 = () => {
-    setFilters({});
-  };
+  const router = useRouter();
+
+  const { clearFilter, filters, tableLoading, first, rows, setFirst, setRows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+    useDatatable();
 
   const fetchBundles = useCallback(async () => {
-    setLoading(true);
+    setTableLoading(true);
     try {
       const params = {
-        search: filters.keyword?.trim() || undefined,
+        search: filters.search,
         page: filters.page,
-        per_page: filters.per_page,
+        per_page: filters.per_page
       };
 
       const data = await StyleBundleService.getBundles(params);
-      setTotalRecords(data.data.total ?? 0)
+      setTotalRecords(data.data.total ?? 0);
 
       setBundles(data.data.data ?? []);
     } catch (error: any) {
       showApiError(error, 'Error fetching bundles');
     } finally {
-      setLoading(false);
+      setTableLoading(false);
     }
   }, [filters]);
 
@@ -80,11 +70,11 @@ const BundlesPage = () => {
   }, [fetchBundles]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters({ keyword: e.target.value });
+    setFilters({ search: e.target.value });
   };
 
-  const renderHeader1 = () => {
-    return <TableHeader onClear={clearFilter1} onSearchChange={handleSearchChange} />;
+  const renderHeader = () => {
+    return <TableHeader onClear={clearFilter} onSearchChange={handleSearchChange} />;
   };
 
   const dateBodyTemplate = (rowData: StyleBundle) => {
@@ -158,18 +148,17 @@ const BundlesPage = () => {
     );
   };
 
-
   const handleOnPageChange = (e: any) => {
-    setFilters({ ...filters, page: (e.page + 1), per_page: e.rows })
+    setFilters({ ...filters, page: e.page + 1, per_page: e.rows });
     setFirst(e.first);
     setRows(e.rows);
-  }
+  };
 
   const onBundleSelectionChange = (data: any) => {
     setSelectedBundles(data.value);
   };
 
-  const header1 = renderHeader1();
+  const header1 = renderHeader();
 
   const bundleBodyTemplate = (rowData: StyleBundle) => {
     return (
@@ -209,6 +198,10 @@ const BundlesPage = () => {
     }
   };
 
+  const quantityBody = (data: StyleBundle) => {
+    return `${data.quantity}${data.postfix ?? ''}`;
+  };
+
   return (
     <>
       <PageTile title="Release Bundles" icon="pi pi-fw pi-box" url={ROUTES.BUNDLES.INDEX} />
@@ -242,7 +235,7 @@ const BundlesPage = () => {
         rows={rows}
         rowsPerPageOptions={[5, 10, 20, 50]}
         filterDisplay="menu"
-        loading={loading}
+        loading={tableLoading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         selectionMode={'checkbox'}
         selection={selectedBundles}
@@ -261,7 +254,7 @@ const BundlesPage = () => {
         <Column header="Color" field="style_planned_fabric.color" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="roll_number" header="Roll No." style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column header="Size" field="style_planned_fabric_size.size_number" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
-        <Column field="quantity" header="Quantity" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="quantity" header="Quantity" body={quantityBody} style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="released_at" header="Released At" body={dateBodyTemplate} style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column
           field="balance"
