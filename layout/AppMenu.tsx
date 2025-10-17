@@ -50,7 +50,10 @@ const AppMenu = () => {
     },
     {
       label: 'Administrator',
-      items: [{ label: 'Users', icon: 'pi pi-fw pi-id-card', to: '/administration/users' }]
+      items: [
+        { label: 'Users', icon: 'pi pi-fw pi-id-card', to: '/administration/users' },
+        { label: 'Downloads', icon: 'pi pi-fw pi-download', to: '/administration/downloads' }
+      ]
     }
   ];
 
