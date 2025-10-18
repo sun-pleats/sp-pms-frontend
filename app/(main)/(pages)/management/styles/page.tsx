@@ -24,6 +24,7 @@ import UploadStyles from './components/upload-styles';
 import useDatatable from '@/app/hooks/useDatatable';
 import useModelStatus from '@/app/hooks/useModelStatus';
 import useUtilityData from '@/app/hooks/useUtilityData';
+import CustomDatatable from '@/app/components/datatable/component';
 
 interface StylePageState {
   deleteModalShow?: boolean;
@@ -45,7 +46,7 @@ const StylesPage = () => {
   const { fetchBuyersSelectOption } = useUtilityData();
   const { updateStatus, isSaving } = useModelStatus();
 
-  const { clearFilter, filters, tableLoading, first, rows, setFirst, setRows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFirst, setRows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
     useDatatable();
 
   const [styles, setStyle] = useState<Style[]>([]);
@@ -174,11 +175,7 @@ const StylesPage = () => {
     }
   }
 
-  const handleOnPageChange = (e: any) => {
-    setFilters({ ...filters, page: e.page + 1, per_page: e.rows });
-    setFirst(e.first);
-    setRows(e.rows);
-  };
+
 
   return (
     <>
@@ -193,25 +190,15 @@ const StylesPage = () => {
           ]}
         />
       </PageHeader>
-      <DataTable
+      <CustomDatatable
         value={styles}
-        paginator
-        className="custom-table p-datatable-gridlines"
-        showGridlines
-        dataKey="id"
-        scrollable
         loading={tableLoading}
-        emptyMessage={EMPTY_TABLE_MESSAGE}
-        selectionMode={'checkbox'}
         selection={selectedStyles}
         onSelectionChange={onStyleSelectionChange}
         onPage={handleOnPageChange}
         header={tableHeader}
-        lazy
         first={first}
         rows={rows}
-        rowsPerPageOptions={[5, 10, 20, 50]}
-        filterDisplay="menu"
         totalRecords={totalRecords}
       >
         <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
@@ -223,7 +210,7 @@ const StylesPage = () => {
         <Column field="season" header="Season" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column header="Status" body={statusTemplate} headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} frozen alignFrozen='right'></Column>
         <Column header="Actions" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} frozen alignFrozen='right' body={actionBodyTemplate}></Column>
-      </DataTable>
+      </CustomDatatable>
 
       <Modal
         title='Delete Record'
