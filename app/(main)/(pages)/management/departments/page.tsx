@@ -17,6 +17,8 @@ import PageTile from '@/app/components/page-title/component';
 import PrintBarcode from '@/app/components/barcode/PrintBarcode';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
+import CustomDatatable from '@/app/components/datatable/component';
+import useDatatable from '@/app/hooks/useDatatable';
 
 interface DepartmentPageState {
   deleteModalShow?: boolean;
@@ -24,65 +26,60 @@ interface DepartmentPageState {
   showPrint?: boolean;
 }
 
-interface SearchFilter {
-  keyword?: string;
-}
-
 const DepartmentsPage = () => {
   const [pageState, setPageState] = useState<DepartmentPageState>({});
   const [departments, setDepartments] = useState<Department[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<SearchFilter>({});
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const abortControllerRef = React.useRef<AbortController | null>(null);
   const [selectedDepartment, setSelectedDepartment] = useState<Department | undefined>();
 
+  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+    useDatatable();
+
   const router = useRouter();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter({ keyword: e.target.value });
-  };
-
-  const clearFilter = () => {
-    setFilter({ keyword: '' });
-    fetchDepartments('');
+    setFilters({ search: e.target.value });
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
+    return <TableHeader onClear={clearFilter} searchValue={filters.search ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchDepartments = useCallback(
-    async (keyword?: string) => {
-      // Abort previous request if exists
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
+  const fetchDepartments = useCallback(async () => {
+    // Abort previous request if exists
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
-      setLoading(true);
-      try {
-        const search = keyword?.trim() || filter.keyword?.trim() || '';
-        // Pass keyword to service if available
-        const { data } = await DepartmentService.getDepartmentes(search ? { search } : {}, { signal: controller.signal });
-        setDepartments(getDepartments(data.data ?? []));
-      } catch (error: any) {
-        if (error.name !== 'CanceledError') {
-          console.error(error);
-        }
-      } finally {
-        // Only set loading to false if this is the latest controller
-        if (abortControllerRef.current === controller) {
-          setLoading(false);
-        }
+    setTableLoading(true);
+    try {
+      const params = {
+        search: filters.search,
+        page: filters.page,
+        per_page: filters.per_page
+      };
+
+      // Pass keyword to service if available
+      const { data } = await DepartmentService.getDepartmentes(params, { signal: controller.signal });
+      setTotalRecords(data.total ?? 0);
+      setDepartments(getDepartments(data.data ?? []));
+    } catch (error: any) {
+      if (error.name !== 'CanceledError') {
+        console.error(error);
       }
-    },
-    [filter.keyword]
-  );
+    } finally {
+      // Only set loading to false if this is the latest controller
+      if (abortControllerRef.current === controller) {
+        setTableLoading(false);
+      }
+    }
+  }, [filters]);
 
   useEffect(() => {
-    fetchDepartments('');
+    fetchDepartments();
   }, [fetchDepartments]);
 
   const getDepartments = (data: Department[]) => {
@@ -165,18 +162,15 @@ const DepartmentsPage = () => {
       <PageHeader titles={['Management', 'Departments']}>
         <PageAction actionAdd={() => router.push(ROUTES.DEPARTMENTS.CREATE)} actions={[PageActions.ADD]} />
       </PageHeader>
-      <DataTable
+
+      <CustomDatatable
         value={departments}
-        paginator
-        className="custom-table p-datatable-gridlines"
-        showGridlines
-        rows={10}
-        dataKey="id"
-        filterDisplay="menu"
-        loading={loading}
-        emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
-        scrollable
+        loading={tableLoading}
+        onPage={handleOnPageChange}
+        first={first}
+        rows={rows}
+        totalRecords={totalRecords}
       >
         <Column field="id" header="ID" />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
@@ -184,7 +178,7 @@ const DepartmentsPage = () => {
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(department: Department) => department?.created_by?.name} />
         <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
         <Column header="Actions" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} body={actionBodyTemplate} frozen alignFrozen="right"></Column>
-      </DataTable>
+      </CustomDatatable>
       <PrintBarcode
         visible={pageState.showPrint}
         ids={[selectedDepartment?.id ?? '']}
