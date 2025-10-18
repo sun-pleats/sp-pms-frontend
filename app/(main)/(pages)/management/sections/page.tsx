@@ -39,39 +39,36 @@ const SectionsPage = () => {
     return <TableHeader onClear={clearFilter} searchValue={filters.search ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchSections = useCallback(
-    async (keyword?: string) => {
-      // Abort previous request if exists
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
+  const fetchSections = useCallback(async () => {
+    // Abort previous request if exists
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
-      setTableLoading(true);
-      try {
-        const params = {
-          search: filters.search,
-          page: filters.page,
-          per_page: filters.per_page
-        };
+    setTableLoading(true);
+    try {
+      const params = {
+        search: filters.search,
+        page: filters.page,
+        per_page: filters.per_page
+      };
 
-        const data = await SectionService.getSections(params, { signal: controller.signal });
-        setTotalRecords(data.data.total ?? 0);
-        setSections(getSections(data.data.data ?? []));
-      } catch (error: any) {
-        if (error.name !== 'CanceledError') {
-          console.error(error);
-        }
-      } finally {
-        // Only set loading to false if this is the latest controller
-        if (abortControllerRef.current === controller) {
-          setTableLoading(false);
-        }
+      const data = await SectionService.getSections(params, { signal: controller.signal });
+      setTotalRecords(data.data.total ?? 0);
+      setSections(getSections(data.data.data ?? []));
+    } catch (error: any) {
+      if (error.name !== 'CanceledError') {
+        console.error(error);
       }
-    },
-    [filters]
-  );
+    } finally {
+      // Only set loading to false if this is the latest controller
+      if (abortControllerRef.current === controller) {
+        setTableLoading(false);
+      }
+    }
+  }, [filters]);
 
   useEffect(() => {
     fetchSections();

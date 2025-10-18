@@ -2,8 +2,6 @@
 
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Process } from '@/app/types/process';
 import { ProcessService } from '@/app/services/ProcessService';
@@ -15,6 +13,8 @@ import PageHeader from '@/app/components/page-header/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import PageTile from '@/app/components/page-title/component';
+import CustomDatatable from '@/app/components/datatable/component';
+import useDatatable from '@/app/hooks/useDatatable';
 
 interface ProcessPageState {
   deleteModalShow?: boolean;
@@ -28,55 +28,52 @@ interface SearchFilter {
 const ProcessesPage = () => {
   const [pageState, setPageState] = useState<ProcessPageState>({});
   const [processes, setProcesses] = useState<Process[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<SearchFilter>({});
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const abortControllerRef = React.useRef<AbortController | null>(null);
 
   const router = useRouter();
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter({ keyword: e.target.value });
-  };
+  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+    useDatatable();
 
-  const clearFilter = () => {
-    setFilter({
-      keyword: ''
-    });
-    fetchProcesses();
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilters({ search: e.target.value });
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
+    return <TableHeader onClear={clearFilter} searchValue={filters.search ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchProcesses = useCallback(
-    async (keyword?: string) => {
-      // Abort previous request if exists
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
+  const fetchProcesses = useCallback(async () => {
+    // Abort previous request if exists
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
-      setLoading(true);
-      try {
-        const search = keyword?.trim() || filter.keyword?.trim() || '';
-        const data = await ProcessService.getProcesses(search ? { search } : {}, { signal: controller.signal });
-        setProcesses(getProcesses(data.data.data ?? []));
-      } catch (error: any) {
-        if (error.name !== 'AbortError') {
-          console.error(error);
-        }
-      } finally {
-        // Only set loading to false if this is the latest controller
-        if (abortControllerRef.current === controller) {
-          setLoading(false);
-        }
+    setTableLoading(true);
+    try {
+      const params = {
+        search: filters.search,
+        page: filters.page,
+        per_page: filters.per_page
+      };
+
+      const data = await ProcessService.getProcesses(params, { signal: controller.signal });
+      setTotalRecords(data.data.total ?? 0);
+      setProcesses(getProcesses(data.data.data ?? []));
+    } catch (error: any) {
+      if (error.name !== 'AbortError') {
+        console.error(error);
       }
-    },
-    [filter.keyword]
-  );
+    } finally {
+      // Only set loading to false if this is the latest controller
+      if (abortControllerRef.current === controller) {
+        setTableLoading(false);
+      }
+    }
+  }, [filters]);
 
   useEffect(() => {
     fetchProcesses();
@@ -139,18 +136,14 @@ const ProcessesPage = () => {
         <PageAction actionAdd={() => router.push(ROUTES.PROCESS.CREATE)} actions={[PageActions.ADD]} />
       </PageHeader>
 
-      <DataTable
+      <CustomDatatable
         value={processes}
-        paginator
-        className="custom-table p-datatable-gridlines"
-        showGridlines
-        rows={10}
-        dataKey="id"
-        filterDisplay="menu"
-        loading={loading}
-        emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
-        scrollable
+        loading={tableLoading}
+        onPage={handleOnPageChange}
+        first={first}
+        rows={rows}
+        totalRecords={totalRecords}
       >
         <Column field="id" header="ID" />
         <Column field="code" header="Code" style={{ minWidth: '12rem' }} />
@@ -158,7 +151,7 @@ const ProcessesPage = () => {
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(process: Process) => process?.created_by?.name} />
         <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
         <Column header="Actions" body={actionBodyTemplate} bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} frozen alignFrozen="right"></Column>
-      </DataTable>
+      </CustomDatatable>
       <Modal
         title="Delete Record"
         visible={pageState.deleteModalShow}
