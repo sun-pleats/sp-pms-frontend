@@ -2,21 +2,21 @@
 
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 import { LayoutContext } from '@/layout/context/layoutcontext';
+import { PRINTING_MODELS } from '@/app/constants/barcode';
 import { ProcessOffset } from '@/app/types/process-offset';
 import { ProcessOffsetService } from '@/app/services/ProcessOffsetService';
 import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
+import CustomDatatable from '@/app/components/datatable/component';
 import Modal from '@/app/components/modal/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import PageHeader from '@/app/components/page-header/component';
-import React, { useContext, useCallback, useEffect, useState } from 'react';
-import TableHeader from '@/app/components/table-header/component';
 import PageTile from '@/app/components/page-title/component';
 import PrintBarcode from '@/app/components/barcode/PrintBarcode';
-import { PRINTING_MODELS } from '@/app/constants/barcode';
+import React, { useContext, useCallback, useEffect, useState } from 'react';
+import TableHeader from '@/app/components/table-header/component';
+import useDatatable from '@/app/hooks/useDatatable';
 
 interface ProcessOffsetPageState {
   deleteModalShow?: boolean;
@@ -24,34 +24,24 @@ interface ProcessOffsetPageState {
   showPrint?: boolean;
 }
 
-interface SearchFilter {
-  keyword?: string;
-}
-
 const ProcessOffsetsPage = () => {
   const [pageState, setPageState] = useState<ProcessOffsetPageState>({});
   const [processOffsets, setProcessOffsets] = useState<ProcessOffset[]>([]);
   const [selectedOffset, setSelectedOffset] = useState<ProcessOffset>();
 
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<SearchFilter>({});
   const router = useRouter();
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const abortControllerRef = React.useRef<AbortController | null>(null);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter({ keyword: e.target.value });
-  };
+  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+    useDatatable();
 
-  const clearFilter = () => {
-    setFilter({
-      keyword: ''
-    });
-    fetchProcessOffsets();
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilters({ search: e.target.value });
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
+    return <TableHeader onClear={clearFilter} searchValue={filters.search ?? ''} onSearchChange={handleSearchChange} />;
   };
 
   const fetchProcessOffsets = useCallback(
@@ -63,10 +53,16 @@ const ProcessOffsetsPage = () => {
       const controller = new AbortController();
       abortControllerRef.current = controller;
 
-      setLoading(true);
+      setTableLoading(true);
       try {
-        const search = keyword?.trim() || filter.keyword?.trim() || '';
-        const { data } = await ProcessOffsetService.getProcessOffsets(search ? { search } : {}, { signal: controller.signal });
+        const params = {
+          search: filters.search,
+          page: filters.page,
+          per_page: filters.per_page
+        };
+
+        const { data } = await ProcessOffsetService.getProcessOffsets(params, { signal: controller.signal });
+        setTotalRecords(data.total ?? 0);
         setProcessOffsets(getProcessOffsets(data.data ?? []));
       } catch (error: any) {
         if (error.name !== 'AbortError') {
@@ -75,11 +71,11 @@ const ProcessOffsetsPage = () => {
       } finally {
         // Only set loading to false if this is the latest controller
         if (abortControllerRef.current === controller) {
-          setLoading(false);
+          setTableLoading(false);
         }
       }
     },
-    [filter.keyword]
+    [filters]
   );
 
   useEffect(() => {
@@ -156,18 +152,14 @@ const ProcessOffsetsPage = () => {
         <PageAction actionAdd={() => router.push(ROUTES.PROCESS_OFFSETS.CREATE)} actions={[PageActions.ADD]} />
       </PageHeader>
 
-      <DataTable
+      <CustomDatatable
         value={processOffsets}
-        paginator
-        className="custom-table p-datatable-gridlines"
-        showGridlines
-        rows={10}
-        dataKey="id"
-        filterDisplay="menu"
-        loading={loading}
-        emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
-        scrollable
+        loading={tableLoading}
+        onPage={handleOnPageChange}
+        first={first}
+        rows={rows}
+        totalRecords={totalRecords}
       >
         <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
@@ -175,7 +167,7 @@ const ProcessOffsetsPage = () => {
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(data: ProcessOffset) => data?.created_by?.name} />
         <Column field="created_at" header="Created At" body={dateBodyTemplate} />
         <Column header="Actions" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} body={actionBodyTemplate} frozen alignFrozen="right"></Column>
-      </DataTable>
+      </CustomDatatable>
       <Modal
         title="Delete Record"
         visible={pageState.deleteModalShow}

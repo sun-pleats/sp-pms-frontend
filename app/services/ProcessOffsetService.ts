@@ -1,7 +1,6 @@
 import { AxiosPromise } from 'axios';
 import apiClient from '../api/http-common';
 import { ProcessOffsetCreatePayload, ProcessOffsetPaginatedResponse } from '../types/api/process-offsets';
-import { ProcessOffset } from '../types/process-offset';
 
 const BASE_URL = '/api/process-offset';
 
