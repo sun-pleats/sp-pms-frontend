@@ -2,20 +2,20 @@
 
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Operator } from '@/app/types/operator';
 import { OperatorService } from '@/app/services/OperatorService';
 import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
+import CustomDatatable from '@/app/components/datatable/component';
 import Modal from '@/app/components/modal/component';
+import OperatorPrintBarcode from '@/app/components/operators/OperatorPrintBarcode';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
-import OperatorPrintBarcode from '@/app/components/operators/OperatorPrintBarcode';
+import useDatatable from '@/app/hooks/useDatatable';
 
 interface OperatorPageState {
   deleteModalShow?: boolean;
@@ -30,27 +30,22 @@ const OperatorsPage = () => {
   const [pageState, setPageState] = useState<OperatorPageState>({});
   const [operators, setOperators] = useState<Operator[]>([]);
   const [selectedOperator, setSelectedOperator] = useState<Operator>();
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<SearchFilter>({});
+
   const [showPrint, setShowPrint] = useState<boolean>(false);
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const abortControllerRef = React.useRef<AbortController | null>(null);
 
+  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+    useDatatable();
+
   const router = useRouter();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter({ keyword: e.target.value });
-  };
-
-  const clearFilter = () => {
-    setFilter({
-      keyword: ''
-    });
-    fetchOperators();
+    setFilters({ search: e.target.value });
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
+    return <TableHeader onClear={clearFilter} searchValue={filters.search ?? ''} onSearchChange={handleSearchChange} />;
   };
 
   const fetchOperators = useCallback(
@@ -62,10 +57,16 @@ const OperatorsPage = () => {
       const controller = new AbortController();
       abortControllerRef.current = controller;
 
-      setLoading(true);
+      setTableLoading(true);
       try {
-        const search = keyword?.trim() || filter.keyword?.trim() || '';
-        const { data } = await OperatorService.getOperators(search ? { search } : {}, { signal: controller.signal });
+        const params = {
+          search: filters.search,
+          page: filters.page,
+          per_page: filters.per_page
+        };
+
+        const { data } = await OperatorService.getOperators(params, { signal: controller.signal });
+        setTotalRecords(data.total ?? 0);
         setOperators(getOperators(data.data ?? []));
       } catch (error: any) {
         if (error.name !== 'CanceledError') {
@@ -74,11 +75,11 @@ const OperatorsPage = () => {
       } finally {
         // Only set loading to false if this is the latest controller
         if (abortControllerRef.current === controller) {
-          setLoading(false);
+          setTableLoading(false);
         }
       }
     },
-    [filter.keyword]
+    [filters]
   );
 
   useEffect(() => {
@@ -158,18 +159,14 @@ const OperatorsPage = () => {
       <PageHeader titles={['Management', 'Operators']}>
         <PageAction actionAdd={() => router.push(ROUTES.OPERATORS.CREATE)} actions={[PageActions.ADD]} />
       </PageHeader>
-      <DataTable
+      <CustomDatatable
         value={operators}
-        paginator
-        className="custom-table p-datatable-gridlines"
-        showGridlines
-        rows={10}
-        dataKey="id"
-        filterDisplay="menu"
-        loading={loading}
-        emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
-        scrollable
+        loading={tableLoading}
+        onPage={handleOnPageChange}
+        first={first}
+        rows={rows}
+        totalRecords={totalRecords}
       >
         <Column header="ID" field="id" />
         <Column header="Name" field="name" style={{ minWidth: '10rem' }} />
@@ -179,7 +176,7 @@ const OperatorsPage = () => {
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(operator: Operator) => operator?.created_by?.name} />
         <Column header="Created At" field="created_at" dataType="created_at" body={dateBodyTemplate} />
         <Column header="Actions" body={actionBodyTemplate} bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} frozen alignFrozen="right"></Column>
-      </DataTable>
+      </CustomDatatable>
       <Modal
         title="Delete Record"
         visible={pageState.deleteModalShow}
