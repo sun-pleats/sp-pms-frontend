@@ -2,7 +2,7 @@
 
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
-import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
+import { DataTable } from 'primereact/datatable';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ProgressSpinner } from 'primereact/progressspinner';
@@ -21,6 +21,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import StatusBadge from '@/app/components/status/component';
 import TableHeader from '@/app/components/table-header/component';
 import UploadStyles from './components/upload-styles';
+import useDatatable from '@/app/hooks/useDatatable';
 import useModelStatus from '@/app/hooks/useModelStatus';
 import useUtilityData from '@/app/hooks/useUtilityData';
 
@@ -33,44 +34,36 @@ interface StylePageState {
   selectedId?: string | number;
 }
 
-interface PageFilter {
-  buyers?: string[];
-  keyword?: string
-}
-
 const StylesPage = () => {
 
   const [pageState, setPageState] = useState<StylePageState>({});
-  const [pageFilter, setPageFilter] = useState<PageFilter>({});
   const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
   const [buyerOptions, setBuyerOptions] = useState<SelectItem[]>([]);
   const { showApiError, showSuccess } = useContext(LayoutContext);
-  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
   const { fetchBuyersSelectOption } = useUtilityData();
   const { updateStatus, isSaving } = useModelStatus();
 
+  const { clearFilter, filters, tableLoading, first, rows, setFirst, setRows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+    useDatatable();
+
   const [styles, setStyle] = useState<Style[]>([]);
 
-  const clearPageFilter = () => {
-    setPageFilter({ ...pageFilter, keyword: '' });
-  };
-
   const handlePageFilter = (e: any) => {
-    setPageFilter({ ...pageFilter, buyers: e.value });
+    setFilters({ ...filters, buyers: e.value });
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageFilter({ ...pageFilter, keyword: e.target.value });
+    setFilters({ ...filters, search: e.target.value });
   };
 
   const tableHeader = () => {
     return (
-      <TableHeader onClear={clearPageFilter} searchValue={pageFilter.keyword ?? ''} onSearchChange={handleSearchChange}>
+      <TableHeader onClear={clearFilter} searchValue={filters.search ?? ''} onSearchChange={handleSearchChange}>
         <div className="w-full md:w-20rem">
           <FormMultiDropdown
-            value={pageFilter.buyers}
+            value={filters.buyers}
             onChange={handlePageFilter}
             filter
             options={buyerOptions}
@@ -87,21 +80,20 @@ const StylesPage = () => {
   }
 
   const fetchStyles = useCallback(
-    async (keyword?: string) => {
-      setLoading(true);
-      const search = keyword?.trim() || pageFilter.keyword?.trim() || '';
-      const buyer = pageFilter.buyers || [];
-
-      // Build payload dynamically
-      const payload: any = {};
-      if (search) payload.search = search;
-      if (buyer.length > 0) payload.buyer = buyer;
-
-      const { data } = await StyleService.getStyles(payload);
+    async () => {
+      setTableLoading(true);
+      const params = {
+        search: filters.search,
+        page: filters.page,
+        buyers: filters.buyers,
+        per_page: filters.per_page
+      };
+      const { data } = await StyleService.getStyles(params);
+      setTotalRecords(data.total ?? 0);
       setStyle(getStyles(data.data ?? []));
-      setLoading(false);
+      setTableLoading(false);
     },
-    [pageFilter.keyword, pageFilter.buyers]
+    [filters]
   );
 
   const getStyles = (data: Style[]) => {
@@ -182,6 +174,12 @@ const StylesPage = () => {
     }
   }
 
+  const handleOnPageChange = (e: any) => {
+    setFilters({ ...filters, page: e.page + 1, per_page: e.rows });
+    setFirst(e.first);
+    setRows(e.rows);
+  };
+
   return (
     <>
       <PageTile title='Styles' icon='pi pi-fw pi-clone' url={ROUTES.STYLES_INDEX} />
@@ -200,27 +198,29 @@ const StylesPage = () => {
         paginator
         className="custom-table p-datatable-gridlines"
         showGridlines
-        rows={10}
         dataKey="id"
         scrollable
-        loading={loading}
+        loading={tableLoading}
         emptyMessage={EMPTY_TABLE_MESSAGE}
         selectionMode={'checkbox'}
         selection={selectedStyles}
         onSelectionChange={onStyleSelectionChange}
+        onPage={handleOnPageChange}
         header={tableHeader}
+        lazy
+        first={first}
+        rows={rows}
+        rowsPerPageOptions={[5, 10, 20, 50]}
+        filterDisplay="menu"
+        totalRecords={totalRecords}
       >
-        {/* <Column
-          selectionMode="multiple"
-          headerStyle={{ width: '3em' }}
-        /> */}
         <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
         <Column field="style_number" header="Style#" style={{ minWidth: '12rem' }} />
         <Column header="Buyer" dataType='string' style={{ minWidth: '12rem' }} body={(style: Style) => style?.buyer?.name} />
         <Column field="pleats_name" header="Pleats" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
-        <Column header="Japan Date" field="ship_date_from_japan" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }}  />
-        <Column field="ship_date_from_cebu" header="Cebu Date"  headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
-        <Column field="season" header="Season"   headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column header="Japan Date" field="ship_date_from_japan" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="ship_date_from_cebu" header="Cebu Date" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="season" header="Season" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column header="Status" body={statusTemplate} headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} frozen alignFrozen='right'></Column>
         <Column header="Actions" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} frozen alignFrozen='right' body={actionBodyTemplate}></Column>
       </DataTable>
