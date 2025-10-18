@@ -3,8 +3,6 @@
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 import { formatDate } from '@/app/utils';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { PRINTING_MODELS } from '@/app/constants/barcode';
@@ -13,6 +11,7 @@ import { StyleBundle } from '@/app/types/styles';
 import { StyleBundleService } from '@/app/services/StyleBundleService';
 import { useRouter } from 'next/navigation';
 import BundleSinglePrintBarcode from '@/app/components/style/BundleSinglePrintBarcode';
+import CustomDatatable from '@/app/components/datatable/component';
 import Modal from '@/app/components/modal/component';
 import PageAction from '@/app/components/page-action/component';
 import PageHeader from '@/app/components/page-header/component';
@@ -42,7 +41,7 @@ const BundlesPage = () => {
 
   const router = useRouter();
 
-  const { clearFilter, filters, tableLoading, first, rows, setFirst, setRows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+  const { clearFilter, filters, handleOnPageChange, tableLoading, first, rows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
     useDatatable();
 
   const fetchBundles = useCallback(async () => {
@@ -148,12 +147,6 @@ const BundlesPage = () => {
     );
   };
 
-  const handleOnPageChange = (e: any) => {
-    setFilters({ ...filters, page: e.page + 1, per_page: e.rows });
-    setFirst(e.first);
-    setRows(e.rows);
-  };
-
   const onBundleSelectionChange = (data: any) => {
     setSelectedBundles(data.value);
   };
@@ -224,26 +217,16 @@ const BundlesPage = () => {
           />
         </PageAction>
       </PageHeader>
-      <DataTable
+      <CustomDatatable
         value={bundles}
-        paginator
-        className="custom-table p-datatable-gridlines"
-        showGridlines
-        dataKey="id"
-        lazy
         first={first}
         rows={rows}
-        rowsPerPageOptions={[5, 10, 20, 50]}
-        filterDisplay="menu"
         loading={tableLoading}
-        emptyMessage={EMPTY_TABLE_MESSAGE}
-        selectionMode={'checkbox'}
         selection={selectedBundles}
         onPage={handleOnPageChange}
         onSelectionChange={onBundleSelectionChange}
         header={header1}
         totalRecords={totalRecords}
-        scrollable
       >
         <Column selectionMode="multiple" headerStyle={{ width: '3em' }} />
         <Column field="bundle_number" header="Bundle#" body={bundleBodyTemplate} style={{ width: 'auto', whiteSpace: 'nowrap' }} />
@@ -264,7 +247,7 @@ const BundlesPage = () => {
           alignFrozen="right"
           frozen
         ></Column>
-      </DataTable>
+      </CustomDatatable>
 
       <Modal
         title="Release Bundle"

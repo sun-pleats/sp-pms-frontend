@@ -30,6 +30,6 @@ export default function useDatatable() {
     totalRecords,
     first,
     rows,
-    filters,
+    filters
   };
 }

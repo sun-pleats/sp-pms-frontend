@@ -21,8 +21,6 @@ interface SectionPageState {
   deleteId?: string | number;
 }
 
-
-
 const SectionsPage = () => {
   const [pageState, setPageState] = useState<SectionPageState>({});
   const [Sections, setSections] = useState<Section[]>([]);
@@ -30,7 +28,7 @@ const SectionsPage = () => {
   const abortControllerRef = React.useRef<AbortController | null>(null);
   const router = useRouter();
 
-  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFirst, setRows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
     useDatatable();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
