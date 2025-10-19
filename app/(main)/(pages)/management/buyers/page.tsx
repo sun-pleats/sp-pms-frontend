@@ -1,86 +1,76 @@
 'use client';
 
-import axios from 'axios';
-
 import { Button } from 'primereact/button';
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
-import { InputText } from 'primereact/inputtext';
-import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Buyer } from '@/app/types/buyers';
 import { BuyerService } from '@/app/services/BuyerService';
+import { Column } from 'primereact/column';
+import { Image } from 'primereact/image';
+import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ROUTES } from '@/app/constants/routes';
 import { useRouter } from 'next/navigation';
+import CustomDatatable from '@/app/components/datatable/component';
 import Modal from '@/app/components/modal/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import PageHeader from '@/app/components/page-header/component';
+import PageTile from '@/app/components/page-title/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
-import PageTile from '@/app/components/page-title/component';
-import { Image } from 'primereact/image';
+import useDatatable from '@/app/hooks/useDatatable';
 
 interface BuyerPageState {
   deleteModalShow?: boolean;
   deleteId?: string | number;
 }
 
-interface SearchFilter {
-  keyword?: string;
-}
-
 const BuyersPage = () => {
   const [pageState, setPageState] = useState<BuyerPageState>({});
   const [buyers, setBuyers] = useState<Buyer[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<SearchFilter>({});
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const abortControllerRef = React.useRef<AbortController | null>(null);
+
+  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+    useDatatable();
 
   const router = useRouter();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter({ keyword: e.target.value });
-  };
-
-  const clearFilter = () => {
-    setFilter({
-      keyword: ''
-    });
-    fetchBuyers();
+    setFilters({ search: e.target.value });
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
+    return <TableHeader onClear={clearFilter} searchValue={filters.search ?? ''} onSearchChange={handleSearchChange} />;
   };
 
-  const fetchBuyers = useCallback(
-    async (keyword?: string) => {
-      // Abort previous request if exists
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
+  const fetchBuyers = useCallback(async () => {
+    // Abort previous request if exists
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
-      setLoading(true);
-      try {
-        const search = keyword?.trim() || filter.keyword?.trim() || '';
-        const data = await BuyerService.getBuyers(search ? { search } : {}, { signal: controller.signal });
-        setBuyers(getBuyers(data.data.data ?? []));
-      } catch (error: any) {
-        if (error.name !== 'AbortError') {
-          console.error(error);
-        }
-      } finally {
-        // Only set loading to false if this is the latest controller
-        if (abortControllerRef.current === controller) {
-          setLoading(false);
-        }
+    setTableLoading(true);
+    try {
+      const params = {
+        search: filters.search,
+        page: filters.page,
+        per_page: filters.per_page
+      };
+
+      const data = await BuyerService.getBuyers(params, { signal: controller.signal });
+      setTotalRecords(data.data.total ?? 0);
+      setBuyers(getBuyers(data.data.data ?? []));
+    } catch (error: any) {
+      if (error.name !== 'AbortError') {
+        console.error(error);
       }
-    },
-    [filter.keyword]
-  );
+    } finally {
+      // Only set loading to false if this is the latest controller
+      if (abortControllerRef.current === controller) {
+        setTableLoading(false);
+      }
+    }
+  }, [filters]);
 
   useEffect(() => {
     fetchBuyers();
@@ -158,18 +148,14 @@ const BuyersPage = () => {
         <PageAction actionAdd={() => router.push(ROUTES.BUYER.CREATE)} actions={[PageActions.ADD]} />
       </PageHeader>
 
-      <DataTable
+      <CustomDatatable
         value={buyers}
-        paginator
-        className="custom-table p-datatable-gridlines"
-        showGridlines
-        rows={10}
-        dataKey="id"
-        filterDisplay="menu"
-        loading={loading}
-        emptyMessage={EMPTY_TABLE_MESSAGE}
         header={renderHeader()}
-        scrollable
+        loading={tableLoading}
+        onPage={handleOnPageChange}
+        first={first}
+        rows={rows}
+        totalRecords={totalRecords}
       >
         <Column field="id" header="ID" />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
@@ -177,7 +163,7 @@ const BuyersPage = () => {
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(buyer: Buyer) => buyer?.created_by?.name} />
         <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
         <Column header="Actions" body={actionBodyTemplate} bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} alignFrozen="right" frozen></Column>
-      </DataTable>
+      </CustomDatatable>
       <Modal
         title="Delete Record"
         visible={pageState.deleteModalShow}
