@@ -6,7 +6,7 @@ interface StatusBadgeProps {
 }
 
 const StatusBadge = ({ status }: StatusBadgeProps) => {
-  const success = ['completed'];
+  const success = ['completed', 'production-running'];
   const danger = ['in-active'];
 
   const formatStatus = status
