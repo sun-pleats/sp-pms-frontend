@@ -95,6 +95,14 @@ const LandingPage = () => {
           resetPageState();
         }
       })
+      .catch((error) => {
+        showApiError(error, 'Error Bundle Entry');
+
+        setKioskFilters({ ...kioskFilters, logger_barcode: '' });
+        setTimeout(() => {
+          setFocus();
+        }, 1000);
+      })
       .finally(() => setIsLogging(false));
   };
 
@@ -175,12 +183,13 @@ const LandingPage = () => {
       </div>
 
       <Modal
-        title="Logger"
+        title="Bundle Logger"
         visible={isLoggerBarcodeShow}
         onHide={() => {
           resetPageState();
         }}
         hideActions={true}
+        minWidth="80vh"
         confirmSeverity="danger"
       >
         {isReturnedShow && (
