@@ -22,6 +22,9 @@ export const StyleBundleService = {
   releaseFabricBundle(id: string): AxiosPromise<StyleBundleEntryLog> {
     return apiClient.post(`${BASE_URL}/${id}/release`);
   },
+  releaseFabricBundleBarcode(barcode: string): AxiosPromise<StyleBundleEntryLog> {
+    return apiClient.post(`${BASE_URL}/release-barcode`, { barcode });
+  },
   getFabricBundle(id: string): AxiosPromise<StyleBundle> {
     return apiClient.get(`${BASE_URL}/${id}`);
   },

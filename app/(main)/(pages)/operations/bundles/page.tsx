@@ -21,9 +21,11 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import ReleaseBundles from './components/release-bundle';
 import TableHeader from '@/app/components/table-header/component';
 import useDatatable from '@/app/hooks/useDatatable';
+import ScanReleaseBundle from './components/scan-release';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
+  scanReleaseShow?: boolean;
   releaseModalShow?: boolean;
   showSinglePrintBarcode?: boolean;
   showRelease?: boolean;
@@ -156,6 +158,7 @@ const BundlesPage = () => {
   const bundleBodyTemplate = (rowData: StyleBundle) => {
     return (
       <>
+        {rowData.released_at && <i className="pi pi-check-circle text-green-500 mr-2" title="Released"></i>}
         <span
           className="cursor-pointer"
           onClick={() => {
@@ -195,6 +198,25 @@ const BundlesPage = () => {
     return `${data.quantity}${data.postfix ?? ''}`;
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'F8') {
+        event.preventDefault();
+        setPageState({
+          ...pageState,
+          scanReleaseShow: true
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    // cleanup on unmount
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   return (
     <>
       <PageTile title="Release Bundles" icon="pi pi-fw pi-box" url={ROUTES.BUNDLES.INDEX} />
@@ -213,6 +235,15 @@ const BundlesPage = () => {
             size="small"
             label="Print Barcodes"
             icon="pi pi-print"
+            style={{ marginRight: '.5em' }}
+          />
+          <Button
+            onClick={() => setPageState({ ...pageState, scanReleaseShow: true })}
+            severity="info"
+            outlined
+            size="small"
+            label="Scan [F8]"
+            icon="pi pi-arrow-up-right"
             style={{ marginRight: '.5em' }}
           />
         </PageAction>
@@ -269,6 +300,13 @@ const BundlesPage = () => {
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>
+      <ScanReleaseBundle
+        visible={pageState.scanReleaseShow}
+        onHide={() => {
+          fetchBundles();
+          setPageState({ ...pageState, scanReleaseShow: false });
+        }}
+      />
       <BundleSinglePrintBarcode
         bundle={selectedBundle}
         onHide={() => setPageState({ ...pageState, showSinglePrintBarcode: false })}
