@@ -194,6 +194,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, sectionOptions, lo
                 value={field.value}
                 onChange={(e: any) => field.onChange(e.value)}
                 filter={true}
+                showClear={true}
                 placeholder="Select"
                 options={sectionOptions}
                 errorMessage={fieldState.error?.message}

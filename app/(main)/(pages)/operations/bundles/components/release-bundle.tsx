@@ -16,6 +16,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import ReleaseBundleTable from '@/app/components/style/ReleaseBundleTable';
 import RemoteStyleDropdown from '@/app/components/remote/style-dropdown/component';
 import useBarcodePrinting from '@/app/hooks/useBarcodePrinting';
+import { Message } from 'primereact/message';
 
 interface SinglePrintBarcodeState {
   show?: boolean;
@@ -42,7 +43,8 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
   const [isStyleSelected, setIsStyleSelected] = useState<boolean>(false);
   const [shouldPrint, setShouldPrint] = useState<boolean>(false);
   const [isSaveOnly, setIsSaveOnly] = useState<boolean>(true);
-  const { showApiError, showSuccess, showError } = useContext(LayoutContext);
+  const [warningQuantities, setWarningQuantities] = useState<{ stored_quantity: number; planned_quantity: number; index: number }[]>([]);
+  const { showApiError, showSuccess, showError, showWarning } = useContext(LayoutContext);
   const { queuePrintStyleBundle, fetchPrintersSelectOptions } = useBarcodePrinting();
 
   const emptyStyleItem = (): FormReleaseBundle => ({
@@ -155,8 +157,23 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
   };
 
   const submit = (e: FormData) => {
-    console.log(e);
     releaseFabrics(e);
+  };
+
+  const handleOnQuantityChange = async (size_id: string, index: number, quantity: number) => {
+    const { data } = await StyleService.getStoredSizeQuantity(size_id);
+    console.log([data.stored_quantity + quantity, data.planned_quantity]);
+    if (data.stored_quantity + quantity > data.planned_quantity) {
+      setWarningQuantities([...warningQuantities, { stored_quantity: data.stored_quantity, planned_quantity: data.planned_quantity, index }]); // Add warning
+      showWarning(
+        `Quantity exceed as planned for row ${index + 1}. Planned Quantity is ${data.planned_quantity} and stored quantity or released quantity is ${
+          data.stored_quantity
+        }.`,
+        'Quantity Exceeded'
+      );
+    } else {
+      setWarningQuantities([...warningQuantities.filter((item) => item.index !== index)]); // Remove
+    }
   };
 
   return (
@@ -170,7 +187,20 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
           sizesOptions={sizesOptions}
           disabled={!isStyleSelected}
           colorOptions={colorOptions}
+          onQuantityChange={handleOnQuantityChange}
+          onRemoveRow={(index: number) => setWarningQuantities([...warningQuantities.filter((item) => item.index !== index)])}
         />
+        <div className="flex">
+          <div className="m-1"></div>
+          {warningQuantities.map((data) => (
+            <Message
+              severity="warn"
+              text={`Quantity exceed as planned for row ${data.index + 1}. Planned Quantity is ${
+                data.planned_quantity
+              } and stored quantity or released quantity is ${data.stored_quantity}.`}
+            />
+          ))}
+        </div>
         <div className="m-5"></div>
         <div className="flex align-items-end mt-b-2">
           <div className="ml-auto">

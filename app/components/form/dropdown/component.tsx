@@ -15,11 +15,26 @@ interface FormDropdownProps {
   value?: any;
   filter?: boolean;
   optionValue?: string;
+  showClear?: boolean;
 }
 
 const FormDropdown = forwardRef<any, FormDropdownProps>(
   (
-    { label, isError, value, className = 'field', placeholder, filter, loading, onChange, errorMessage, options, optionValue = 'value', ...rest },
+    {
+      label,
+      isError,
+      value,
+      className = 'field',
+      placeholder,
+      showClear,
+      filter,
+      loading,
+      onChange,
+      errorMessage,
+      options,
+      optionValue = 'value',
+      ...rest
+    },
     ref
   ) => (
     <div className={className}>
@@ -33,7 +48,7 @@ const FormDropdown = forwardRef<any, FormDropdownProps>(
         placeholder={placeholder}
         loading={loading}
         options={options}
-        showClear
+        showClear={showClear}
         optionLabel="label"
         optionValue={optionValue}
         className={classNames(

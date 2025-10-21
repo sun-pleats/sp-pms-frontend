@@ -52,6 +52,11 @@ export interface StylePlannedFabricsResponse {
   sizes: StylePlannedFabricSize[];
 }
 
+export interface StyleStoredQuantityResponse {
+  stored_quantity: number;
+  planned_quantity: number;
+}
+
 export interface StyleReleaseFabricPayload {
   bundles: SaveStyleFabricPayload[];
 }

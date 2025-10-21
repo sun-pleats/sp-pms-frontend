@@ -1,4 +1,4 @@
-import { StyleSavePayload, StylePaginatedResponse, StylePlannedFabricsResponse } from '../types/api/styles';
+import { StyleSavePayload, StylePaginatedResponse, StylePlannedFabricsResponse, StyleStoredQuantityResponse } from '../types/api/styles';
 import apiClient from '../api/http-common';
 import { AxiosPromise } from 'axios';
 
@@ -27,5 +27,8 @@ export const StyleService = {
     return apiClient.post(`${BASE_URL}/import`, payload, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
+  },
+  getStoredSizeQuantity(size_id: string): AxiosPromise<StyleStoredQuantityResponse> {
+    return apiClient.get(`${BASE_URL}/stored-size-quantity/${size_id}`);
   }
 };

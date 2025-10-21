@@ -9,6 +9,7 @@ interface FormInputNumberProps {
   errorMessage?: string;
   autoFocus?: boolean;
   required?: boolean;
+  disabled?: boolean;
   inputClassName?: string;
   className?: string;
   placeholder?: string;
@@ -31,6 +32,7 @@ const FormInputNumber = forwardRef<any, FormInputNumberProps>(
       isError,
       required,
       placeholder,
+      disabled,
       autoFocus,
       onChange,
       onValueChange,
@@ -56,6 +58,7 @@ const FormInputNumber = forwardRef<any, FormInputNumberProps>(
         required={required}
         onValueChange={onValueChange}
         autoFocus={autoFocus}
+        disabled={disabled}
         placeholder={placeholder}
         className={classNames(
           {

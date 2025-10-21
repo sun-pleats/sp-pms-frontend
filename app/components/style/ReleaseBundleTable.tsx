@@ -18,9 +18,11 @@ interface FormStyleProps {
   disabled?: boolean;
   sizesOptions?: StylePlannedFabricSize[];
   loading?: boolean;
+  onQuantityChange?: (size_id: string, index: number, quantity: number) => void;
+  onRemoveRow?: (index: number) => void;
 }
 
-const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], sizesOptions = [] }: FormStyleProps) => {
+const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], sizesOptions = [], onQuantityChange, onRemoveRow }: FormStyleProps) => {
   const items = useWatch({ control, name: 'bundles' }) || [];
   const colors = React.useMemo(() => colorOptions, [colorOptions]);
   const { showError } = useContext(LayoutContext);
@@ -55,7 +57,18 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
   const actionBodyTemplate = (rowData: FormReleaseBundle, options: { rowIndex: number }) => {
     return (
       <div className="flex gap-2">
-        <Button size="small" outlined rounded type="button" onClick={() => remove(options.rowIndex)} icon="pi pi-trash" severity="danger" />
+        <Button
+          size="small"
+          outlined
+          rounded
+          type="button"
+          onClick={() => {
+            if (onRemoveRow) onRemoveRow(options.rowIndex);
+            remove(options.rowIndex);
+          }}
+          icon="pi pi-trash"
+          severity="danger"
+        />
       </div>
     );
   };
@@ -76,17 +89,9 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
   };
 
   const handleQuantityChange = (field: any, e: any, index: number) => {
-    // const item = items[index];
-    // let filterdItem = [...items];
-    // filterdItem.splice(index, 1);
-    // const find = filterdItem.find((i: any) => i.roll_number == item.roll_number && i.quantity == e);
-    // if (find) {
-    //   field.onChange(undefined);
-    //   showError(`Size already selected by bundle no. ${item.roll_number}`);
-    //   return;
-    // }
-
+    const item = items[index];
     field.onChange(e ?? null);
+    if (onQuantityChange) onQuantityChange(item.style_planned_fabric_size_id, index, e ?? 0);
   };
 
   const onAddOperatorClick = () => {
@@ -190,6 +195,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
               render={({ field, fieldState }) => (
                 <FormInputNumber
                   style={{ width: '50px' }}
+                  disabled={!items[options.rowIndex].style_planned_fabric_size_id}
                   value={field.value as number | null}
                   onValueChange={(e) => handleQuantityChange(field, e.value, options.rowIndex)}
                   placeholder="Qty"
