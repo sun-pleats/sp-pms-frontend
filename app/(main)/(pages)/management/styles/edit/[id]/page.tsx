@@ -24,7 +24,8 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const { updateStyle, isSaveLoading } = useStylePage();
   const [buyers, setBuyers] = useState<SelectItem[]>([]);
-  const { isBuyerLoading, fetchBuyerOptions } = useUtilityData();
+  const [sections, setSections] = useState<SelectItem[]>([]);
+  const { isBuyerLoading, fetchBuyerOptions, fetchSectionOptions } = useUtilityData();
   const [style, setStyle] = useState<DefaultFormData | undefined>();
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
@@ -34,6 +35,7 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
 
   const initData = async () => {
     fetchBuyerOptions().then((data: SelectItem[]) => setBuyers(data));
+    fetchSectionOptions().then((data: SelectItem[]) => setSections(data));
   }
 
   const styleOptions: SelectItem[] = [
@@ -59,7 +61,6 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
 
   const handleSubmit = async (data: DefaultFormData) => {
     try {
-      console.log(data);
       await updateStyle(params?.id as string, data);
       showSuccess("Style successfully updated.");
       setTimeout(() => {
@@ -89,6 +90,7 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
               styleOptions={styleOptions}
               loading={{ buyerField: isBuyerLoading, fields: isFetching }}
               buyerOptions={buyers}
+              sectionOptions={sections}
             >
               <div className='grid mt-5'>
                 <div className='ml-auto'>

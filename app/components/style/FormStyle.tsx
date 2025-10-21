@@ -21,8 +21,10 @@ interface FormStyleProps {
   onSubmit?: any;
   children?: any;
   buyerOptions?: SelectItem[];
+  sectionOptions?: SelectItem[];
   loading?: {
     buyerField?: boolean;
+    sectionField?: boolean;
     fields?: boolean;
   };
 }
@@ -30,6 +32,7 @@ interface FormStyleProps {
 interface FormData extends DefaultFormData {
   control_number: string;
   buyer_id: string;
+  section_id?: string;
   style_number: string;
   pleats_name?: string | null;
   item_type?: string | null;
@@ -44,7 +47,7 @@ interface FormData extends DefaultFormData {
   style_fabrics: FormStyleFabric[];
 }
 
-const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormStyleProps) => {
+const FormStyle = ({ value, onSubmit, children, buyerOptions, sectionOptions, loading }: FormStyleProps) => {
   const [seasonOptions] = useState<SelectItem[]>([
     { label: 'SS', value: STYLE_SEASONS.SS },
     { label: 'AW', value: STYLE_SEASONS.AW }
@@ -78,6 +81,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
     defaultValues: {
       control_number: '',
       buyer_id: '',
+      section_id: '',
       style_number: '',
       pleats_name: '',
       item_type: '',
@@ -101,6 +105,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
       reset({
         control_number: value?.control_number,
         buyer_id: value?.buyer_id,
+        section_id: value?.section_id,
         style_number: value?.style_number,
         pleats_name: value?.pleats_name,
         item_type: value?.item_type,
@@ -148,7 +153,7 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid">
-        <div className="col-12 md:col-6">
+        <div className="col-12">
           <Controller
             name="control_number"
             control={control}
@@ -172,6 +177,25 @@ const FormStyle = ({ value, onSubmit, children, buyerOptions, loading }: FormSty
                 filter={true}
                 placeholder="Select"
                 options={buyerOptions}
+                errorMessage={fieldState.error?.message}
+                isError={fieldState.error ? true : false}
+              />
+            )}
+          />
+        </div>
+        <div className="col-12 md:col-6">
+          <Controller
+            name="section_id"
+            control={control}
+            render={({ fieldState, field }) => (
+              <FormDropdown
+                loading={loading?.sectionField || loading?.fields}
+                label="Section"
+                value={field.value}
+                onChange={(e: any) => field.onChange(e.value)}
+                filter={true}
+                placeholder="Select"
+                options={sectionOptions}
                 errorMessage={fieldState.error?.message}
                 isError={fieldState.error ? true : false}
               />

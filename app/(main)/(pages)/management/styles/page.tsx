@@ -208,10 +208,10 @@ const StylesPage = () => {
         <Column header="Japan Date" field="ship_date_from_japan" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="ship_date_from_cebu" header="Cebu Date" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="season" header="Season" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="section.name" header="Section" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column header="Status" body={statusTemplate} headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} frozen alignFrozen='right'></Column>
         <Column header="Actions" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} frozen alignFrozen='right' body={actionBodyTemplate}></Column>
       </CustomDatatable>
-
       <Modal
         title='Delete Record'
         visible={pageState.deleteModalShow}

@@ -33,6 +33,7 @@ const FormDropdown = forwardRef<any, FormDropdownProps>(
         placeholder={placeholder}
         loading={loading}
         options={options}
+        showClear
         optionLabel="label"
         optionValue={optionValue}
         className={classNames(

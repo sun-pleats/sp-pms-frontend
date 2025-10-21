@@ -1,5 +1,4 @@
-import { StyleCreatePayload, StylePaginatedResponse, StylePlannedFabricsResponse, StyleReleaseFabricPayload } from '../types/api/styles';
-import { Style } from '../types/styles';
+import { StyleSavePayload, StylePaginatedResponse, StylePlannedFabricsResponse } from '../types/api/styles';
 import apiClient from '../api/http-common';
 import { AxiosPromise } from 'axios';
 
@@ -15,10 +14,10 @@ export const StyleService = {
   getStyle(id: string) {
     return apiClient.get(`${BASE_URL}/${id}`);
   },
-  createStyle(payload: StyleCreatePayload) {
+  createStyle(payload: StyleSavePayload) {
     return apiClient.post(`${BASE_URL}`, payload);
   },
-  updateStyle(id: string, payload: StyleCreatePayload) {
+  updateStyle(id: string, payload: StyleSavePayload) {
     return apiClient.put(`${BASE_URL}/${id}`, payload);
   },
   deleteStyle(id: string) {

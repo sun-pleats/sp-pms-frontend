@@ -1,9 +1,10 @@
 import { PaginatedResponse } from '.';
 import { Style, StyleBundle, StylePlannedFabric, StylePlannedFabricSize } from '../styles';
 
-export interface StyleCreatePayload {
+export interface StyleSavePayload {
   control_number: string;
   buyer_id: string;
+  section_id?: string;
   style_number: string;
   pleats_name?: string | null;
   item_type?: string | null;
@@ -13,11 +14,11 @@ export interface StyleCreatePayload {
   sample?: string | null;
   season?: string | null;
   pattern?: string | null;
-  style_items?: ItemStyleCreatePayload[];
+  style_items?: ItemStyleSavePayload[];
   style_fabrics?: ItemFabricCreatePayload[];
 }
 
-export interface ItemStyleCreatePayload {
+export interface ItemStyleSavePayload {
   item_name?: string;
   item_number?: string;
   specs_qty?: number;

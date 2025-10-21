@@ -1,5 +1,5 @@
 import { StyleService } from '@/app/services/StyleService';
-import { ItemFabricCreatePayload, ItemStyleCreatePayload, StyleCreatePayload, StylePaginatedResponse } from '@/app/types/api/styles';
+import { ItemFabricCreatePayload, ItemStyleSavePayload, StyleSavePayload, StylePaginatedResponse } from '@/app/types/api/styles';
 import { DefaultFormData } from '@/app/types/form';
 import { Style } from '@/app/types/styles';
 import dayjs from 'dayjs';
@@ -27,11 +27,11 @@ export const useStylePage = () => {
     }
   }
 
-  const formatSavePayload = (data: DefaultFormData): StyleCreatePayload => {
-    console.log("DATA", data)
+  const formatSavePayload = (data: DefaultFormData): StyleSavePayload => {
     return {
       control_number: data.control_number ?? "",
       buyer_id: data.buyer_id ?? "",
+      section_id: data.section_id ?? null,
       style_number: data.style_number ?? "",
       pleats_name: data.pleats_name ?? null,
       item_type: data.item_type ?? null,
@@ -46,7 +46,7 @@ export const useStylePage = () => {
       ship_date_from_cebu: data.ship_date_from_cebu
         ? dayjs(data.ship_date_from_cebu).format("YYYY-MM-DD")
         : null,
-      style_items: ((data?.style_items ?? []) as ItemStyleCreatePayload[]),
+      style_items: ((data?.style_items ?? []) as ItemStyleSavePayload[]),
       style_fabrics: ((data?.style_fabrics ?? []) as ItemFabricCreatePayload[]),
     };
   }

@@ -17,7 +17,8 @@ const CreateStylePage = () => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const { saveStyle, isSaveLoading } = useStylePage();
   const [buyers, setBuyers] = useState<SelectItem[]>([]);
-  const { isBuyerLoading, fetchBuyerOptions } = useUtilityData();
+  const [sections, setSections] = useState<SelectItem[]>([]);
+  const { isBuyerLoading, fetchBuyerOptions, fetchSectionOptions } = useUtilityData();
 
   useEffect(() => {
     initData();
@@ -25,6 +26,7 @@ const CreateStylePage = () => {
 
   const initData = async () => {
     fetchBuyerOptions().then((data: SelectItem[]) => setBuyers(data));
+    fetchSectionOptions().then((data: SelectItem[]) => setSections(data));
   }
 
   const styleOptions: SelectItem[] = [
@@ -56,11 +58,12 @@ const CreateStylePage = () => {
       <div className='grid'>
         <div className='col-12'>
           <div className='p-fluid'>
-            <FormStyle 
-              onSubmit={handleSubmit} 
+            <FormStyle
+              onSubmit={handleSubmit}
               styleOptions={styleOptions}
               loading={{ buyerField: isBuyerLoading }}
               buyerOptions={buyers}
+              sectionOptions={sections}
             >
               <div className='grid mt-5'>
                 <div className='ml-auto'>
