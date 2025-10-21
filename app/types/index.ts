@@ -18,4 +18,4 @@ export interface Pagination {
   total?: number;
 }
 
-export type Option = { label: string; value: number };
+export type Option = { label: string; value: number; meta?: any };

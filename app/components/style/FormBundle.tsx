@@ -14,13 +14,14 @@ interface FormBundleProps {
   children?: any;
   colorOptions?: SelectItem[];
   sizesOptions?: SelectItem[];
+  sectionOptions?: SelectItem[];
   loading?: {
     sizeField?: boolean;
     colorField?: boolean;
   };
 }
 
-const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions = [], loading }: FormBundleProps) => {
+const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions = [], sectionOptions = [], loading }: FormBundleProps) => {
   const { control, handleSubmit, reset } = useForm<FormReleaseBundle>({
     defaultValues: {
       roll_number: 0,
@@ -29,6 +30,7 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
       quantity: 0,
       postfix: '',
       remarks: '',
+      section_id: 0,
       belong_style_bundle_id: ''
     }
   });
@@ -43,6 +45,7 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
         style_planned_fabric_size_id: value?.style_planned_fabric_size_id,
         quantity: value?.quantity,
         remarks: value?.remarks,
+        section_id: value?.section_id,
         belong_style_bundle_id: value?.belong_style_bundle_id
       });
     }
@@ -159,6 +162,25 @@ const FormBundle = ({ value, onSubmit, children, colorOptions = [], sizesOptions
             placeholder="Bundle No."
             errorMessage={fieldState.error?.message}
             isError={fieldState.error ? true : false}
+          />
+        )}
+      />
+
+      <Controller
+        control={control}
+        name={`section_id` as const}
+        rules={{ required: 'Section is required' }}
+        render={({ field, fieldState }) => (
+          <FormDropdown
+            {...field}
+            value={field.value}
+            onChange={(e: any) => field.onChange(e.value)}
+            placeholder="Select"
+            label="Section"
+            filter
+            errorMessage={fieldState.error?.message}
+            isError={fieldState.error ? true : false}
+            options={sectionOptions}
           />
         )}
       />

@@ -13,6 +13,7 @@ import PageAction, { PageActions } from '@/app/components/page-action/component'
 import PageCard from '@/app/components/page-card/component';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { set } from 'lodash';
+import useUtilityData from '@/app/hooks/useUtilityData';
 
 interface EditBundlePageProps {
   params?: { id: any };
@@ -31,17 +32,20 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
   const [styleBundle, setStyleBunle] = useState<StyleBundle>();
   const [colorOptions, setColorOptions] = useState<SelectItem[]>([]);
   const [sizesOptions, setSizesOptions] = useState<SelectItem[]>([]);
+  const [sectionOptions, setSectionOptions] = useState<SelectItem[]>([]);
   const [formData, setFormData] = useState<FormReleaseBundle>({
     roll_number: 0,
     postfix: '',
     style_planned_fabric_id: 0,
     style_planned_fabric_size_id: 0,
     quantity: 0,
+    section_id: 0,
     remarks: '',
     belong_style_bundle_id: ''
   });
 
   const { showSuccess, showApiError } = useContext(LayoutContext);
+  const { fetchSectionOptions } = useUtilityData();
 
   const setLoading = (loadings: any = {}) => {
     setState({ ...state, loadings: { ...state.loadings, ...loadings } });
@@ -81,6 +85,7 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
         style_planned_fabric_size_id: data.style_planned_fabric_size_id,
         quantity: data.quantity,
         remarks: data.remarks,
+        section_id: data.section_id,
         belong_style_bundle_id: data.belong_style_bundle_id
       });
       showSuccess('Bundle successfully saved.');
@@ -113,10 +118,19 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
         style_planned_fabric_size_id: styleBundle?.style_planned_fabric_size_id,
         quantity: styleBundle.quantity,
         remarks: styleBundle.remarks ?? '',
+        section_id: styleBundle.section_id,
         belong_style_bundle_id: styleBundle.belong_style_bundle_id ?? ''
       });
     }
   }, [styleBundle]);
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  const init = async () => {
+    setSectionOptions(await fetchSectionOptions());
+  };
 
   useEffect(() => {
     if (params?.id) {
@@ -136,6 +150,7 @@ const EditBundlePage = ({ params }: EditBundlePageProps) => {
                   value={formData}
                   colorOptions={colorOptions}
                   sizesOptions={sizesOptions}
+                  sectionOptions={sectionOptions}
                   loading={{ colorField: state.loadings?.fetching, sizeField: state.loadings?.fetching }}
                 >
                   <div className="flex">

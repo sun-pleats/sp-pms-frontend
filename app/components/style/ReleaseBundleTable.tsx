@@ -15,17 +15,29 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 interface FormStyleProps {
   control?: any;
   colorOptions?: SelectItem[];
+  sectionOptions?: SelectItem[];
   disabled?: boolean;
+  defaultSection?: number | null;
   sizesOptions?: StylePlannedFabricSize[];
   loading?: boolean;
   onQuantityChange?: (size_id: string, index: number, quantity: number) => void;
   onRemoveRow?: (index: number) => void;
 }
 
-const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], sizesOptions = [], onQuantityChange, onRemoveRow }: FormStyleProps) => {
+const ReleaseBundleTable = ({
+  loading,
+  control,
+  disabled,
+  sectionOptions = [],
+  defaultSection,
+  colorOptions = [],
+  sizesOptions = [],
+  onQuantityChange,
+  onRemoveRow
+}: FormStyleProps) => {
   const items = useWatch({ control, name: 'bundles' }) || [];
   const colors = React.useMemo(() => colorOptions, [colorOptions]);
-  const { showError } = useContext(LayoutContext);
+  const sections = React.useMemo(() => sectionOptions, [sectionOptions]);
 
   const getSizeOptions = (rowIndex: number): SelectItem[] => {
     const option = items[rowIndex];
@@ -43,6 +55,7 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
     id: items?.length + 1,
     style_planned_fabric_id: 0,
     style_planned_fabric_size_id: 0,
+    section_id: defaultSection,
     quantity: 0,
     remarks: '',
     postfix: '',
@@ -247,6 +260,31 @@ const ReleaseBundleTable = ({ loading, control, disabled, colorOptions = [], siz
           />
         )}
       />
+
+      <Column
+        field="section_id"
+        header="Section"
+        body={(_row: any, options: { rowIndex: number }) => (
+          <Controller
+            control={control}
+            name={`bundles.${options.rowIndex}.section_id` as const}
+            rules={{ required: 'Section is required' }}
+            render={({ field, fieldState }) => (
+              <FormDropdown
+                {...field}
+                value={field.value}
+                onChange={(e: any) => field.onChange(e.value)}
+                placeholder="Select"
+                filter
+                errorMessage={fieldState.error?.message}
+                isError={fieldState.error ? true : false}
+                options={sections}
+              />
+            )}
+          />
+        )}
+      />
+
       <Column body={actionBodyTemplate}></Column>
     </DataTable>
   );

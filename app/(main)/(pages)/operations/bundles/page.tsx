@@ -238,6 +238,7 @@ const BundlesPage = () => {
         <Column field="roll_number" header="Roll No." style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column header="Size" field="style_planned_fabric_size.size_number" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="quantity" header="Quantity" body={quantityBody} style={{ width: 'auto', whiteSpace: 'nowrap' }} />
+        <Column field="section.name" header="Section" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="released_at" header="Released At" body={dateBodyTemplate} style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column
           field="balance"

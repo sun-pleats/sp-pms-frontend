@@ -28,7 +28,8 @@ export default function RemoteStyleDropdown({
         const { data: res } = await UtilityService.findStyles(q, perPage);
         const mapped: Option[] = (res.data ?? res.data ?? []).map((item: any) => ({
           label: item.style_number,
-          value: item.id
+          value: item.id,
+          meta: item
         }));
         setOptions(mapped);
       } catch (e: any) {

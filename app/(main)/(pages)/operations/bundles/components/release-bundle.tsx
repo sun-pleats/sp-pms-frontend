@@ -12,11 +12,12 @@ import { StyleService } from '@/app/services/StyleService';
 import { useForm } from 'react-hook-form';
 import FormDropdown from '@/app/components/form/dropdown/component';
 import Modal from '@/app/components/modal/component';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import ReleaseBundleTable from '@/app/components/style/ReleaseBundleTable';
 import RemoteStyleDropdown from '@/app/components/remote/style-dropdown/component';
 import useBarcodePrinting from '@/app/hooks/useBarcodePrinting';
 import { Message } from 'primereact/message';
+import useUtilityData from '@/app/hooks/useUtilityData';
 
 interface SinglePrintBarcodeState {
   show?: boolean;
@@ -38,6 +39,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
   const [selectedStyleNumber, setSelectedStyleNumber] = useState<Option | null>(null);
   const [colorOptions, setColorOptions] = useState<SelectItem[]>([]);
   const [printerOptions, setPrinterOptions] = useState<SelectItem[]>([]);
+  const [sectionOptions, setSectionOptions] = useState<SelectItem[]>([]);
   const [selectedPrinter, setSelectedPrinter] = useState<string | null>();
   const [sizesOptions, setSizesOptions] = useState<StylePlannedFabricSize[]>([]);
   const [isStyleSelected, setIsStyleSelected] = useState<boolean>(false);
@@ -46,16 +48,8 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
   const [warningQuantities, setWarningQuantities] = useState<{ stored_quantity: number; planned_quantity: number; index: number }[]>([]);
   const { showApiError, showSuccess, showError, showWarning } = useContext(LayoutContext);
   const { queuePrintStyleBundle, fetchPrintersSelectOptions } = useBarcodePrinting();
-
-  const emptyStyleItem = (): FormReleaseBundle => ({
-    id: 1,
-    style_planned_fabric_id: 0,
-    style_planned_fabric_size_id: 0,
-    quantity: 0,
-    remarks: '',
-    postfix: '',
-    belong_style_bundle_id: ''
-  });
+  const { fetchSectionOptions } = useUtilityData();
+  const [defaultSection, setDefaultSection] = useState<number | null>(null);
 
   const { control, handleSubmit, reset } = useForm<FormData>({
     defaultValues: {
@@ -63,7 +57,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
     }
   });
 
-  const fetchPlannedFabics = async (id: string) => {
+  const fetchPlannedFabics = async (id: string, section_id?: number | null) => {
     try {
       setState({ ...state, loadingFetch: true });
       const { data: res } = await StyleService.getPlannedFabrics(id);
@@ -75,7 +69,18 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
       );
       setSizesOptions(res.sizes);
       reset({
-        bundles: [emptyStyleItem()]
+        bundles: [
+          {
+            id: 1,
+            style_planned_fabric_id: 0,
+            style_planned_fabric_size_id: 0,
+            quantity: 0,
+            remarks: '',
+            section_id: section_id,
+            postfix: '',
+            belong_style_bundle_id: ''
+          }
+        ]
       });
       setIsStyleSelected(true);
     } catch (e: any) {
@@ -102,6 +107,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
             quantity: r.quantity,
             remarks: r.remarks,
             postfix: r.postfix,
+            section_id: r.section_id,
             belong_style_bundle_id: r.belong_style_bundle_id,
             is_save_only: isSaveOnly
           }))
@@ -137,6 +143,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
 
   const initData = async () => {
     setPrinterOptions(await fetchPrintersSelectOptions());
+    setSectionOptions(await fetchSectionOptions());
   };
 
   const resetAllState = () => {
@@ -153,7 +160,8 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
   };
 
   const handleSelectedStyle = (option: AutoCompleteSelectEvent<Option>) => {
-    fetchPlannedFabics(option.value?.value?.toString());
+    setDefaultSection(option.value.meta?.section_id ?? null);
+    fetchPlannedFabics(option.value?.value?.toString(), option.value.meta?.section_id ?? null);
   };
 
   const submit = (e: FormData) => {
@@ -162,7 +170,6 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
 
   const handleOnQuantityChange = async (size_id: string, index: number, quantity: number) => {
     const { data } = await StyleService.getStoredSizeQuantity(size_id);
-    console.log([data.stored_quantity + quantity, data.planned_quantity]);
     if (data.stored_quantity + quantity > data.planned_quantity) {
       setWarningQuantities([...warningQuantities, { stored_quantity: data.stored_quantity, planned_quantity: data.planned_quantity, index }]); // Add warning
       showWarning(
@@ -186,7 +193,9 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
           control={control}
           sizesOptions={sizesOptions}
           disabled={!isStyleSelected}
+          defaultSection={defaultSection}
           colorOptions={colorOptions}
+          sectionOptions={sectionOptions}
           onQuantityChange={handleOnQuantityChange}
           onRemoveRow={(index: number) => setWarningQuantities([...warningQuantities.filter((item) => item.index !== index)])}
         />

@@ -74,6 +74,7 @@ export interface FormReleaseBundle {
   postfix?: string;
   style_planned_fabric_id?: number;
   style_planned_fabric_size_id?: number;
+  section_id?: number | null;
   quantity?: number;
   remarks?: string;
   belong_style_bundle_id?: string;
@@ -93,6 +94,8 @@ export interface StyleBundle {
   style_planned_fabric?: StylePlannedFabric;
   style_planned_fabric_size?: StylePlannedFabricSize;
   belong_style_bundle_id?: string;
+  section_id?: number;
+  section?: Section;
   belong_style_bundle?: StyleBundle;
   created_at?: string;
   released?: boolean;
