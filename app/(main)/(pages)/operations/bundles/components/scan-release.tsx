@@ -5,6 +5,7 @@ import Modal from '@/app/components/modal/component';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import FormInputText from '@/app/components/form/input-text/component';
 import { StyleBundleService } from '@/app/services/StyleBundleService';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 interface SinglePrintBarcodeState {
   show?: boolean;
@@ -38,15 +39,18 @@ const ScanReleaseBundle = ({ visible, onHide }: SinglePrintBarcodeProps) => {
 
   const onLoggerBarcodeEnter = async (value: string) => {
     try {
+      setIsSaving(true);
       if (!value.length) return;
-      const data = StyleBundleService.releaseFabricBundleBarcode(value);
-      setScannedBarcode('');
-      setHide();
+      await StyleBundleService.releaseFabricBundleBarcode(value);
       showSuccess('Bundle successfully released.');
     } catch (error) {
       showApiError(error, 'Error logging barcode.');
     } finally {
       setIsSaving(false);
+      setScannedBarcode('');
+      setTimeout(() => {
+        if (visible) setFocus();
+      }, 500);
     }
   };
 
@@ -55,7 +59,7 @@ const ScanReleaseBundle = ({ visible, onHide }: SinglePrintBarcodeProps) => {
   };
 
   return (
-    <Modal title="Scan & Release Bundle" minWidth="80vh" visible={state.show} onHide={onHide} hideActions={true}>
+    <Modal title="Scan & Release Bundle" minWidth="80vh" visible={state.show} onHide={setHide} hideActions={true}>
       <p>Please use the scanner to scan the bundle barcode</p>
       <FormInputText
         onChange={(value: any) => setScannedBarcode(value.target.value)}
@@ -68,10 +72,16 @@ const ScanReleaseBundle = ({ visible, onHide }: SinglePrintBarcodeProps) => {
         onBlur={() => setFocus()}
         ref={userBarcodeRef}
         value={scannedBarcode}
+        disabled={isSaving}
         className="w-full"
         placeholder="Please scan the bundle barcode here"
         inputClassName="w-full"
       />
+      {isSaving && (
+        <div className="col-12 flex justify-content-center align-items-center">
+          <ProgressSpinner style={{ width: '50px', height: '50px' }} />
+        </div>
+      )}
     </Modal>
   );
 };
