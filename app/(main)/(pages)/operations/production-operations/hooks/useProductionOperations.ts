@@ -8,7 +8,7 @@ import { ProductionTrackService } from '@/app/services/ProductionTrackService';
 import { SelectItem } from 'primereact/selectitem';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import moment from 'moment';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import useUtilityData from '@/app/hooks/useUtilityData';
 
 interface TrackFilter {
@@ -50,11 +50,12 @@ export const useProductionOperations = () => {
   const [tracksToDelete, setTracksToDelete] = useState<string[]>([]);
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const { fetchProcessOptions, fetchOperators, fetchSectionSelectOption } = useUtilityData();
-  const { control, handleSubmit, reset, getValues } = useForm<FormData>({
+  const { control, handleSubmit, reset, getValues, formState } = useForm<FormData>({
     defaultValues: {
       tracks: []
     }
   });
+  const isAutoSavingRefs = useRef(false);
 
   const operatorsOption = React.useMemo<SelectItem[]>(() => {
     return operators
@@ -109,7 +110,7 @@ export const useProductionOperations = () => {
     }, []);
   };
 
-  const storeTracks = async (e: FormData) => {
+  const storeTracks = async (e: FormData, autoSave: boolean = false) => {
     try {
       setLoading({ storingTracks: true });
       await ProductionTrackService.storeTracks({
@@ -125,9 +126,11 @@ export const useProductionOperations = () => {
         })),
         delete_tracks: tracksToDelete
       });
-      showSuccess('Production process successfully saved.');
+      if (!autoSave) showSuccess('Production process successfully saved.');
+      else console.log('Auto saved!');
     } catch (e: any) {
-      showApiError(e, 'Error saving production process.');
+      if (!autoSave) showApiError(e, 'Error saving production process.');
+      else console.log('Error autosave:', e);
     } finally {
       setLoading({ storingTracks: false });
     }
@@ -160,6 +163,7 @@ export const useProductionOperations = () => {
         // Reset first
         reset();
 
+        console.log(data);
         // Load the fetched data
         data.forEach((d) => {
           append({
@@ -168,9 +172,9 @@ export const useProductionOperations = () => {
             section_id: d.section_id,
             operator_id: d.operator_id,
             process_id: d.process_id,
-            target: d.target,
-            remarks: d.remarks,
-            time: d.time
+            target: d.target ?? 0,
+            remarks: d.remarks ?? '',
+            time: d.time ?? 0
           });
         });
 
@@ -234,6 +238,37 @@ export const useProductionOperations = () => {
     const process = operators.find((r) => r.id == operatorId.toString())?.operator_processes?.find((r) => r.process_id?.toString() == processId);
 
     update(rowIndex, { ...current, time: process?.time || 0 });
+  };
+
+  useEffect(() => {
+    autoSave();
+  }, [items]);
+
+  const autoSave = async () => {
+    const hasEmptyTrack = items.some(
+      (t) =>
+        !t.operator_id ||
+        !t.process_id ||
+        t.target == null ||
+        t.time == null ||
+        t.operator_id === '' ||
+        t.process_id === '' ||
+        t.target === '' ||
+        t.time === ''
+    );
+
+    if (hasEmptyTrack) return;
+
+    if (isAutoSavingRefs.current) return;
+    isAutoSavingRefs.current = true;
+
+    try {
+      await storeTracks(getValues(), true); // Auto save
+    } catch (e: any) {
+      console.log('Error Autosaving: ', e);
+    } finally {
+      isAutoSavingRefs.current = false;
+    }
   };
 
   return {
