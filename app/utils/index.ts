@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { subYears, format } from 'date-fns';
+import { subYears, format, differenceInMinutes, parseISO, differenceInSeconds } from 'date-fns';
 import { SelectItem } from 'primereact/selectitem';
 
 export function generateSimpleId() {
@@ -47,4 +47,19 @@ export function getListOfYearOptions(): SelectItem[] {
     label: year,
     value: Number(year)
   }));
+}
+
+export function convertDurationLabel(from: any, to: any) {
+  const diffSeconds = Math.max(0, differenceInSeconds(parseISO(from), parseISO(to)));
+
+  // Convert seconds → minutes → hours → days
+  const days = Math.floor(diffSeconds / (60 * 60 * 24));
+  const hours = Math.floor((diffSeconds % (60 * 60 * 24)) / (60 * 60));
+  const minutes = Math.floor((diffSeconds % (60 * 60)) / 60);
+  const seconds = diffSeconds % 60;
+
+  return {
+    label: [days ? `${days}d` : '', hours ? `${hours}h` : '', minutes ? `${minutes}m` : '', seconds ? `${seconds}s` : '0s'].filter(Boolean).join(' '),
+    duration_seconds: diffSeconds
+  };
 }

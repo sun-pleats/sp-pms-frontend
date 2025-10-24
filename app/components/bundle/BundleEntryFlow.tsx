@@ -2,7 +2,7 @@ import React, { useMemo, useCallback, useEffect } from 'react';
 import ReactFlow, { Background, Controls, MiniMap, addEdge, useEdgesState, useNodesState, Position, Handle, Node, Edge } from 'reactflow';
 import 'reactflow/dist/style.css';
 import dagre from 'dagre';
-import { differenceInMinutes, parseISO, format } from 'date-fns';
+import { parseISO, format } from 'date-fns';
 import { Card } from 'primereact/card';
 import { Tag } from 'primereact/tag';
 import { Avatar } from 'primereact/avatar';
@@ -11,10 +11,11 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import { BundleMovementRecord } from '@/app/types/styles';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { convertDurationLabel } from '@/app/utils';
 
 // --- Custom node with PrimeReact Card -------------------------------------------
 const NodeCard: React.FC<{ data: any }> = ({ data }) => {
-  const { department, entryTime, exitTime, user, durationMin } = data;
+  const { department, entryTime, exitTime, user, durationLabel } = data;
 
   const header = (
     <div className="flex align-items-center gap-2">
@@ -29,7 +30,7 @@ const NodeCard: React.FC<{ data: any }> = ({ data }) => {
         <Avatar label={user.charAt(0)} size="small" shape="circle" />
         <span>{user}</span>
       </div>
-      <Tag severity="info" value={`${durationMin} min`} />
+      <Tag severity="info" value={`${durationLabel}`} />
     </div>
   );
 
@@ -79,27 +80,27 @@ function buildGraph(records: BundleMovementRecord[]) {
   const sorted = [...records].sort((a, b) => parseISO(a.entryTime).getTime() - parseISO(b.entryTime).getTime());
 
   const nodes: Node[] = sorted.map((r, idx) => {
-    const durationMin = Math.max(0, differenceInMinutes(parseISO(r.exitTime), parseISO(r.entryTime)));
+    const duration = convertDurationLabel(r.exitTime, r.entryTime);
     return {
       id: r.id,
       type: 'card',
-      data: { ...r, durationMin },
+      data: { ...r, durationLabel: duration.label },
       position: { x: idx * (nodeWidth + 80), y: 0 }
     } as Node;
   });
 
   const edges: Edge[] = sorted.slice(1).map((r, i) => {
     const prev = sorted[i];
-    const gapMin = Math.max(0, differenceInMinutes(parseISO(r.entryTime), parseISO(prev.exitTime)));
+    const duration = convertDurationLabel(r.entryTime, prev.exitTime);
     return {
       id: `${prev.id}->${r.id}`,
       source: prev.id,
       target: r.id,
       type: 'smoothstep',
-      label: gapMin ? `${gapMin} min gap` : undefined,
+      label: duration.label,
       labelBgPadding: [4, 2],
       labelBgBorderRadius: 6,
-      animated: gapMin > 60
+      animated: true
     } as Edge;
   });
 
