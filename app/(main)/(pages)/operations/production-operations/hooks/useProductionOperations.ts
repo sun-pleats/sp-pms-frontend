@@ -257,7 +257,7 @@ export const useProductionOperations = () => {
         t.time === ''
     );
 
-    if (hasEmptyTrack) return;
+    if (hasEmptyTrack || items.length == 0) return;
 
     if (isAutoSavingRefs.current) return;
     isAutoSavingRefs.current = true;
