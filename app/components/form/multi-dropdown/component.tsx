@@ -53,6 +53,7 @@ const FormMultiDropdown = forwardRef<any, FormMultiDropdownProps>(
         options={options}
         optionValue={optionValue}
         optionLabel={optionLabel}
+        filterInputAutoFocus
         className={classNames(
           {
             'p-invalid': isError

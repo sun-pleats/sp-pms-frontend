@@ -51,6 +51,8 @@ const FormDropdown = forwardRef<any, FormDropdownProps>(
         showClear={showClear}
         optionLabel="label"
         optionValue={optionValue}
+        autoOptionFocus
+        filterInputAutoFocus
         className={classNames(
           {
             'p-invalid': isError

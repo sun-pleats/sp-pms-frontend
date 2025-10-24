@@ -103,6 +103,7 @@ const ProductionOperationPage = () => {
                 value={trackFilter.process_ids}
                 onChange={(option: any) => setTrackFilter({ ...trackFilter, process_ids: option.value })}
                 placeholder="Select"
+                filter={true}
                 options={processOptions}
               />
               <Button

@@ -3,9 +3,7 @@
 import FormInputText from '../form/input-text/component';
 import { OperatorForm } from '@/app/types/operator';
 import { useEffect } from 'react';
-import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { SelectItem } from 'primereact/selectitem';
 import FormDropdown from '../form/dropdown/component';
 import FormMultiDropdown from '../form/multi-dropdown/component';
