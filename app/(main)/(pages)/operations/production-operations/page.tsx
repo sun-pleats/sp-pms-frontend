@@ -243,6 +243,41 @@ const ProductionOperationPage = () => {
               )}
             />
             <Column
+              field="style_id"
+              header="Style No."
+              style={{ minWidth: '12rem' }}
+              align="left"
+              body={(_row: any, options: { rowIndex: number }) => (
+                <Controller
+                  control={control}
+                  name={`tracks.${options.rowIndex}.style_id` as const}
+                  rules={{ required: 'Style number is required' }}
+                  render={({ field, fieldState }) => (
+                    <>
+                      <FormInputText
+                        {...field}
+                        inputClassName="w-full"
+                        className="mt-1"
+                        placeholder="Style No."
+                        errorMessage={fieldState.error?.message}
+                        isError={fieldState.error ? true : false}
+                      />
+                      <div className="pt-1">
+                        <a
+                          href={`/management/styles?search=${items[options.rowIndex].style_id}`}
+                          target="_blank"
+                          title="Click here to validate the style number."
+                          className="text-gray-500 text-sm"
+                        >
+                          <i className="pi pi-eye"></i> Validate Style
+                        </a>
+                      </div>
+                    </>
+                  )}
+                />
+              )}
+            />
+            <Column
               field="time"
               header="Time"
               body={(_row: any, options: { rowIndex: number }) => (
@@ -287,6 +322,7 @@ const ProductionOperationPage = () => {
             <Column
               field="remarks"
               header="Remarks"
+              style={{ minWidth: '12rem' }}
               body={(_row: any, options: { rowIndex: number }) => (
                 <Controller
                   control={control}

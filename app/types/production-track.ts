@@ -1,6 +1,7 @@
 import { Operator } from './operator';
 import { Process } from './process';
 import { Section } from './section';
+import { Style } from './styles';
 
 export interface ProductionTrack {
   id?: string;
@@ -12,6 +13,8 @@ export interface ProductionTrack {
   target: number | string;
   remarks: string;
   section?: Section;
+  style_id?: string;
+  style?: Style;
   operator?: Operator;
   process?: Process;
 }

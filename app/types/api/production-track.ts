@@ -5,6 +5,7 @@ export interface StoreProductionTrackPayload {
     section_id: string;
     operator_id: string;
     process_id: string;
+    style_id: string;
     target: number | string;
     time: number | string;
     remarks: string;

@@ -120,6 +120,7 @@ export const useProductionOperations = () => {
           section_id: trackFilter.section_id,
           operator_id: r.operator_id ?? '',
           process_id: r.process_id ?? '',
+          style_id: r.style_id ?? '',
           target: r.target,
           time: r.time,
           remarks: r.remarks
@@ -163,7 +164,6 @@ export const useProductionOperations = () => {
         // Reset first
         reset();
 
-        console.log(data);
         // Load the fetched data
         data.forEach((d) => {
           append({
@@ -171,6 +171,7 @@ export const useProductionOperations = () => {
             date: d.date,
             section_id: d.section_id,
             operator_id: d.operator_id,
+            style_id: d.style?.style_number, // @NOTE: The frontend will only gonna pass a actual style number and this is intentional
             process_id: d.process_id,
             target: d.target ?? 0,
             remarks: d.remarks ?? '',
@@ -241,7 +242,7 @@ export const useProductionOperations = () => {
   };
 
   useEffect(() => {
-    autoSave();
+    // autoSave(); // Temporary disable
   }, [items]);
 
   const autoSave = async () => {
@@ -249,10 +250,12 @@ export const useProductionOperations = () => {
       (t) =>
         !t.operator_id ||
         !t.process_id ||
+        !t.style_id ||
         t.target == null ||
         t.time == null ||
         t.operator_id === '' ||
         t.process_id === '' ||
+        t.style_id === '' ||
         t.target === '' ||
         t.time === ''
     );

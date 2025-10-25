@@ -11,7 +11,7 @@ import { SelectItem } from 'primereact/selectitem';
 import { STATUSES, StatusModel } from '@/app/constants/status';
 import { Style } from '@/app/types/styles';
 import { StyleService } from '@/app/services/StyleService';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
 import Modal from '@/app/components/modal/component';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
@@ -41,6 +41,9 @@ const StylesPage = () => {
   const [selectedStyles, setSelectedStyles] = useState<Style[]>([]);
   const [buyerOptions, setBuyerOptions] = useState<SelectItem[]>([]);
   const { showApiError, showSuccess } = useContext(LayoutContext);
+
+  const searchParams = useSearchParams();
+  const search = searchParams.get('search');
 
   const router = useRouter();
   const { fetchBuyersSelectOption } = useUtilityData();
@@ -110,6 +113,10 @@ const StylesPage = () => {
   useEffect(() => {
     initData();
   }, []);
+
+  useEffect(() => {
+    setFilters({...filters, search: search?.toString()})
+  }, [search])
 
   const onActionEditClick = (id: string | number) => {
     router.push(`${ROUTES.STYLES_EDIT}/${id}`);
