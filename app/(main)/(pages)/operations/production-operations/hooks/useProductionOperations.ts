@@ -88,6 +88,7 @@ export const useProductionOperations = () => {
     target: 0,
     process_id: '',
     operator_id: '',
+    style_id: '',
     remarks: ''
   });
 
@@ -113,7 +114,7 @@ export const useProductionOperations = () => {
   const storeTracks = async (e: FormData, autoSave: boolean = false) => {
     try {
       setLoading({ storingTracks: true });
-      await ProductionTrackService.storeTracks({
+      const { data } = await ProductionTrackService.storeTracks({
         tracks: e.tracks.map((r) => ({
           id: r.id ?? false,
           date: formatDbDate(r.date),
@@ -127,6 +128,9 @@ export const useProductionOperations = () => {
         })),
         delete_tracks: tracksToDelete
       });
+
+      setTracks(data);
+
       if (!autoSave) showSuccess('Production process successfully saved.');
       else console.log('Auto saved!');
     } catch (e: any) {
@@ -161,28 +165,7 @@ export const useProductionOperations = () => {
           process_ids: trackFilter.process_ids
         });
 
-        // Reset first
-        reset();
-
-        // Load the fetched data
-        data.forEach((d) => {
-          append({
-            id: d.id,
-            date: d.date,
-            section_id: d.section_id,
-            operator_id: d.operator_id,
-            style_id: d.style?.style_number, // @NOTE: The frontend will only gonna pass a actual style number and this is intentional
-            process_id: d.process_id,
-            target: d.target ?? 0,
-            remarks: d.remarks ?? '',
-            time: d.time ?? 0
-          });
-        });
-
-        // Add only new item if not data fetched
-        if (!data.length) {
-          addNewItem();
-        }
+        setTracks(data);
       } catch (e: any) {
         showApiError(e, 'Error fetching production process.');
       } finally {
@@ -190,6 +173,31 @@ export const useProductionOperations = () => {
       }
     }
   }, [isInitDataLoaded, trackFilter]);
+
+  const setTracks = (data: ProductionTrack[]) => {
+    // Reset first
+    reset();
+
+    // Load the fetched data
+    data.forEach((d) => {
+      append({
+        id: d.id,
+        date: d.date,
+        section_id: d.section_id,
+        operator_id: d.operator_id,
+        style_id: d.style?.style_number, // @NOTE: The frontend will only gonna pass a actual style number and this is intentional
+        process_id: d.process_id,
+        target: d.target ?? 0,
+        remarks: d.remarks ?? '',
+        time: d.time ?? 0
+      });
+    });
+
+    // Add only new item if not data fetched
+    if (!data.length) {
+      addNewItem();
+    }
+  };
 
   useEffect(() => {
     fetchTracks();
@@ -241,9 +249,11 @@ export const useProductionOperations = () => {
     update(rowIndex, { ...current, time: process?.time || 0 });
   };
 
-  useEffect(() => {
-    // autoSave(); // Temporary disable
-  }, [items]);
+  // useEffect(() => {
+  //   console.log(formState.touchedFields);
+  //   console.log(formState.touchedFields.tracks?.length)
+  //   if(formState.touchedFields.tracks?.length != 0) autoSave();
+  // }, [formState.touchedFields]);
 
   const autoSave = async () => {
     const hasEmptyTrack = items.some(
