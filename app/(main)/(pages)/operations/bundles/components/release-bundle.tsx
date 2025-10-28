@@ -138,6 +138,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
 
   useEffect(() => {
     setState({ ...state, show: visible });
+    resetAllState();
     if (visible) initData();
   }, [visible]);
 
@@ -153,6 +154,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
       bundles: []
     });
     setShouldPrint(false);
+    setWarningQuantities([]);
   };
   const setHide = () => {
     setState({ ...state, show: false });
