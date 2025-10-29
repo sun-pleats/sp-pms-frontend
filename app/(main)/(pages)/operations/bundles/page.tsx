@@ -9,7 +9,7 @@ import { PRINTING_MODELS } from '@/app/constants/barcode';
 import { ROUTES } from '@/app/constants/routes';
 import { StyleBundle } from '@/app/types/styles';
 import { StyleBundleService } from '@/app/services/StyleBundleService';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import BundleSinglePrintBarcode from '@/app/components/style/BundleSinglePrintBarcode';
 import CustomDatatable from '@/app/components/datatable/component';
 import Modal from '@/app/components/modal/component';
@@ -41,6 +41,9 @@ const BundlesPage = () => {
   const [selectedBundles, setSelectedBundles] = useState<StyleBundle[]>([]);
   const { showApiError, showSuccess } = useContext(LayoutContext);
 
+  const searchParams = useSearchParams();
+  const search = searchParams.get('search');
+
   const router = useRouter();
 
   const { clearFilter, filters, handleOnPageChange, tableLoading, first, rows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
@@ -70,12 +73,23 @@ const BundlesPage = () => {
     fetchBundles();
   }, [fetchBundles]);
 
+  useEffect(() => {
+    setFilters({ ...filters, search: search?.toString() });
+  }, [search]);
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters({ search: e.target.value });
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter} onSearchChange={handleSearchChange} />;
+    return (
+      <TableHeader
+        onClear={clearFilter}
+        searchFocus={filters.search ? true : false}
+        searchValue={filters.search ?? ''}
+        onSearchChange={handleSearchChange}
+      />
+    );
   };
 
   const dateBodyTemplate = (rowData: StyleBundle) => {

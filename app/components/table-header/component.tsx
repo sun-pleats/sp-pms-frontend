@@ -9,10 +9,11 @@ interface TableHeaderProps {
   children?: any;
   onClear?: () => void;
   searchValue?: string;
+  searchFocus?: boolean;
   onSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const TableHeader = ({ onClear, children, searchValue, onSearchChange }: TableHeaderProps) => {
+const TableHeader = ({ onClear, searchFocus, children, searchValue, onSearchChange }: TableHeaderProps) => {
   // const [searchValue, setGlobalFilterValue] = useState('');
 
   // const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +37,7 @@ const TableHeader = ({ onClear, children, searchValue, onSearchChange }: TableHe
               position: 'absolute',
               display: typeof searchValue === 'string' && searchValue.length > 0 ? '' : 'none'
             }}
+            autoFocus={searchFocus}
             onClick={onClear}
           />
         </IconField>

@@ -21,7 +21,7 @@ const DashboardUnreleasedBundles = ({ value, loading }: DashboardStatisticsProps
         severity="contrast"
         className="cursor-pointer"
         onClick={() => {
-          router.push(`/operations/bundle-flow?bundle=${bundle?.bundle_number}&bundle_id=${bundle?.id}`);
+          router.push(`/operations/bundles?search=${bundle?.bundle_number}`);
         }}
       />
     );
