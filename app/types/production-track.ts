@@ -12,6 +12,7 @@ export interface ProductionTrack {
   time: number | string;
   target: number | string;
   remarks: string;
+  classification: string;
   section?: Section;
   style_id?: string;
   style?: Style;

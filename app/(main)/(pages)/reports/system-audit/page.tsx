@@ -1,19 +1,17 @@
 'use client';
 
-import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { SystemAudit } from '@/app/types/system-audit';
+import { DataTable } from 'primereact/datatable';
+import { Dialog } from 'primereact/dialog';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
-
 import { ReportService } from '@/app/services/ReportService';
+import { ROUTES } from '@/app/constants/routes';
+import { SystemAudit } from '@/app/types/system-audit';
+import { useRouter } from 'next/navigation';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
-import { ROUTES } from '@/app/constants/routes';
-import React, { useContext, useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
-import { Tooltip } from 'primereact/tooltip';
-import { Dialog } from 'primereact/dialog';
 
 interface SearchFilter {
   keyword?: string;
@@ -53,8 +51,8 @@ const SystemAuditPage = () => {
       setLoading(true);
       try {
         // Pass signal to your service
-        const data = await ReportService.getAllSystemAudit(search ? { search } : {}, { signal: controller.signal });
-        setSystemAudits(data?.data?.data ?? []);
+        const { data } = await ReportService.getAllSystemAudit(search ? { search } : {}, { signal: controller.signal });
+        setSystemAudits(data?.data ?? []);
       } catch (error: any) {
         if (error.name !== 'AbortError') {
           console.error(error);

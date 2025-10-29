@@ -40,6 +40,7 @@ export interface OperatorProcess {
   process_name?: string;
   total_output?: number;
   target?: number;
+  classification?: string;
   outputs?: {
     [time: string]: number | string | undefined;
   };
@@ -53,6 +54,7 @@ export interface OperatorBuyer {
   process_name?: string;
   total_output?: number;
   target?: number;
+  classification?: string;
   outputs?: {
     [time: string]: number | string | undefined;
   };

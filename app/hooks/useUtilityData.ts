@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Section } from '../types/section';
 import { Process } from '../types/process';
 import { Operator } from '../types/operator';
-import { format24Hour, formatDate } from '../utils';
+import { format24Hour } from '../utils';
 import { Buyer } from '../types/buyers';
 
 export default function useUtilityData() {
@@ -115,6 +115,11 @@ export default function useUtilityData() {
     return data.map((d: Operator) => ({ value: d.id, label: d.name }));
   };
 
+  const fetchProductionTrackClassifications = async (): Promise<SelectItem[]> => {
+    const { data } = await UtilityService.productionTrackClassifications();
+    return data.map((d: string) => ({ value: d, label: d }));
+  };
+
   return {
     fetchItemTypes,
     fetchBuyersSelectOption,
@@ -129,6 +134,7 @@ export default function useUtilityData() {
     fetchOperators,
     fetchOperatorOptions,
     fetchBuyerOptions,
+    fetchProductionTrackClassifications,
     isOperatorLoading,
     isDepartmentLoading,
     isSectionLoading,

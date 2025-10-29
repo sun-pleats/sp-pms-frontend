@@ -34,5 +34,8 @@ class UtilityService {
   findBundles(keyword: string, perPage: number = 15): AxiosPromise<StyleBundlePaginatedResponse> {
     return apiClient.get(`${BASE_URL}/find-bundles`, { params: { q: keyword, page: 1, perPage } });
   }
+  productionTrackClassifications(): AxiosPromise<string[]> {
+    return apiClient.get(`${BASE_URL}/production-track-classifications`);
+  }
 }
 export default new UtilityService();

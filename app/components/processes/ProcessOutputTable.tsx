@@ -16,6 +16,7 @@ interface OperatorOutput {
   output_count?: number;
   total_count?: number;
   target?: number;
+  classification?: string;
   efficiency?: number;
   average?: number;
   [time: string]: number | string | undefined;

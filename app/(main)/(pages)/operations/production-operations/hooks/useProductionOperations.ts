@@ -46,10 +46,11 @@ export const useProductionOperations = () => {
   const [productionTracks, setProductionTracks] = useState<ProductionTrack[]>([]);
   const [operators, setOperators] = useState<Operator[]>([]);
   const [processOptions, setProcessOptions] = useState<SelectItem[]>();
+  const [classificationOptions, setClassificationOptions] = useState<SelectItem[]>();
   const [sectionOptions, setSectionOptions] = useState<SelectItem[]>();
   const [tracksToDelete, setTracksToDelete] = useState<string[]>([]);
   const { showApiError, showSuccess } = useContext(LayoutContext);
-  const { fetchProcessOptions, fetchOperators, fetchSectionSelectOption } = useUtilityData();
+  const { fetchProcessOptions, fetchOperators, fetchSectionSelectOption, fetchProductionTrackClassifications } = useUtilityData();
   const { control, handleSubmit, reset, getValues, formState } = useForm<FormData>({
     defaultValues: {
       tracks: []
@@ -89,7 +90,8 @@ export const useProductionOperations = () => {
     process_id: '',
     operator_id: '',
     style_id: '',
-    remarks: ''
+    remarks: '',
+    classification: ''
   });
 
   const setLoading = (loading: any) => {
@@ -189,7 +191,8 @@ export const useProductionOperations = () => {
         process_id: d.process_id,
         target: d.target ?? 0,
         remarks: d.remarks ?? '',
-        time: d.time ?? 0
+        time: d.time ?? 0,
+        classification: d.classification ?? ''
       });
     });
 
@@ -218,6 +221,9 @@ export const useProductionOperations = () => {
       // Fetch sections
       const sections = await fetchSectionSelectOption();
       setSectionOptions(sections);
+
+      const classifications = await fetchProductionTrackClassifications();
+      setClassificationOptions(classifications);
 
       setIsInitDataLoaded(true);
     } catch (error) {
@@ -264,6 +270,7 @@ export const useProductionOperations = () => {
         t.target == null ||
         t.time == null ||
         t.operator_id === '' ||
+        t.classification === '' ||
         t.process_id === '' ||
         t.style_id === '' ||
         t.target === '' ||
@@ -307,6 +314,7 @@ export const useProductionOperations = () => {
     items,
     control,
     trackFilter,
+    classificationOptions,
     setTrackFilter,
     updateOperatorTime,
     duplicateTracks

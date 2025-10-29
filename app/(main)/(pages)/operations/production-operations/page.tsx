@@ -35,7 +35,8 @@ const ProductionOperationPage = () => {
     storeTracks,
     fetchTracks,
     updateOperatorTime,
-    duplicateTracks
+    duplicateTracks,
+    classificationOptions
   } = useProductionOperations();
 
   useEffect(() => {
@@ -273,6 +274,29 @@ const ProductionOperationPage = () => {
                         </a>
                       </div>
                     </>
+                  )}
+                />
+              )}
+            />
+            <Column
+              field="classification"
+              header="Classification"
+              body={(_row: any, options: { rowIndex: number }) => (
+                <Controller
+                  control={control}
+                  name={`tracks.${options.rowIndex}.classification` as const}
+                  rules={{ required: 'Classification is required' }}
+                  render={({ field, fieldState }) => (
+                    <FormDropdown
+                      {...field}
+                      value={field.value}
+                      filter
+                      onChange={(e: any) => field.onChange(e.value)}
+                      placeholder="Select"
+                      errorMessage={fieldState.error?.message}
+                      isError={fieldState.error ? true : false}
+                      options={classificationOptions}
+                    />
                   )}
                 />
               )}
