@@ -29,6 +29,9 @@ class DashboardService {
   fetchRecentBundles(): AxiosPromise<StyleBundle[]> {
     return apiClient.get(`${BASE_URL}/recent-bundles`);
   }
+  fetchUnreleasedBundles(): AxiosPromise<StyleBundle[]> {
+    return apiClient.get(`${BASE_URL}/unreleased-bundles`);
+  }
   fetchOperatorEfficiency(): AxiosPromise<DashboardOperatorEfficiency[]> {
     return apiClient.get(`${BASE_URL}/operators-efficiency`);
   }

@@ -34,11 +34,11 @@ const DashboardStatistics = ({ value, loading }: DashboardStatisticsProps) => {
         <div className="card mb-0">
           <div className="flex justify-content-between mb-3">
             <div>
-              <span className="block text-500 font-medium mb-3">Bundles Released</span>
+              <span className="block text-500 font-medium mb-3">Created Bundles</span>
               {loading ? (
                 <Skeleton width="10rem" className="mb-2"></Skeleton>
               ) : (
-                <div className="text-900 font-medium text-xl">{value?.bundle_released ?? 0}</div>
+                <div className="text-900 font-medium text-xl">{value?.created_bundles ?? 0}</div>
               )}
             </div>
             <div className="flex align-items-center justify-content-center bg-cyan-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>

@@ -1,17 +1,16 @@
 import { StyleBundle } from '@/app/types/styles';
 import { useRouter } from 'next/navigation';
 import { Badge } from 'primereact/badge';
-import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 interface DashboardStatisticsProps {
   value?: StyleBundle[];
   loading?: boolean;
 }
 
-const DashboardRecentBundles = ({ value, loading }: DashboardStatisticsProps) => {
+const DashboardUnreleasedBundles = ({ value, loading }: DashboardStatisticsProps) => {
   const bundles = useMemo(() => value, [value]);
   const router = useRouter();
 
@@ -31,7 +30,7 @@ const DashboardRecentBundles = ({ value, loading }: DashboardStatisticsProps) =>
   return (
     <div className="card">
       <h5 className="flex gap-2">
-        <i className="pi pi-fw pi-check-circle text-xl text-green-500"></i>Recent Released Bundles
+        <i className="pi pi-fw pi-exclamation-triangle text-xl text-yellow-500"></i> Unreleased Bundles
       </h5>
       <DataTable value={bundles} rows={5} loading={loading} paginator>
         <Column field="style.style_number" header="Style No." style={{ width: '35%' }} />
@@ -42,4 +41,4 @@ const DashboardRecentBundles = ({ value, loading }: DashboardStatisticsProps) =>
     </div>
   );
 };
-export default DashboardRecentBundles;
+export default DashboardUnreleasedBundles;

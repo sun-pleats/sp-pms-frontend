@@ -43,12 +43,15 @@ export const useDashboard = () => {
   const [isFetchingYearlyEfficiency, setIsFetchingYearlyEfficiency] = useState<boolean>(false);
   const [isFetchingMonthlyEfficiency, setIsFetchingMonthlyEfficiency] = useState<boolean>(false);
   const [isFetchingWeeklyEfficiency, setIsFetchingWeeklyEfficiency] = useState<boolean>(false);
+  const [isFetchingUnreleasedBundles, setIsFetchingUnreleasedBundles] = useState<boolean>(false);
 
   const [isFetchingYearlyEfficiencyBySection, setIsFetchingYearlyEfficiencyBySection] = useState<boolean>(false);
   const [isFetchingOperatorEff, setIsFetchingOperatorEff] = useState<boolean>(false);
   const [isFetchingSections, setIsFetchingSections] = useState<boolean>(false);
 
   const [recentBundles, setRecentBundles] = useState<StyleBundle[]>([]);
+  const [unreleasedBundles, setUnreleasedBundles] = useState<StyleBundle[]>([]);
+
   const [pageFilter, setPageFilter] = useState<PageFilter>({
     year: moment().year(),
     efficiency_overview: {
@@ -93,6 +96,13 @@ export const useDashboard = () => {
     const { data } = await DashboardService.fetchRecentBundles();
     setRecentBundles(data);
     setIsFetchingRecentBundles(false);
+  }, []);
+
+  const fetchUnreleasedBundles = useCallback(async () => {
+    setIsFetchingUnreleasedBundles(true);
+    const { data } = await DashboardService.fetchUnreleasedBundles();
+    setUnreleasedBundles(data);
+    setIsFetchingUnreleasedBundles(false);
   }, []);
 
   const fetchYearlyEfficiency = useCallback(async () => {
@@ -144,6 +154,10 @@ export const useDashboard = () => {
   }, [fetchRecentBundles]);
 
   useEffect(() => {
+    fetchUnreleasedBundles();
+  }, [fetchUnreleasedBundles]);
+
+  useEffect(() => {
     fetchStatus();
   }, [fetchStatus]);
 
@@ -175,6 +189,7 @@ export const useDashboard = () => {
     fetchYearlyEfficiency,
     fetchYearlyEfficiencyBySection,
     isFetchingMonthlyEfficiency,
+    isFetchingUnreleasedBundles,
     isFetchingOperatorEff,
     isFetchingRecentBundles,
     isFetchingSections,
@@ -186,6 +201,7 @@ export const useDashboard = () => {
     operatorEfficiency,
     pageFilter,
     recentBundles,
+    unreleasedBundles,
     sectionOptions,
     selectedSection,
     setPageFilter,

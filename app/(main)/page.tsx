@@ -1,13 +1,14 @@
 'use client';
 
+import { SelectItem } from 'primereact/selectitem';
 import { useDashboard } from './(dashboard)/useDashboard';
 import DashboardEfficiencyOverview from '../components/dashboard/DashboardEfficiencyOverview';
-import DashboardStatistics from '../components/dashboard/DashboardStatistics';
-import React from 'react';
+import DashboardEfficiencyOverviewBySection from '../components/dashboard/DashboardEfficiencyOverviewBySection';
 import DashboardOperatorPerformer from '../components/dashboard/DashboardOperatorPerformer';
 import DashboardRecentBundles from '../components/dashboard/DashboardRecentBundles';
-import DashboardEfficiencyOverviewBySection from '../components/dashboard/DashboardEfficiencyOverviewBySection';
-import { SelectItem } from 'primereact/selectitem';
+import DashboardStatistics from '../components/dashboard/DashboardStatistics';
+import DashboardUnreleasedBundles from '../components/dashboard/DashboardUnreleasedBundles';
+import React from 'react';
 
 const Dashboard = () => {
   const {
@@ -30,6 +31,8 @@ const Dashboard = () => {
     isFetchingYearlyEfficiencyBySection,
     weeklyEfficiency,
     monthlyEfficiency,
+    unreleasedBundles,
+    isFetchingUnreleasedBundles,
     setPageFilter
   } = useDashboard();
 
@@ -42,10 +45,11 @@ const Dashboard = () => {
       <div className="grid">
         <DashboardStatistics loading={isFetchingStats} value={stats} />
         <div className="col-12 xl:col-6">
-          <DashboardRecentBundles loading={isFetchingRecentBundles} value={recentBundles} />
+          <DashboardUnreleasedBundles loading={isFetchingUnreleasedBundles} value={unreleasedBundles} />
           <DashboardOperatorPerformer loading={isFetchingOperatorEff} value={operatorEfficiency} />
         </div>
         <div className="col-12 xl:col-6">
+          <DashboardRecentBundles loading={isFetchingRecentBundles} value={recentBundles} />
           <DashboardEfficiencyOverview
             loading={isFetchingYearlyEfficiency || isFetchingMonthlyEfficiency || isFetchingWeeklyEfficiency}
             valueYear={yearlyEfficiency}

@@ -1,6 +1,6 @@
 export interface DashboardStats {
   in_production?: number;
-  bundle_released?: number;
+  created_bundles?: number;
   month_efficiency?: number;
   styles_completed?: {
     SS: number;

@@ -236,7 +236,9 @@ const StylesPage = () => {
         confirmSeverity='info'
         onConfirm={handleCompleteStyle}
       >
-        <p>Are you sure you want to update the status to complete?</p>
+        <p>Are you sure you want to update the status to complete?<br></br>
+        <small>Please also be aware that the style will be completed automatically when all the style bundles exits <strong>FINAL QC.</strong></small>
+        </p>
         {isSaving && (
           <div className="col-12 flex justify-content-center align-items-center">
             <ProgressSpinner style={{ width: '50px', height: '50px' }} />
