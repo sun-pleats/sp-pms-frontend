@@ -50,6 +50,12 @@ export function getListOfYearOptions(): SelectItem[] {
 }
 
 export function convertDurationLabel(from: any, to: any) {
+  if (!from || !to)
+    return {
+      label: `0`,
+      duration_seconds: 0
+    };
+
   const diffSeconds = Math.max(0, differenceInSeconds(parseISO(from), parseISO(to)));
 
   // Convert seconds → minutes → hours → days

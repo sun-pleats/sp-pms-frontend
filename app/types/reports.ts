@@ -68,6 +68,7 @@ export interface ReportStyleBundleEntryLog {
   color?: string;
   entry_by_name?: string;
   exit_by_name?: string;
+  released_at?: string;
 }
 
 export interface ReportShipmentStatus {

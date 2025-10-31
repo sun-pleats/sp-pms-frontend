@@ -18,7 +18,7 @@ const NodeCard: React.FC<{ data: any }> = ({ data }) => {
   const { department, entryTime, exitTime, user, durationLabel } = data;
 
   const header = (
-    <div className="flex align-items-center gap-2">
+    <div className="flex align-items-center gap-2 p-2">
       <i className="pi pi-building text-blue-500" />
       <span className="font-semibold text-sm">{department}</span>
     </div>
@@ -43,7 +43,7 @@ const NodeCard: React.FC<{ data: any }> = ({ data }) => {
         </div>
         <div>
           <i className="pi pi-sign-out mr-1 text-red-500" />
-          {format(parseISO(exitTime), 'MMM d, HH:mm')}
+          {exitTime ? format(parseISO(exitTime), 'MMM d, HH:mm') : 'No available'}
         </div>
       </div>
       <Handle type="target" position={Position.Left} style={{ visibility: 'hidden' }} />

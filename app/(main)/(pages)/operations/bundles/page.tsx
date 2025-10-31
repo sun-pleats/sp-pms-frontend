@@ -286,6 +286,13 @@ const BundlesPage = () => {
         <Column field="section.name" header="Section" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="released_at" header="Released At" body={dateBodyTemplate} style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column
+          field="latest_style_bundle_entry_log.department.name"
+          alignFrozen="right"
+          frozen
+          header="Location"
+          style={{ width: 'auto', whiteSpace: 'nowrap' }}
+        />
+        <Column
           field="balance"
           header="Action"
           body={actionBodyTemplate}

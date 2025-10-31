@@ -2,6 +2,7 @@
 
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
+import { currentMonthDates, formatDbDate } from '@/app/utils';
 import { DataTable } from 'primereact/datatable';
 import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
 import { LayoutContext } from '@/layout/context/layoutcontext';
@@ -9,6 +10,7 @@ import { ReportService } from '@/app/services/ReportService';
 import { ReportStyleBundleEntryLog } from '@/app/types/reports';
 import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
+import { useRouter } from 'next/navigation';
 import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
 import FormRangeCalendar from '@/app/components/form/range-calendar/component';
 import PageHeader from '@/app/components/page-header/component';
@@ -16,7 +18,6 @@ import PageTile from '@/app/components/page-title/component';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import useUtilityData from '@/app/hooks/useUtilityData';
-import { currentMonthDates, formatDbDate } from '@/app/utils';
 
 interface SearchFilter {
   keyword?: string;
@@ -32,10 +33,10 @@ const BundleReleasePage = () => {
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [fetchingUtils, setFetchingUtils] = useState(false);
-  const abortControllerRef = React.useRef<AbortController | null>(null);
   const [departmentOptions, setDepartments] = useState<SelectItem[]>([]);
   const { fetchDepartmentOptions } = useUtilityData();
   const { showApiError, showSuccess } = useContext(LayoutContext);
+  const router = useRouter();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter({ keyword: e.target.value });
@@ -105,6 +106,22 @@ const BundleReleasePage = () => {
     }
   };
 
+  const bundleBodyTemplate = (rowData: ReportStyleBundleEntryLog) => {
+    return (
+      <>
+        {rowData.released_at && <i className="pi pi-check-circle text-green-500 mr-2" title="Released"></i>}
+        <span
+          className="cursor-pointer"
+          onClick={() => {
+            router.push(`/operations/bundle-flow?bundle=${rowData?.bundle_number}&bundle_id=${rowData?.style_bundle_id}`);
+          }}
+        >
+          {rowData.bundle_number}
+        </span>
+      </>
+    );
+  };
+
   return (
     <>
       <PageTile title="Bundle Releases" icon="pi pi-fw pi-box" url={ROUTES.REPORTS.SYSTEM_AUDIT.INDEX} />
@@ -153,7 +170,7 @@ const BundleReleasePage = () => {
         header={renderHeader()}
       >
         <Column field="style_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Style No." />
-        <Column field="bundle_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Bundle No." />
+        <Column field="bundle_number" body={bundleBodyTemplate} style={{ width: 'auto', whiteSpace: 'nowrap' }} header="Bundle No." />
         <Column field="quantity" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Released QTY" />
         <Column field="roll_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Roll No." />
         <Column field="size_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Size No." />

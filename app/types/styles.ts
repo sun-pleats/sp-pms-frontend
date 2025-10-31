@@ -101,6 +101,7 @@ export interface StyleBundle {
   released?: boolean;
   status?: string;
   released_at?: string;
+  latest_style_bundle_entry_log?: StyleBundleEntryLog;
 }
 
 export interface StyleBundleEntryLog {
