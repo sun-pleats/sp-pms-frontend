@@ -171,6 +171,7 @@ const BundleReleasePage = () => {
       >
         <Column field="style_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Style No." />
         <Column field="bundle_number" body={bundleBodyTemplate} style={{ width: 'auto', whiteSpace: 'nowrap' }} header="Bundle No." />
+        <Column field="section_name" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Section" />
         <Column field="quantity" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Released QTY" />
         <Column field="roll_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Roll No." />
         <Column field="size_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Size No." />
