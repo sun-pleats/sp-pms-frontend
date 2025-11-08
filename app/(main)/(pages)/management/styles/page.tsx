@@ -49,7 +49,7 @@ const StylesPage = () => {
   const { fetchBuyersSelectOption } = useUtilityData();
   const { updateStatus, isSaving } = useModelStatus();
 
-  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFirst, setRows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
     useDatatable();
 
   const [styles, setStyle] = useState<Style[]>([]);
@@ -115,7 +115,7 @@ const StylesPage = () => {
   }, []);
 
   useEffect(() => {
-    setFilters({...filters, search: search?.toString()})
+    setFilters({ ...filters, search: search?.toString() })
   }, [search])
 
   const onActionEditClick = (id: string | number) => {
@@ -237,7 +237,7 @@ const StylesPage = () => {
         onConfirm={handleCompleteStyle}
       >
         <p>Are you sure you want to update the status to complete?<br></br>
-        <small>Please also be aware that the style will be completed automatically when all the style bundles exits <strong>FINAL QC.</strong></small>
+          <small>Please also be aware that the style will be completed automatically when all the style bundles exits <strong>FINAL QC.</strong></small>
         </p>
         {isSaving && (
           <div className="col-12 flex justify-content-center align-items-center">

@@ -2,72 +2,61 @@
 
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import { formatDbDate } from '@/app/utils';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ReportService } from '@/app/services/ReportService';
 import { ReportShipmentStatus } from '@/app/types/reports';
 import { ROUTES } from '@/app/constants/routes';
+import CustomDatatable from '@/app/components/datatable/component';
 import FormRangeCalendar from '@/app/components/form/range-calendar/component';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
-import { formatDbDate } from '@/app/utils';
-
-interface SearchFilter {
-  keyword?: string;
-  dates?: Date[];
-}
+import useDatatable from '@/app/hooks/useDatatable';
 
 const ShipmentStatusPage = () => {
   const [ShipmentStatuses, setShipmentStatuses] = useState<ReportShipmentStatus[]>([]);
-  const [filter, setFilter] = useState<SearchFilter>({});
-  const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const { showApiError, showSuccess } = useContext(LayoutContext);
+  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+    useDatatable();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter({ keyword: e.target.value });
-  };
-
-  const clearFilter = () => {
-    setFilter({
-      keyword: ''
-    });
-    fetchShipmentStatuses();
+    setFilters({ keyword: e.target.value });
   };
 
   const fetchShipmentStatuses = useCallback(async () => {
-    setLoading(true);
+    setTableLoading(true);
     try {
       // Pass signal to your service
       const data = await ReportService.getAllShipmentStatus({
-        search: filter.keyword,
-        dates: filter.dates ? filter.dates?.flatMap((date) => formatDbDate(date)) : undefined
+        search: filters.search,
+        dates: filters.dates ? filters.dates?.flatMap((date: any) => formatDbDate(date)) : undefined
       });
+      setTotalRecords(data?.data.total ?? 0);
       setShipmentStatuses(data?.data.data ?? []);
     } catch (error: any) {
       showApiError(error, 'Failed fetching report.');
     } finally {
-      setLoading(false);
+      setTableLoading(false);
     }
-  }, [filter]);
+  }, [filters]);
 
   useEffect(() => {
     fetchShipmentStatuses();
   }, [fetchShipmentStatuses]);
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
+    return <TableHeader onClear={clearFilter} searchValue={filters.search ?? ''} onSearchChange={handleSearchChange} />;
   };
 
   const onExportExcelClick = async () => {
     try {
       setDownloading(true);
       const response = await ReportService.exportShipmentStatus({
-        search: filter.keyword,
-        dates: filter.dates ? filter.dates?.flatMap((date) => formatDbDate(date)) : undefined
+        search: filters.search,
+        dates: filters.dates ? filters.dates?.flatMap((date: any) => formatDbDate(date)) : undefined
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
@@ -92,8 +81,8 @@ const ShipmentStatusPage = () => {
         <div className="flex flex-align-items-center mr-2">
           <div className="flex align-items-center gap-2">
             <FormRangeCalendar
-              value={filter.dates}
-              onChange={(e: any) => setFilter({ ...filter, dates: e.value })}
+              value={filters.dates}
+              onChange={(e: any) => setFilters({ ...filters, dates: e.value })}
               label="Shipment Date"
               placeholder="Select Date"
               readOnlyInput
@@ -111,17 +100,14 @@ const ShipmentStatusPage = () => {
         </div>
       </div>
 
-      <DataTable
+      <CustomDatatable
         value={ShipmentStatuses}
-        paginator
-        className="custom-table p-datatable-gridlines"
-        showGridlines
-        rows={10}
-        dataKey="id"
-        filterDisplay="menu"
-        loading={loading}
-        emptyMessage={EMPTY_TABLE_MESSAGE}
+        loading={tableLoading}
+        onPage={handleOnPageChange}
         header={renderHeader()}
+        first={first}
+        rows={rows}
+        totalRecords={totalRecords}
       >
         <Column field="style_no" header="Style No." style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="shipment_date" header="Shipment Date" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
@@ -137,7 +123,7 @@ const ShipmentStatusPage = () => {
         <Column field="kumitate_sewing" header="Kumitate Sewing" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="kumitate_chuukan_qc" header="Kumitate Chuukan QC" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
         <Column field="final_qc" header="Final QC" style={{ width: 'auto', whiteSpace: 'nowrap' }} />
-      </DataTable>
+      </CustomDatatable>
     </>
   );
 };
