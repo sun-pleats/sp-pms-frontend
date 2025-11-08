@@ -29,11 +29,14 @@ const ShipmentStatusPage = () => {
   const fetchShipmentStatuses = useCallback(async () => {
     setTableLoading(true);
     try {
-      // Pass signal to your service
-      const data = await ReportService.getAllShipmentStatus({
+      const params = {
         search: filters.search,
-        dates: filters.dates ? filters.dates?.flatMap((date: any) => formatDbDate(date)) : undefined
-      });
+        page: filters.page,
+        dates: filters.dates ? filters.dates?.flatMap((date: any) => formatDbDate(date)) : undefined,
+        per_page: filters.per_page
+      };
+      // Pass signal to your service
+      const data = await ReportService.getAllShipmentStatus(params);
       setTotalRecords(data?.data.total ?? 0);
       setShipmentStatuses(data?.data.data ?? []);
     } catch (error: any) {
