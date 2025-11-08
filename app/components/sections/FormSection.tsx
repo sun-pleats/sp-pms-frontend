@@ -4,7 +4,6 @@ import FormInputText from '../form/input-text/component';
 import { useEffect } from 'react';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { SectionForm } from '@/app/types/section';
 import FormDropdown from '../form/dropdown/component';
 import { SelectItem } from 'primereact/selectitem';
