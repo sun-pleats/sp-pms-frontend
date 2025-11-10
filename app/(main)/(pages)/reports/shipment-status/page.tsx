@@ -23,7 +23,7 @@ const ShipmentStatusPage = () => {
     useDatatable();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters({ keyword: e.target.value });
+    setFilters({ search: e.target.value });
   };
 
   const fetchShipmentStatuses = useCallback(async () => {
