@@ -124,8 +124,8 @@ const BundleReleasePage = () => {
 
   return (
     <>
-      <PageTile title="Bundle Releases" icon="pi pi-fw pi-box" url={ROUTES.REPORTS.SYSTEM_AUDIT.INDEX} />
-      <PageHeader titles={['Reports', 'Bundle Releases']} />
+      <PageTile title="Bundle Entry Log Report" icon="pi pi-fw pi-box" url={ROUTES.REPORTS.SYSTEM_AUDIT.INDEX} />
+      <PageHeader titles={['Reports', 'Bundle Entry Log Report']} />
       <div className="flex flex-align-items-center">
         <div className="flex flex-align-items-center mr-2">
           <div className="flex align-items-center gap-2">
