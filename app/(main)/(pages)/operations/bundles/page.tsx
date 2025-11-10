@@ -22,11 +22,13 @@ import ReleaseBundles from './components/release-bundle';
 import TableHeader from '@/app/components/table-header/component';
 import useDatatable from '@/app/hooks/useDatatable';
 import ScanReleaseBundle from './components/scan-release';
+import { ReportService } from '@/app/services/ReportService';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
   scanReleaseShow?: boolean;
   releaseModalShow?: boolean;
+  isDownloading?: boolean;
   showSinglePrintBarcode?: boolean;
   showRelease?: boolean;
   showMultiPrintBarcode?: boolean;
@@ -212,6 +214,30 @@ const BundlesPage = () => {
     return `${data.quantity}${data.postfix ?? ''}`;
   };
 
+  const handleExport = async () => {
+    try {
+      setPageState({ ...pageState, isDownloading: true });
+      const params = {
+        search: filters.search,
+        page: filters.page,
+        per_page: filters.per_page
+      };
+      const response = await ReportService.exportReleasedBundles(params);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'released-bundles.xlsx');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      showSuccess('Successfully exported and please check the download files.');
+    } catch (error) {
+      showApiError(error, 'Error exporting');
+    } finally {
+      setPageState({ ...pageState, isDownloading: false });
+    }
+  };
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'F8') {
@@ -249,6 +275,15 @@ const BundlesPage = () => {
             size="small"
             label="Print Barcodes"
             icon="pi pi-print"
+            style={{ marginRight: '.5em' }}
+          />
+          <Button
+            onClick={handleExport}
+            loading={pageState.isDownloading}
+            severity="success"
+            size="small"
+            label="Export"
+            icon="pi pi-file-excel"
             style={{ marginRight: '.5em' }}
           />
           <Button
