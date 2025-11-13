@@ -6,23 +6,28 @@ import { Column } from 'primereact/column';
 import { formatDate } from '@/app/utils';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { PRINTING_MODELS } from '@/app/constants/barcode';
+import { ReportService } from '@/app/services/ReportService';
 import { ROUTES } from '@/app/constants/routes';
+import { SelectItem } from 'primereact/selectitem';
 import { StyleBundle } from '@/app/types/styles';
 import { StyleBundleService } from '@/app/services/StyleBundleService';
 import { useRouter, useSearchParams } from 'next/navigation';
 import BundleSinglePrintBarcode from '@/app/components/style/BundleSinglePrintBarcode';
 import CustomDatatable from '@/app/components/datatable/component';
+import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
 import Modal from '@/app/components/modal/component';
 import PageAction from '@/app/components/page-action/component';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
 import PrintBarcode from '@/app/components/barcode/PrintBarcode';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import ReleaseBundles from './components/release-bundle';
+import ScanReleaseBundle from './components/scan-release';
 import TableHeader from '@/app/components/table-header/component';
 import useDatatable from '@/app/hooks/useDatatable';
-import ScanReleaseBundle from './components/scan-release';
-import { ReportService } from '@/app/services/ReportService';
+import useUtilityData from '@/app/hooks/useUtilityData';
+import { Checkbox } from 'primereact/checkbox';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 interface BundlePageState {
   deleteModalShow?: boolean;
@@ -32,6 +37,8 @@ interface BundlePageState {
   showSinglePrintBarcode?: boolean;
   showRelease?: boolean;
   showMultiPrintBarcode?: boolean;
+  showExport?: boolean;
+
   showUploading?: boolean;
   deleteId?: string | number;
 }
@@ -41,10 +48,14 @@ const BundlesPage = () => {
   const [selectedBundle, setSelectedBundle] = useState<StyleBundle | undefined>(undefined);
   const [bundles, setBundles] = useState<StyleBundle[]>([]);
   const [selectedBundles, setSelectedBundles] = useState<StyleBundle[]>([]);
-  const { showApiError, showSuccess } = useContext(LayoutContext);
+  const [downloadNoLimit, setDownloadNoLimit] = useState<boolean>(true);
 
+  const { showApiError, showSuccess } = useContext(LayoutContext);
+  const [sectionOptions, setSectionOptions] = useState<SelectItem[]>([]);
   const searchParams = useSearchParams();
   const search = searchParams.get('search');
+
+  const { fetchSectionOptions } = useUtilityData();
 
   const router = useRouter();
 
@@ -57,7 +68,8 @@ const BundlesPage = () => {
       const params = {
         search: filters.search,
         page: filters.page,
-        per_page: filters.per_page
+        per_page: filters.per_page,
+        section_ids: filters.section_ids
       };
 
       const data = await StyleBundleService.getBundles(params);
@@ -83,6 +95,10 @@ const BundlesPage = () => {
     setFilters({ search: e.target.value });
   };
 
+  const handlePageFilter = (e: any) => {
+    setFilters({ ...filters, section_ids: e.value });
+  };
+
   const renderHeader = () => {
     return (
       <TableHeader
@@ -90,9 +106,28 @@ const BundlesPage = () => {
         searchFocus={filters.search ? true : false}
         searchValue={filters.search ?? ''}
         onSearchChange={handleSearchChange}
-      />
+      >
+        <div className="w-full md:w-20rem">
+          <FormMultiDropdown
+            value={filters.section_ids}
+            onChange={handlePageFilter}
+            filter
+            options={sectionOptions}
+            placeholder="Filter Section"
+            className="w-full"
+          />
+        </div>
+      </TableHeader>
     );
   };
+
+  const initData = async () => {
+    setSectionOptions(await fetchSectionOptions());
+  };
+
+  useEffect(() => {
+    initData();
+  }, []);
 
   const dateBodyTemplate = (rowData: StyleBundle) => {
     if (!rowData.released_at) return null;
@@ -215,12 +250,15 @@ const BundlesPage = () => {
   };
 
   const handleExport = async () => {
+    if (pageState.isDownloading) return;
+
     try {
       setPageState({ ...pageState, isDownloading: true });
       const params = {
         search: filters.search,
         page: filters.page,
-        per_page: filters.per_page
+        per_page: filters.per_page,
+        no_limit: downloadNoLimit
       };
       const response = await ReportService.exportReleasedBundles(params);
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -278,7 +316,7 @@ const BundlesPage = () => {
             style={{ marginRight: '.5em' }}
           />
           <Button
-            onClick={handleExport}
+            onClick={() => setPageState({ ...pageState, showExport: true })}
             loading={pageState.isDownloading}
             severity="success"
             size="small"
@@ -356,6 +394,25 @@ const BundlesPage = () => {
       >
         <p>Are you sure you want to delete the record?</p>
       </Modal>
+      <Modal
+        title="Export Released Bundles"
+        visible={pageState.showExport}
+        onHide={() => setPageState({ ...pageState, showExport: false })}
+        confirmSeverity="danger"
+        onConfirm={handleExport}
+      >
+        {pageState.isDownloading ? (
+          <div className="col-12 flex justify-content-center align-items-center flex-column">
+            <ProgressSpinner style={{ width: '50px', height: '50px' }} />
+            <p>This may take a while sometimes please wait a moment...</p>
+          </div>
+        ) : (
+          <div className="flex align-items-center mb-5 mt-2">
+            <Checkbox name="category" value={downloadNoLimit} onChange={(e) => setDownloadNoLimit(e.checked ?? false)} checked={downloadNoLimit} />
+            <label className="ml-2">Export the release bundle list no limit?</label>
+          </div>
+        )}
+      </Modal>
       <ScanReleaseBundle
         visible={pageState.scanReleaseShow}
         onHide={() => {
@@ -372,6 +429,7 @@ const BundlesPage = () => {
       <PrintBarcode
         model={PRINTING_MODELS.STYLE_BUNDLE}
         ids={selectedBundles?.flatMap((r) => r.id?.toString() ?? '')}
+        onHide={() => setPageState({ ...pageState, showMultiPrintBarcode: false })}
         visible={pageState.showMultiPrintBarcode}
       />
     </>

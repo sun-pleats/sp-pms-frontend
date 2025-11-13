@@ -32,8 +32,7 @@ const BundleSinglePrintBarcode = ({ bundle, visible, onHide }: BundleSinglePrint
   const [barcode, setBarcode] = useState<string>('');
   const [selectedPrinter, setSelectedPrinter] = useState<string | null>();
   const [printerOptions, setPrinterOptions] = useState<SelectItem[]>([]);
-
-  const { showError, showApiError } = useContext(LayoutContext);
+  const { showError } = useContext(LayoutContext);
   const { queuePrintStyleBundle, fetchPrintersSelectOptions } = useBarcodePrinting();
 
   useEffect(() => {
