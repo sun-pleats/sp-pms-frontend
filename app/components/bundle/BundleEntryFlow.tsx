@@ -27,7 +27,7 @@ const NodeCard: React.FC<{ data: any }> = ({ data }) => {
   const footer = (
     <div className="flex justify-content-between align-items-center text-xs text-gray-600 gap-1">
       <div className="flex align-items-center gap-1">
-        <Avatar label={user.charAt(0)} size="small" shape="circle" />
+        <Avatar label={user.charAt(0)} size="normal" shape="circle" />
         <span>{user}</span>
       </div>
       <Tag severity="info" value={`${durationLabel}`} />
