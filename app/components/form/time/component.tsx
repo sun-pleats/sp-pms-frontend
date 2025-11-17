@@ -12,12 +12,13 @@ interface FormTimeProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
 
-const FormTime = forwardRef<HTMLInputElement, FormTimeProps>(({ label = 'Label', value, isError, onChange, errorMessage, className }, ref) => (
+const FormTime = forwardRef<HTMLInputElement, FormTimeProps>(({ label, value, isError, onChange, placeholder, errorMessage, className }, ref) => (
   <div className="field">
-    <label htmlFor="name">{label}</label>
+    {label && <label htmlFor="name">{label}</label>}
     <Calendar
       inputRef={ref}
       value={value}
+      placeholder={placeholder}
       className={classNames(
         className,
         {

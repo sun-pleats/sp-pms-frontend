@@ -15,6 +15,7 @@ import React, { useContext, useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import CustomDatatable from '@/app/components/datatable/component';
 import useDatatable from '@/app/hooks/useDatatable';
+import { Badge } from 'primereact/badge';
 
 interface SectionPageState {
   deleteModalShow?: boolean;
@@ -92,6 +93,16 @@ const SectionsPage = () => {
     return formatDate(new Date(rowData.created_at ?? ''));
   };
 
+  const breakTimesBodyTemplate = (rowData: Section) => {
+    return (
+      <div className="grid gap-2">
+        {rowData.breaktimes?.map((r) => (
+          <Badge title={`${r.time_start}-${r.time_end} -> ${r.type}`} value={`${r.time_start} ${r.type}`} />
+        ))}
+      </div>
+    );
+  };
+
   const onActionEditClick = (id: string | number) => {
     router.push(`${ROUTES.SECTION.EDIT}/${id}`);
   };
@@ -150,8 +161,7 @@ const SectionsPage = () => {
         <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
         <Column field="department.name" header="Department" style={{ minWidth: '12rem' }} />
-        <Column field="break_time_start" header="Break Time Start" style={{ minWidth: '12rem' }} />
-        <Column field="break_time_end" header="Break Time End" style={{ minWidth: '12rem' }} />
+        <Column field="breaktimes" header="Breaktimes" body={breakTimesBodyTemplate} />
         <Column field="shift_start" header="Shift Start" style={{ minWidth: '12rem' }} />
         <Column field="shift_end" header="Shift End" style={{ minWidth: '12rem' }} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(section: Section) => section?.created_by?.name} />

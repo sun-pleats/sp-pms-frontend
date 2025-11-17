@@ -1,12 +1,12 @@
 'use client';
 
-import FormInputText from '../form/input-text/component';
-import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SectionForm } from '@/app/types/section';
-import FormDropdown from '../form/dropdown/component';
 import { SelectItem } from 'primereact/selectitem';
-import { DefaultFormData } from '@/app/types/form';
+import { useEffect } from 'react';
+import FormDropdown from '../form/dropdown/component';
+import FormInputText from '../form/input-text/component';
+import FormSectionBreakTime from './FormSectionBreakTime';
 import FormTime from '../form/time/component';
 
 interface FormSectionProps {
@@ -19,29 +19,21 @@ interface FormSectionProps {
   };
 }
 
-interface FormData extends DefaultFormData {
-  name: string;
-  department_id?: string;
-  break_time_start?: string;
-  break_time_end?: string;
-}
-
 const FormSection = ({ onSubmit, children, departments, value, loading }: FormSectionProps) => {
   const { control, handleSubmit, reset } = useForm<SectionForm>({
     defaultValues: {
       name: value?.name || '',
       department_id: value?.department_id || '',
-      break_time_start: value?.break_time_start || '',
-      break_time_end: value?.break_time_end || '',
       shift_end: value?.shift_end || '',
-      shift_start: value?.shift_start || ''
+      shift_start: value?.shift_start || '',
+      breaktimes: []
     }
   });
 
   useEffect(() => {
     if (value) {
       const timeStringToDate = (timeStr?: string) => {
-        if (!timeStr) return null;
+        if (!timeStr) return undefined;
         const [hour, minute, second] = timeStr.split(':');
         const now = new Date();
         now.setHours(Number(hour) || 0);
@@ -54,10 +46,13 @@ const FormSection = ({ onSubmit, children, departments, value, loading }: FormSe
       reset({
         name: value.name || '',
         department_id: value.department_id || '',
-        break_time_start: timeStringToDate(value.break_time_start),
-        break_time_end: timeStringToDate(value.break_time_end),
-        shift_end: timeStringToDate(value.shift_end),
-        shift_start: timeStringToDate(value.shift_start)
+        shift_end: timeStringToDate(value.shift_end?.toString()),
+        shift_start: timeStringToDate(value.shift_start?.toString()),
+        breaktimes: value.breaktimes?.map((r) => ({
+          ...r,
+          time_end: timeStringToDate(r.time_end?.toString()),
+          time_start: timeStringToDate(r.time_start?.toString())
+        }))
       });
     }
   }, [value, reset]);
@@ -95,25 +90,6 @@ const FormSection = ({ onSubmit, children, departments, value, loading }: FormSe
           />
         )}
       />
-
-      <Controller
-        name="break_time_start"
-        control={control}
-        rules={{ required: 'Break time start is required' }}
-        render={({ fieldState, field }) => (
-          <FormTime {...field} label="Break Time Start" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
-        )}
-      />
-
-      <Controller
-        name="break_time_end"
-        control={control}
-        rules={{ required: 'Break time end is required' }}
-        render={({ fieldState, field }) => (
-          <FormTime {...field} label="Break Time End" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
-        )}
-      />
-
       <Controller
         name="shift_start"
         control={control}
@@ -130,6 +106,7 @@ const FormSection = ({ onSubmit, children, departments, value, loading }: FormSe
           <FormTime {...field} label="Shift End" errorMessage={fieldState.error?.message} isError={fieldState.error ? true : false} />
         )}
       />
+      <FormSectionBreakTime control={control} />
       {children}
     </form>
   );
