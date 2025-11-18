@@ -11,6 +11,7 @@ import moment from 'moment';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import useUtilityData from '@/app/hooks/useUtilityData';
 import { useIdle } from '@/app/hooks/useIdle';
+import { ReportService } from '@/app/services/ReportService';
 
 interface TrackFilter {
   date?: any;
@@ -100,6 +101,26 @@ export const useProductionOperations = () => {
       ...loadings,
       ...loading
     });
+  };
+
+  const onExportProcesSheetClick = async () => {
+    try {
+      const date = moment(trackFilter.date).format('YYYY-MM-DD');
+      const response = await ReportService.exportProcessSheet({
+        date,
+        section_id: trackFilter.section_id
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `process-sheet-${date}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      showSuccess('Successfully exported and please check the download files.');
+    } catch (error) {
+      showApiError(error, 'Error exporting');
+    }
   };
 
   const getProcessOptions = (rowIndex: number): SelectItem[] => {
@@ -320,6 +341,7 @@ export const useProductionOperations = () => {
     classificationOptions,
     setTrackFilter,
     updateOperatorTime,
-    duplicateTracks
+    duplicateTracks,
+    onExportProcesSheetClick
   };
 };

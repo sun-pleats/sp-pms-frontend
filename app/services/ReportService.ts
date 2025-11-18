@@ -42,5 +42,8 @@ export const ReportService = {
   },
   exportReleasedBundles(params?: Record<string, any>): AxiosPromise<Blob> {
     return apiClient.get(`${BASE_URL}/exports/released-bundles`, { params, responseType: 'blob' });
+  },
+  exportProcessSheet(params?: Record<string, any>): AxiosPromise<Blob> {
+    return apiClient.get(`${BASE_URL}/exports/process-sheet`, { params, responseType: 'blob' });
   }
 };

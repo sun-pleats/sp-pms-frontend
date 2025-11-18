@@ -36,6 +36,7 @@ const ProductionOperationPage = () => {
     fetchTracks,
     updateOperatorTime,
     duplicateTracks,
+    onExportProcesSheetClick,
     classificationOptions
   } = useProductionOperations();
 
@@ -179,6 +180,18 @@ const ProductionOperationPage = () => {
               className="mt-2"
               icon="pi pi-clone"
               title="Duplicate to next day"
+            />
+
+            <Button
+              disabled={!trackFilter.section_id}
+              loading={loadings.fetchingOperator || loadings.duplicatingTracks}
+              severity="secondary"
+              size="small"
+              type="button"
+              onClick={onExportProcesSheetClick}
+              className="mt-2"
+              icon="pi pi-download"
+              title="Download Process Sheet"
             />
           </div>
         </div>
