@@ -4,6 +4,7 @@ export interface StoreProductionTrackPayload {
     date: string;
     section_id: string;
     operator_id: string;
+    classification: string;
     process_id: string;
     style_id: string;
     target: number | string;

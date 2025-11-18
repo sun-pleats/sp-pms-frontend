@@ -121,6 +121,7 @@ export const useProductionOperations = () => {
           id: r.id ?? false,
           date: formatDbDate(r.date),
           section_id: trackFilter.section_id,
+          classification: r.classification,
           operator_id: r.operator_id ?? '',
           process_id: r.process_id ?? '',
           style_id: r.style_id ?? '',
@@ -256,10 +257,10 @@ export const useProductionOperations = () => {
   };
 
   // useEffect(() => {
-  //   console.log(formState.touchedFields);
+  //   console.log(formState);
   //   console.log(formState.touchedFields.tracks?.length)
   //   if(formState.touchedFields.tracks?.length != 0) autoSave();
-  // }, [formState.touchedFields]);
+  // }, [formState]);
 
   const autoSave = async () => {
     const hasEmptyTrack = items.some(
