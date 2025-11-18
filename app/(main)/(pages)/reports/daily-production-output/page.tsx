@@ -197,6 +197,7 @@ const DailyProductionOutputsPage = () => {
             <Column field="11AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="11AM" />
             <Column field="12PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="12PM" />
             <Column field="1PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="1PM" />
+            <Column field="2PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="2PM" />
             <Column field="3PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="3PM" />
             <Column field="4PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="4PM" />
             <Column field="5PM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="5PM" />
