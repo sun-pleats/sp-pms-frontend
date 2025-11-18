@@ -10,6 +10,7 @@ import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import moment from 'moment';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import useUtilityData from '@/app/hooks/useUtilityData';
+import { useIdle } from '@/app/hooks/useIdle';
 
 interface TrackFilter {
   date?: any;
@@ -256,11 +257,12 @@ export const useProductionOperations = () => {
     update(rowIndex, { ...current, time: process?.time || 0 });
   };
 
-  // useEffect(() => {
-  //   console.log(formState);
-  //   console.log(formState.touchedFields.tracks?.length)
-  //   if(formState.touchedFields.tracks?.length != 0) autoSave();
-  // }, [formState]);
+  const isIdle = useIdle(60000); // 1 minute idle timeout
+
+  useEffect(() => {
+    console.log(formState, isIdle);
+    if (isIdle) autoSave();
+  }, [isIdle]);
 
   const autoSave = async () => {
     const hasEmptyTrack = items.some(
