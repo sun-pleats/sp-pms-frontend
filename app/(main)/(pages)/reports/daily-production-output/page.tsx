@@ -17,8 +17,11 @@ import OperatorPerformanceCard from '@/app/components/reports/operator-performan
 import PageTile from '@/app/components/page-title/component';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import useUtilityData from '@/app/hooks/useUtilityData';
+import CustomDatatable from '@/app/components/datatable/component';
+import useDatatable from '@/app/hooks/useDatatable';
+import { DatatableFilters } from '@/app/types/datatable';
 
-interface SearchFilter {
+interface SearchFilter extends DatatableFilters {
   keyword?: string;
   section_ids?: string[];
   process_ids?: string[];
@@ -48,6 +51,8 @@ const DailyProductionOutputsPage = () => {
   const [operatorOptions, setOperatorOptions] = useState<SelectItem[]>([]);
   const { fetchProcessOptions, fetchOperatorOptions, fetchSectionSelectOption } = useUtilityData();
   const { showApiError, showSuccess } = useContext(LayoutContext);
+
+  const { setFirst, setRows, first, rows, setTotalRecords, totalRecords } = useDatatable();
 
   useEffect(() => {
     initData();
@@ -83,10 +88,23 @@ const DailyProductionOutputsPage = () => {
       );
   };
 
+  const handleOnPageChange = (e: any) => {
+    setFilter({ ...filter, page: e.page + 1, per_page: e.rows });
+    setFirst(e.first);
+    setRows(e.rows);
+  };
+
   const fetchDailyProductionOutputs = useCallback(async () => {
     setLoadings({ ...loadings, fetchingOutputs: true });
-    const data = await ReportService.getProductionDailyOutput({ ...filter, dates: filter.dates?.flatMap((date) => formatDbDate(date)) });
-    setDailyProductionOutputs(data.data.data ?? []);
+    const params = {
+      page: filter.page,
+      per_page: filter.per_page,
+      ...filter,
+      dates: filter.dates?.flatMap((date) => formatDbDate(date))
+    };
+    const { data } = await ReportService.getProductionDailyOutput(params);
+    setDailyProductionOutputs(data.data ?? []);
+    setTotalRecords(data.total ?? 0);
     setLoadings({ ...loadings, fetchingOutputs: false });
   }, [filter]);
 
@@ -167,22 +185,19 @@ const DailyProductionOutputsPage = () => {
           <OperatorPerformanceCard loading={loadings.fetchingOutputs} outputs={dailyProductionOutputs} />
         </TabPanel>
         <TabPanel header="List View" leftIcon="pi pi-list mr-2">
-          <DataTable
+          <CustomDatatable
             value={dailyProductionOutputs}
-            paginator
-            className="custom-table p-datatable-gridlines"
-            showGridlines
-            rows={10}
-            dataKey="id"
-            filterDisplay="menu"
             loading={loadings.fetchingOutputs}
-            emptyMessage={EMPTY_TABLE_MESSAGE}
-            scrollable
+            onPage={handleOnPageChange}
+            first={first}
+            rows={rows}
+            totalRecords={totalRecords}
           >
             <Column field="id" header="ID" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
             <Column field="operator_name" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Operator" style={{ minWidth: '12rem' }} />
             <Column field="process_name" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Process" style={{ minWidth: '12rem' }} />
             <Column field="log_date" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Date" style={{ minWidth: '12rem' }} />
+            <Column field="target" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Target" />
             <Column field="12AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="12AM" />
             <Column field="1AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="1AM" />
             <Column field="2AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="2AM" />
@@ -220,7 +235,7 @@ const DailyProductionOutputsPage = () => {
               frozen
               alignFrozen="right"
             />
-          </DataTable>
+          </CustomDatatable>
         </TabPanel>
       </TabView>
     </>
