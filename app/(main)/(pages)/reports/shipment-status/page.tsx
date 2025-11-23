@@ -14,6 +14,7 @@ import PageTile from '@/app/components/page-title/component';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import useDatatable from '@/app/hooks/useDatatable';
+import DateSelectors from '@/app/components/date-selector/component';
 
 const ShipmentStatusPage = () => {
   const [ShipmentStatuses, setShipmentStatuses] = useState<ReportShipmentStatus[]>([]);
@@ -102,6 +103,14 @@ const ShipmentStatusPage = () => {
           </div>
         </div>
       </div>
+
+      <DateSelectors
+        className="mb-2"
+        onDateSelected={(dates: Date[] | null) => {
+          if (dates) setFilters({ ...filters, dates });
+          else setFilters({ ...filters, dates: undefined });
+        }}
+      />
 
       <CustomDatatable
         value={ShipmentStatuses}
