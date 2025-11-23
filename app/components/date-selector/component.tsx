@@ -13,10 +13,11 @@ export enum DateSelectorsType {
 
 interface DateSelectorsProps {
   onDateSelected?: (dates: Date[] | null) => void;
+  onlyMonths?: boolean;
   className?: string;
 }
 
-const DateSelectors = ({ onDateSelected, className }: DateSelectorsProps) => {
+const DateSelectors = ({ onDateSelected, className, onlyMonths }: DateSelectorsProps) => {
   const [selected, setSelected] = useState<DateSelectorsType | null>(null);
 
   const getWeekRange = (date: Date) => {
@@ -108,34 +109,41 @@ const DateSelectors = ({ onDateSelected, className }: DateSelectorsProps) => {
         severity={selected === DateSelectorsType.LAST_MONTH ? 'contrast' : 'secondary'}
         onClick={() => onDateSet(DateSelectorsType.LAST_MONTH)}
       />
-      <Badge
-        className="cursor-pointer"
-        value="Upcoming"
-        severity={selected === DateSelectorsType.UPCOMING ? 'contrast' : 'warning'}
-        onClick={() => onDateSet(DateSelectorsType.UPCOMING)}
-      />
-      <Badge
-        className="cursor-pointer"
-        value="This Week"
-        severity={selected === DateSelectorsType.THIS_WEEK ? 'contrast' : 'success'}
-        onClick={() => onDateSet(DateSelectorsType.THIS_WEEK)}
-      />
-      <Badge
-        className="cursor-pointer"
-        value="Prev. Week"
-        severity={selected === DateSelectorsType.LAST_WEEK ? 'contrast' : 'secondary'}
-        onClick={() => onDateSet(DateSelectorsType.LAST_WEEK)}
-      />
-      <Badge
-        className="cursor-pointer"
-        severity={selected === DateSelectorsType.TODAY ? 'contrast' : 'success'}
-        value="Today"
-        onClick={() => onDateSet(DateSelectorsType.TODAY)}
-      />
-
+      {!onlyMonths && (
+        <Badge
+          className="cursor-pointer"
+          value="Upcoming"
+          severity={selected === DateSelectorsType.UPCOMING ? 'contrast' : 'warning'}
+          onClick={() => onDateSet(DateSelectorsType.UPCOMING)}
+        />
+      )}
+      {!onlyMonths && (
+        <Badge
+          className="cursor-pointer"
+          value="This Week"
+          severity={selected === DateSelectorsType.THIS_WEEK ? 'contrast' : 'success'}
+          onClick={() => onDateSet(DateSelectorsType.THIS_WEEK)}
+        />
+      )}
+      {!onlyMonths && (
+        <Badge
+          className="cursor-pointer"
+          value="Prev. Week"
+          severity={selected === DateSelectorsType.LAST_WEEK ? 'contrast' : 'secondary'}
+          onClick={() => onDateSet(DateSelectorsType.LAST_WEEK)}
+        />
+      )}
+      {!onlyMonths && (
+        <Badge
+          className="cursor-pointer"
+          severity={selected === DateSelectorsType.TODAY ? 'contrast' : 'success'}
+          value="Today"
+          onClick={() => onDateSet(DateSelectorsType.TODAY)}
+        />
+      )}
       {/* Clear Button */}
       <div className="cursor-pointer border-round text-500 hover:text-700 surface-hover" onClick={onClear}>
-        <i className="pi pi-times-circle mt-1" title='Clear'></i>
+        <i className="pi pi-times-circle mt-1" title="Clear"></i>
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ import PageTile from '@/app/components/page-title/component';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import useUtilityData from '@/app/hooks/useUtilityData';
+import DateSelectors from '@/app/components/date-selector/component';
 
 interface SearchFilter {
   keyword?: string;
@@ -156,6 +157,14 @@ const BundleReleasePage = () => {
           </div>
         </div>
       </div>
+
+      <DateSelectors
+        className="mb-2"
+        onDateSelected={(dates: Date[] | null) => {
+          if (dates) setFilter({ ...filter, dates });
+          else setFilter({ ...filter, dates: undefined });
+        }}
+      />
 
       <DataTable
         value={BundleEntries}

@@ -15,6 +15,7 @@ import FormRangeCalendar from '@/app/components/form/range-calendar/component';
 import PageTile from '@/app/components/page-title/component';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import useUtilityData from '@/app/hooks/useUtilityData';
+import DateSelectors from '@/app/components/date-selector/component';
 
 interface SearchFilter {
   keyword?: string;
@@ -141,6 +142,16 @@ const ProductionMonthlyEfficiencyPage = () => {
           </div>
         </div>
       </div>
+
+      <DateSelectors
+        className="mb-2"
+        onlyMonths
+        onDateSelected={(dates: Date[] | null) => {
+          if (dates) setFilter({ ...filter, dates });
+          else setFilter({ ...filter, dates: undefined });
+        }}
+      />
+
       <DataTable
         value={productionMonthlyEfficiency}
         paginator
