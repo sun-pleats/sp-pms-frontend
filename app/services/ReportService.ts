@@ -8,13 +8,16 @@ import {
   ReportSystemAuditResponse
 } from '../types/api/reports';
 import { SystemAudit } from '../types/system-audit';
-import { ReportShipmentStatus } from '../types/reports';
+import { ProductionDailyOutput, ReportShipmentStatus } from '../types/reports';
 
 const BASE_URL = '/api/reports';
 
 export const ReportService = {
   getProductionDailyOutput(params?: Record<string, any>): AxiosPromise<ReportProductionDailyOutputResponse> {
     return apiClient.get(`${BASE_URL}/production-daily-outputs`, { params });
+  },
+  getAllProductionDailyOutput(params?: Record<string, any>): AxiosPromise<ProductionDailyOutput[]> {
+    return apiClient.get(`${BASE_URL}/production-daily-outputs`, { params: { ...params, no_limit: true } });
   },
   getAllSystemAudit(params?: Record<string, any>, options?: any): AxiosPromise<ReportSystemAuditResponse> {
     return apiClient.get(`${BASE_URL}/system-audits`, { params, ...options });

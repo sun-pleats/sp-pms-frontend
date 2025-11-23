@@ -39,6 +39,8 @@ interface Loadings {
 
 const DailyProductionOutputsPage = () => {
   const [dailyProductionOutputs, setDailyProductionOutputs] = useState<ProductionDailyOutput[]>([]);
+  const [cardDailyProductionOutputs, setCardDailyProductionOutputs] = useState<ProductionDailyOutput[]>([]);
+
   const [loadings, setLoadings] = useState<Loadings>({});
   const [filter, setFilter] = useState<SearchFilter>({
     dates: [
@@ -108,9 +110,24 @@ const DailyProductionOutputsPage = () => {
     setLoadings({ ...loadings, fetchingOutputs: false });
   }, [filter]);
 
+  const fetchDailyProductionOutputsNoLimit = useCallback(async () => {
+    setLoadings({ ...loadings, fetchingOutputs: true });
+    const params = {
+      ...filter,
+      dates: filter.dates?.flatMap((date) => formatDbDate(date))
+    };
+    const { data } = await ReportService.getAllProductionDailyOutput(params);
+    setCardDailyProductionOutputs(data ?? []);
+    setLoadings({ ...loadings, fetchingOutputs: false });
+  }, [filter]);
+
   useEffect(() => {
     fetchDailyProductionOutputs();
   }, [fetchDailyProductionOutputs]);
+
+  useEffect(() => {
+    fetchDailyProductionOutputsNoLimit();
+  }, [fetchDailyProductionOutputsNoLimit]);
 
   const onExportExcelClick = async () => {
     try {
@@ -182,7 +199,7 @@ const DailyProductionOutputsPage = () => {
       </div>
       <TabView>
         <TabPanel header="Card View" leftIcon="pi pi-th-large mr-2">
-          <OperatorPerformanceCard loading={loadings.fetchingOutputs} outputs={dailyProductionOutputs} />
+          <OperatorPerformanceCard loading={loadings.fetchingOutputs} outputs={cardDailyProductionOutputs} />
         </TabPanel>
         <TabPanel header="List View" leftIcon="pi pi-list mr-2">
           <CustomDatatable

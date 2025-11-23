@@ -11,9 +11,11 @@ export type OperatorPerformance = {
   loading?: boolean;
 };
 
-const StatRow = ({ label, value }: { label: string; value: React.ReactNode }) => (
+const StatRow = ({ label, value, title }: { title: string; label: string; value: React.ReactNode }) => (
   <li className="flex align-items-center justify-content-between my-2 mx-0">
-    <span className="font-medium text-color-secondary">{label}</span>
+    <span className="font-medium text-color-secondary cursor-pointer" title={title}>
+      {label}
+    </span>
     <span className="p-tag p-tag-warning">{value}%</span>
   </li>
 );
@@ -30,7 +32,7 @@ const EfficiencyRow = ({ value }: { value: number }) => {
 
 const EfficiencyCard = (operatorName: string, outputs: ProductionDailyOutput[]) => {
   const efficiencies = outputs.map((o) => o.efficiency);
-  const avg = efficiencies.reduce((sum, val) => sum + val, 0) / efficiencies.length || 0;
+  const avg = efficiencies.reduce((sum, val) => sum + val, 0) || 0;
   return (
     <div className="col-12 md:col-6 lg:col-4">
       <Card className="h-full shadow-2 border-round-2xl">
@@ -39,7 +41,12 @@ const EfficiencyCard = (operatorName: string, outputs: ProductionDailyOutput[]) 
         </div>
         <ul className="list-none p-0 m-0">
           {outputs.map((output, index) => (
-            <StatRow key={`${operatorName}-${output.id ?? index}`} label={output.process_name} value={output.efficiency} />
+            <StatRow
+              key={`${operatorName}-${output.id ?? index}`}
+              label={`${output.process_name} - ${output.total_output}/${output.target}`}
+              title={` Total scanned (${output.total_output}) over target (${output.target}).`}
+              value={output.efficiency}
+            />
           ))}
         </ul>
         <div>
