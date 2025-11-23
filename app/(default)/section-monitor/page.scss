@@ -1,0 +1,10 @@
+.gradient-bg {
+  min-height: 100vh;
+  /* full screen */
+  background: linear-gradient(170deg, #000000, #211eff);
+ 
+  .surface-card {
+    background-color: transparent !important;
+    color: white !important;
+  }
+}
