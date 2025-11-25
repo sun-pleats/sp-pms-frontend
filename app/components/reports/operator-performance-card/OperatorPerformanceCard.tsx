@@ -5,6 +5,7 @@ import { ProgressBar } from 'primereact/progressbar';
 import { ProductionDailyOutput } from '@/app/types/reports';
 import { groupBy } from 'lodash';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { roundToDecimal } from '@/app/utils';
 
 export type OperatorPerformance = {
   outputs?: ProductionDailyOutput[];
@@ -25,14 +26,14 @@ const EfficiencyRow = ({ value }: { value: number }) => {
   return (
     <div className="flex items-center gap-2">
       <ProgressBar value={value} showValue={false} style={{ height: 8, width: '100%' }}></ProgressBar>
-      <Tag value={`${value.toFixed(0)}%`} severity={severity as any} rounded></Tag>
+      <Tag value={`${value}%`} severity={severity as any} rounded></Tag>
     </div>
   );
 };
 
 const EfficiencyCard = (operatorName: string, outputs: ProductionDailyOutput[]) => {
   const efficiencies = outputs.map((o) => o.efficiency);
-  const avg = efficiencies.reduce((sum, val) => sum + val, 0) || 0;
+  const avg = roundToDecimal((efficiencies.reduce((sum, val) => sum + val, 0) || 0) / efficiencies.length, 2);
   return (
     <div className="col-12 md:col-6 lg:col-4">
       <Card className="h-full shadow-2 border-round-2xl">

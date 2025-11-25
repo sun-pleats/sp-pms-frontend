@@ -69,3 +69,10 @@ export function convertDurationLabel(from: any, to: any) {
     duration_seconds: diffSeconds
   };
 }
+
+export function roundToDecimal(num: number, decimals: number) {
+  // const factor = Math.pow(10, decimals);
+  // return Math.round(num * factor) / factor;
+
+  return Number(num.toFixed(decimals));
+}

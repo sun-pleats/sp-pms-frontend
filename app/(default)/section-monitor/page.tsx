@@ -150,7 +150,7 @@ const DailyProductionOutputsPage = () => {
             </h1>
           </div>
         </div>
-        <p className='text-sm text-gray-500'>Refetching records every 1 minute...</p>
+        <p className="text-sm text-gray-500">Refetching records every 1 minute...</p>
       </div>
       <OperatorPerformanceCard loading={loadings.fetchingOutputs} outputs={cardDailyProductionOutputs} />
     </div>
