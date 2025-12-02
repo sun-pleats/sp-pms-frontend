@@ -14,11 +14,15 @@ interface CustomDatatableProps {
   first?: number;
   rows?: number;
   totalRecords?: number;
+  rowGroupMode?: string | undefined;
+  groupRowsBy?: any;
 }
 
 const CustomDatatable = ({
   value,
   children,
+  rowGroupMode,
+  groupRowsBy,
   loading,
   selection,
   onSelectionChange,
@@ -32,6 +36,10 @@ const CustomDatatable = ({
     <DataTable
       value={value}
       paginator
+      paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+      currentPageReportTemplate="{first} to {last} of {totalRecords}"
+      groupRowsBy={groupRowsBy}
+      rowGroupMode={rowGroupMode}
       className="custom-table p-datatable-gridlines"
       showGridlines
       dataKey="id"

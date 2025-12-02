@@ -19,19 +19,12 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
 import useUtilityData from '@/app/hooks/useUtilityData';
 import DateSelectors from '@/app/components/date-selector/component';
-
-interface SearchFilter {
-  keyword?: string;
-  dates?: Date[];
-  department_ids?: string[];
-}
+import CustomDatatable from '@/app/components/datatable/component';
+import useDatatable from '@/app/hooks/useDatatable';
 
 const BundleReleasePage = () => {
   const [BundleEntries, setBundleEntries] = useState<ReportStyleBundleEntryLog[]>([]);
-  const [filter, setFilter] = useState<SearchFilter>({
-    dates: currentMonthDates()
-  });
-  const [loading, setLoading] = useState(false);
+
   const [downloading, setDownloading] = useState(false);
   const [fetchingUtils, setFetchingUtils] = useState(false);
   const [departmentOptions, setDepartments] = useState<SelectItem[]>([]);
@@ -39,29 +32,31 @@ const BundleReleasePage = () => {
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const router = useRouter();
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter({ keyword: e.target.value });
-  };
+  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+    useDatatable();
 
-  const clearFilter = () => {
-    setFilter({
-      keyword: ''
-    });
-    fetchBundleEntries();
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilters({ search: e.target.value });
   };
 
   const fetchBundleEntries = useCallback(async () => {
-    setLoading(true);
+    setTableLoading(true);
     try {
+      const params = {
+        ...filters,
+        dates: filters.dates?.flatMap((date: Date) => formatDbDate(date))
+      };
+
       // Pass signal to your service
-      const data = await ReportService.getAllBundleEntryLogs({ ...filter, dates: filter.dates?.flatMap((date) => formatDbDate(date)) });
+      const data = await ReportService.getAllBundleEntryLogs(params);
       setBundleEntries(data?.data.data ?? []);
+      setTotalRecords(data?.data.total ?? 0);
     } catch (error: any) {
       showApiError(error, 'Failed fetching report.');
     } finally {
-      setLoading(false);
+      setTableLoading(false);
     }
-  }, [filter]);
+  }, [filters]);
 
   useEffect(() => {
     fetchBundleEntries();
@@ -69,10 +64,14 @@ const BundleReleasePage = () => {
 
   useEffect(() => {
     initData();
+    setFilters({
+      dates: currentMonthDates(),
+      department_ids: []
+    });
   }, []);
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange} />;
+    return <TableHeader onClear={clearFilter} searchValue={filters.search ?? ''} onSearchChange={handleSearchChange} />;
   };
 
   const initData = async () => {
@@ -91,7 +90,13 @@ const BundleReleasePage = () => {
   const onExportExcelClick = async () => {
     try {
       setDownloading(true);
-      const response = await ReportService.exportAllBundleEntryLogs({ ...filter, dates: filter.dates?.flatMap((date) => formatDbDate(date)) });
+
+      const params = {
+        ...filters,
+        dates: filters.dates?.flatMap((date: Date) => formatDbDate(date))
+      };
+
+      const response = await ReportService.exportAllBundleEntryLogs(params);
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -131,16 +136,16 @@ const BundleReleasePage = () => {
         <div className="flex flex-align-items-center mr-2">
           <div className="flex align-items-center gap-2">
             <FormRangeCalendar
-              value={filter.dates}
-              onChange={(e: any) => setFilter({ ...filter, dates: e.value })}
+              value={filters.dates}
+              onChange={(e: any) => setFilters({ ...filters, dates: e.value })}
               label="Logged Date"
               readOnlyInput
               hideOnRangeSelection
             />
             <FormMultiDropdown
               label="Departments"
-              value={filter.department_ids}
-              onChange={(option: SelectItem) => setFilter({ ...filter, department_ids: option.value })}
+              value={filters.department_ids}
+              onChange={(option: SelectItem) => setFilters({ ...filters, department_ids: option.value })}
               filter={true}
               placeholder="Select"
               loading={fetchingUtils}
@@ -161,37 +166,58 @@ const BundleReleasePage = () => {
       <DateSelectors
         className="mb-2"
         onDateSelected={(dates: Date[] | null) => {
-          if (dates) setFilter({ ...filter, dates });
-          else setFilter({ ...filter, dates: undefined });
+          if (dates) setFilters({ ...filters, dates });
+          else setFilters({ ...filters, dates: undefined });
         }}
       />
 
-      <DataTable
+      <CustomDatatable
         value={BundleEntries}
-        paginator
-        className="custom-table p-datatable-gridlines"
-        showGridlines
-        rows={10}
-        dataKey="id"
-        filterDisplay="menu"
-        loading={loading}
-        emptyMessage={EMPTY_TABLE_MESSAGE}
+        loading={tableLoading}
+        onPage={handleOnPageChange}
+        first={first}
+        rows={rows}
+        totalRecords={totalRecords}
         header={renderHeader()}
       >
-        <Column field="style_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Style No." />
-        <Column field="bundle_number" body={bundleBodyTemplate} style={{ width: 'auto', whiteSpace: 'nowrap' }} header="Bundle No." />
-        <Column field="section_name" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Section" />
+        <Column
+          field="style_number"
+          headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }}
+          bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }}
+          alignFrozen="left"
+          frozen
+          header="Style No."
+        />
+        <Column
+          field="bundle_number"
+          body={bundleBodyTemplate}
+          style={{ width: 'auto', whiteSpace: 'nowrap' }}
+          alignFrozen="left"
+          frozen
+          header="Bundle No."
+        />
+        <Column field="section_name" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Section" alignFrozen="left" frozen />
         <Column field="quantity" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Released QTY" />
         <Column field="roll_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Roll No." />
         <Column field="size_number" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Size No." />
         <Column field="remarks" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Bundle Remarks" />
         <Column field="color" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Color" />
         <Column field="department_name" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Department" />
-        <Column field="entry_time" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Entry" />
-        <Column field="exit_time" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Exit" />
+        <Column
+          field="entry_time"
+          headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }}
+          bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }}
+          header="Entry"
+        />
+        <Column
+          field="exit_time"
+          headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }}
+          bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }}
+          header="Exit"
+        />
         <Column field="hours_stayed" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Hours Stayed" />
         <Column field="log_remarks" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Log Remarks" />
-      </DataTable>
+      </CustomDatatable>
     </>
   );
 };

@@ -2,9 +2,7 @@
 
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
-import { formatDbDate } from '@/app/utils';
+import { formatDbDate, roundToDecimal } from '@/app/utils';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ProductionDailyOutput } from '@/app/types/reports';
 import { ReportService } from '@/app/services/ReportService';
@@ -210,9 +208,23 @@ const DailyProductionOutputsPage = () => {
             rows={rows}
             totalRecords={totalRecords}
           >
-            <Column field="id" header="ID" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />
-            <Column field="operator_name" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Operator" style={{ minWidth: '12rem' }} />
-            <Column field="process_name" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Process" style={{ minWidth: '12rem' }} />
+            <Column field="id" header="ID" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} alignFrozen="left" frozen />
+            <Column
+              field="operator_name"
+              headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }}
+              header="Operator"
+              style={{ minWidth: '12rem' }}
+              alignFrozen="left"
+              frozen
+            />
+            <Column
+              field="process_name"
+              headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }}
+              header="Process"
+              style={{ minWidth: '12rem' }}
+              alignFrozen="left"
+              frozen
+            />
             <Column field="log_date" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Date" style={{ minWidth: '12rem' }} />
             <Column field="target" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Target" />
             <Column field="12AM" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="12AM" />
@@ -243,14 +255,12 @@ const DailyProductionOutputsPage = () => {
             <Column field="hour_ratio" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Break Time" />
             <Column field="efficiency_count" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Efficiency Count" />
             <Column field="efficiency_summary_count" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Efficiency Summary" />
-            <Column field="efficiency_target" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Target" frozen alignFrozen="right" />
+            <Column field="efficiency_target" headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }} header="Target" />
             <Column
+              headerStyle={{ width: 'auto', whiteSpace: 'nowrap' }}
               field="efficiency"
               header="Efficiency"
               body={(data) => `${data.efficiency}%`}
-              style={{ width: '9rem' }}
-              frozen
-              alignFrozen="right"
             />
           </CustomDatatable>
         </TabPanel>
