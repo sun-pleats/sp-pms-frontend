@@ -32,8 +32,27 @@ const EfficiencyRow = ({ value }: { value: number }) => {
 };
 
 const EfficiencyCard = (operatorName: string, outputs: ProductionDailyOutput[]) => {
+  const processes = groupBy<any[]>(outputs, 'process_name');
+
+  const pros = Object.entries(processes).map(([process_name, opts]) => {
+    const id = opts.map((o) => o.id).reduce((sum, val) => sum + val, 0);
+    const total_output = opts.map((o) => o.total_output).reduce((sum, val) => sum + val, 0);
+    const target = opts.map((o) => o.target).reduce((sum, val) => sum + val, 0);
+
+    const effs = opts.map((o) => o.efficiency);
+    const avgEff = roundToDecimal((effs.reduce((sum, val) => sum + val, 0) || 0) / effs.length, 2);
+
+    return {
+      id: id,
+      label: `${process_name} - ${total_output}/${target}`,
+      title: ` Total scanned (${total_output}) over target (${target}).`,
+      value: avgEff
+    };
+  });
+
   const efficiencies = outputs.map((o) => o.efficiency);
   const avg = roundToDecimal((efficiencies.reduce((sum, val) => sum + val, 0) || 0) / efficiencies.length, 2);
+
   return (
     <div className="col-12 md:col-6 lg:col-4">
       <Card className="h-full shadow-2 border-round-2xl">
@@ -41,13 +60,8 @@ const EfficiencyCard = (operatorName: string, outputs: ProductionDailyOutput[]) 
           <h3 className="text-lg font-semibold">{operatorName}</h3>
         </div>
         <ul className="list-none p-0 m-0">
-          {outputs.map((output, index) => (
-            <StatRow
-              key={`${operatorName}-${output.id ?? index}`}
-              label={`${output.process_name} - ${output.total_output}/${output.target}`}
-              title={` Total scanned (${output.total_output}) over target (${output.target}).`}
-              value={output.efficiency}
-            />
+          {pros.map((output, index) => (
+            <StatRow key={`${operatorName}-${output.id ?? index}`} label={output.label} title={output.title} value={output.value} />
           ))}
         </ul>
         <div>

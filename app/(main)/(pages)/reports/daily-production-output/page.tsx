@@ -2,22 +2,25 @@
 
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
-import { formatDbDate, roundToDecimal } from '@/app/utils';
+import { DatatableFilters } from '@/app/types/datatable';
+import { endOfWeek, startOfWeek } from 'date-fns';
+import { formatDbDate } from '@/app/utils';
 import { LayoutContext } from '@/layout/context/layoutcontext';
+import { Message } from 'primereact/message';
 import { ProductionDailyOutput } from '@/app/types/reports';
 import { ReportService } from '@/app/services/ReportService';
 import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';
 import { TabPanel, TabView } from 'primereact/tabview';
+import CustomDatatable from '@/app/components/datatable/component';
 import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
 import FormRangeCalendar from '@/app/components/form/range-calendar/component';
 import OperatorPerformanceCard from '@/app/components/reports/operator-performance-card/OperatorPerformanceCard';
 import PageTile from '@/app/components/page-title/component';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import useUtilityData from '@/app/hooks/useUtilityData';
-import CustomDatatable from '@/app/components/datatable/component';
 import useDatatable from '@/app/hooks/useDatatable';
-import { DatatableFilters } from '@/app/types/datatable';
+import useUtilityData from '@/app/hooks/useUtilityData';
+import DateSelectors from '@/app/components/date-selector/component';
 
 interface SearchFilter extends DatatableFilters {
   keyword?: string;
@@ -42,8 +45,8 @@ const DailyProductionOutputsPage = () => {
   const [loadings, setLoadings] = useState<Loadings>({});
   const [filter, setFilter] = useState<SearchFilter>({
     dates: [
-      new Date(new Date().setDate(new Date().getDate() - 7)),
-      new Date() // start = today
+      startOfWeek(new Date(), { weekStartsOn: 1 }), // Monday
+      endOfWeek(new Date(), { weekStartsOn: 1 }) // Sunday
     ]
   });
   const [processOptions, setProcessOptions] = useState<SelectItem[]>();
@@ -195,8 +198,16 @@ const DailyProductionOutputsPage = () => {
           </div>
         </div>
       </div>
+      <DateSelectors
+        className="mb-2"
+        onDateSelected={(dates: Date[] | null) => {
+          if (dates) setFilter({ ...filter, dates });
+          else setFilter({ ...filter, dates: undefined });
+        }}
+      />
       <TabView>
         <TabPanel header="Card View" leftIcon="pi pi-th-large mr-2">
+          <Message severity="warn" text="Average efficiency is computed based on the total efficiency of each process." className="mb-2" />
           <OperatorPerformanceCard loading={loadings.fetchingOutputs} outputs={cardDailyProductionOutputs} />
         </TabPanel>
         <TabPanel header="List View" leftIcon="pi pi-list mr-2">
@@ -263,6 +274,7 @@ const DailyProductionOutputsPage = () => {
               body={(data) => `${data.efficiency}%`}
             />
           </CustomDatatable>
+          <Message severity="warn" text="Total Efficiency per operator and date is only available in export." className="mt-2" />
         </TabPanel>
       </TabView>
     </>
