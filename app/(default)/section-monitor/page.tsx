@@ -36,8 +36,8 @@ interface Loadings {
 
 const DailyProductionOutputsPage = () => {
   const [cardDailyProductionOutputs, setCardDailyProductionOutputs] = useState<ProductionDailyOutput[]>([]);
-  const router = useRouter();
   const [storedSection, setStoredSection] = useLocalStorage<number[]>(LOCALSTORAGE_KEYS.section_monitor.section, []);
+  const [isListenFilters, setIsListenFilters] = useState<boolean>(true);
 
   const [loadings, setLoadings] = useState<Loadings>({
     fetchingSections: false
@@ -45,14 +45,21 @@ const DailyProductionOutputsPage = () => {
   const [filter, setFilter] = useState<SearchFilter>({
     dates: new Date()
   });
+
   const [sectionOptions, setSectionOptions] = useState<SelectItem[]>();
   const [refetch, setRefetch] = useState<boolean>(false);
 
   const { fetchSectionSelectOption } = useUtilityData();
   const { showApiError } = useContext(LayoutContext);
 
+  const router = useRouter();
+
   const avgEff = useMemo(
-    () => roundToDecimal((cardDailyProductionOutputs.map((o) => o.efficiency).reduce((sum, val) => sum + val, 0) || 0) / cardDailyProductionOutputs.length, 2),
+    () =>
+      roundToDecimal(
+        cardDailyProductionOutputs.length ==0 ? 0 : (cardDailyProductionOutputs.map((o) => o.efficiency).reduce((sum, val) => sum + val, 0) || 0) / cardDailyProductionOutputs.length,
+        2
+      ),
     [cardDailyProductionOutputs]
   );
 
@@ -62,13 +69,16 @@ const DailyProductionOutputsPage = () => {
 
   useEffect(() => {
     if (storedSection) {
-      console.log(storedSection);
+      setIsListenFilters(false);
       setFilter({ ...filter, section_ids: [...storedSection] });
+      setTimeout(() => {
+        setIsListenFilters(true);
+      }, 2000);
     }
-  }, []);
+  }, [storedSection]);
 
   useEffect(() => {
-    if (filter.section_ids) setStoredSection(filter.section_ids.flatMap((r) => Number(r)));
+    if (filter.section_ids && filter.section_ids.length !== 0 && isListenFilters) setStoredSection(filter.section_ids.flatMap((r) => Number(r)));
   }, [filter.section_ids]);
 
   const initData = () => {
@@ -146,7 +156,7 @@ const DailyProductionOutputsPage = () => {
           <div className="ml-auto">
             <h1>
               <i className="pi pi-arrow-down text-red-500 text-lg"></i>
-              <i className="pi pi-arrow-up text-green-500 text-lg"></i> AVG Efficiency. {avgEff}%
+              <i className="pi pi-arrow-up text-green-500 text-lg"></i> AVG Efficiency {avgEff}%
             </h1>
           </div>
         </div>

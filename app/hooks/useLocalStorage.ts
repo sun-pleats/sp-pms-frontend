@@ -1,20 +1,25 @@
 import { useState, useEffect } from 'react';
 
 function useLocalStorage<T>(key: string, initialValue: T) {
-  // Load from localStorage or use initialValue
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? (JSON.parse(item) as T) : initialValue;
-    } catch (error) {
-      console.warn(`Error reading localStorage key “${key}”:`, error);
-      return initialValue;
-    }
-  });
+  const [storedValue, setStoredValue] = useState<T>(initialValue);
 
-  // Save to localStorage whenever value changes
+  // Load value only on client
   useEffect(() => {
     try {
+      if (typeof window === 'undefined') return;
+
+      const item = window.localStorage.getItem(key);
+      setStoredValue(item ? (JSON.parse(item) as T) : initialValue);
+    } catch (error) {
+      console.warn(`Error reading localStorage key “${key}”:`, error);
+    }
+  }, [key]);
+
+  // Save to localStorage when value changes, client only
+  useEffect(() => {
+    try {
+      console.log('window', key);
+      if (typeof window === 'undefined') return;
       window.localStorage.setItem(key, JSON.stringify(storedValue));
     } catch (error) {
       console.warn(`Error setting localStorage key “${key}”:`, error);
