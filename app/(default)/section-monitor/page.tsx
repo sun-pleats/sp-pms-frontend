@@ -1,7 +1,7 @@
 'use client';
 
 import './page.scss';
-import { formatDbDate } from '@/app/utils';
+import { formatDbDate, roundToDecimal } from '@/app/utils';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ProductionDailyOutput } from '@/app/types/reports';
 import { ReportService } from '@/app/services/ReportService';
@@ -52,7 +52,7 @@ const DailyProductionOutputsPage = () => {
   const { showApiError } = useContext(LayoutContext);
 
   const avgEff = useMemo(
-    () => cardDailyProductionOutputs.map((o) => o.efficiency).reduce((sum, val) => sum + val, 0) || 0,
+    () => roundToDecimal((cardDailyProductionOutputs.map((o) => o.efficiency).reduce((sum, val) => sum + val, 0) || 0) / cardDailyProductionOutputs.length, 2),
     [cardDailyProductionOutputs]
   );
 
@@ -146,7 +146,7 @@ const DailyProductionOutputsPage = () => {
           <div className="ml-auto">
             <h1>
               <i className="pi pi-arrow-down text-red-500 text-lg"></i>
-              <i className="pi pi-arrow-up text-green-500 text-lg"></i> AVG Eff. {avgEff}%
+              <i className="pi pi-arrow-up text-green-500 text-lg"></i> AVG Efficiency. {avgEff}%
             </h1>
           </div>
         </div>
