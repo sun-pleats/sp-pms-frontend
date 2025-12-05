@@ -57,7 +57,9 @@ const DailyProductionOutputsPage = () => {
   const avgEff = useMemo(
     () =>
       roundToDecimal(
-        cardDailyProductionOutputs.length ==0 ? 0 : (cardDailyProductionOutputs.map((o) => o.efficiency).reduce((sum, val) => sum + val, 0) || 0) / cardDailyProductionOutputs.length,
+        cardDailyProductionOutputs.length == 0
+          ? 0
+          : (cardDailyProductionOutputs.map((o) => o.efficiency).reduce((sum, val) => sum + val, 0) || 0) / cardDailyProductionOutputs.length,
         2
       ),
     [cardDailyProductionOutputs]

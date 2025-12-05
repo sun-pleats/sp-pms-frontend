@@ -39,6 +39,113 @@ export interface ProductionDailyOutput {
   efficiency: number;
 }
 
+export interface SectionDailyProcessOutput {
+  id: number;
+  name: string;
+  log_date: string; // or Date if you convert it
+  style_number: string | null;
+  pleats_name: string | null;
+  buyer_name: string | null;
+
+  // 12AM → 11AM
+  TARGET_12AM: number | null;
+  OUTPUT_12AM: number | null;
+  EFFICIENY_12AM: number | null;
+
+  TARGET_1AM: number | null;
+  OUTPUT_1AM: number | null;
+  EFFICIENY_1AM: number | null;
+
+  TARGET_2AM: number | null;
+  OUTPUT_2AM: number | null;
+  EFFICIENY_2AM: number | null;
+
+  TARGET_3AM: number | null;
+  OUTPUT_3AM: number | null;
+  EFFICIENY_3AM: number | null;
+
+  TARGET_4AM: number | null;
+  OUTPUT_4AM: number | null;
+  EFFICIENY_4AM: number | null;
+
+  TARGET_5AM: number | null;
+  OUTPUT_5AM: number | null;
+  EFFICIENY_5AM: number | null;
+
+  TARGET_6AM: number | null;
+  OUTPUT_6AM: number | null;
+  EFFICIENY_6AM: number | null;
+
+  TARGET_7AM: number | null;
+  OUTPUT_7AM: number | null;
+  EFFICIENY_7AM: number | null;
+
+  TARGET_8AM: number | null;
+  OUTPUT_8AM: number | null;
+  EFFICIENY_8AM: number | null;
+
+  TARGET_9AM: number | null;
+  OUTPUT_9AM: number | null;
+  EFFICIENY_9AM: number | null;
+
+  TARGET_10AM: number | null;
+  OUTPUT_10AM: number | null;
+  EFFICIENY_10AM: number | null;
+
+  TARGET_11AM: number | null;
+  OUTPUT_11AM: number | null;
+  EFFICIENY_11AM: number | null;
+
+  // 12PM → 11PM
+  TARGET_12PM: number | null;
+  OUTPUT_12PM: number | null;
+  EFFICIENY_12PM: number | null;
+
+  TARGET_1PM: number | null;
+  OUTPUT_1PM: number | null;
+  EFFICIENY_1PM: number | null;
+
+  TARGET_2PM: number | null;
+  OUTPUT_2PM: number | null;
+  EFFICIENY_2PM: number | null;
+
+  TARGET_3PM: number | null;
+  OUTPUT_3PM: number | null;
+  EFFICIENY_3PM: number | null;
+
+  TARGET_4PM: number | null;
+  OUTPUT_4PM: number | null;
+  EFFICIENY_4PM: number | null;
+
+  TARGET_5PM: number | null;
+  OUTPUT_5PM: number | null;
+  EFFICIENY_5PM: number | null;
+
+  TARGET_6PM: number | null;
+  OUTPUT_6PM: number | null;
+  EFFICIENY_6PM: number | null;
+
+  TARGET_7PM: number | null;
+  OUTPUT_7PM: number | null;
+  EFFICIENY_7PM: number | null;
+
+  TARGET_8PM: number | null;
+  OUTPUT_8PM: number | null;
+  EFFICIENY_8PM: number | null;
+
+  TARGET_9PM: number | null;
+  OUTPUT_9PM: number | null;
+  EFFICIENY_9PM: number | null;
+
+  TARGET_10PM: number | null;
+  OUTPUT_10PM: number | null;
+  EFFICIENY_10PM: number | null;
+
+  TARGET_11PM: number | null;
+  OUTPUT_11PM: number | null;
+  EFFICIENY_11PM: number | null;
+}
+
 export interface ProductionMonthlyEfficiency {
   operator_id: number;
   operator_name: string;

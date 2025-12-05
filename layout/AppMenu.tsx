@@ -42,6 +42,7 @@ const AppMenu = () => {
       label: 'Reports',
       items: [
         { label: 'Daily Production Output', icon: 'pi pi-fw pi-clock', to: '/reports/daily-production-output' },
+        { label: 'Section Hourly Efficiency', icon: 'pi pi-fw pi-clock', to: '/reports/section-hourly-efficiency' },
         { label: 'Monthly Efficiency Report', icon: 'pi pi-fw pi-chart-bar', to: '/reports/monthly-production-efficiency' },
         { label: 'Bundle Entry Log', icon: 'pi pi-fw pi-box', to: '/reports/bundle-releases' },
         { label: 'System Audit', icon: 'pi pi-fw pi-flag', to: '/reports/system-audit' },

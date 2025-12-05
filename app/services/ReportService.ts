@@ -3,6 +3,7 @@ import apiClient from '../api/http-common';
 import {
   ProductionMonthlyEfficiencyResponse,
   ReportProductionDailyOutputResponse,
+  ReportSectionDailyProcessOutputResponse,
   ReportShipmentStatusResponse,
   ReportStyleBundleEntryLogResponse,
   ReportSystemAuditResponse
@@ -15,6 +16,9 @@ const BASE_URL = '/api/reports';
 export const ReportService = {
   getProductionDailyOutput(params?: Record<string, any>): AxiosPromise<ReportProductionDailyOutputResponse> {
     return apiClient.get(`${BASE_URL}/production-daily-outputs`, { params });
+  },
+  getSectionDailyOutput(params?: Record<string, any>): AxiosPromise<ReportSectionDailyProcessOutputResponse> {
+    return apiClient.get(`${BASE_URL}/sections-daily-outputs`, { params });
   },
   getAllProductionDailyOutput(params?: Record<string, any>): AxiosPromise<ProductionDailyOutput[]> {
     return apiClient.get(`${BASE_URL}/production-daily-outputs`, { params: { ...params, no_limit: true } });
@@ -48,5 +52,8 @@ export const ReportService = {
   },
   exportProcessSheet(params?: Record<string, any>): AxiosPromise<Blob> {
     return apiClient.get(`${BASE_URL}/exports/process-sheet`, { params, responseType: 'blob' });
+  },
+  exportSectionDailyOutput(params?: Record<string, any>): AxiosPromise<Blob> {
+    return apiClient.get(`${BASE_URL}/exports/sections-daily-outputs`, { params, responseType: 'blob' });
   }
 };

@@ -61,6 +61,9 @@ export const ROUTES = {
     },
     SYSTEM_AUDIT: {
       INDEX: 'system-audit'
+    },
+    SECTION_HOURLY_EFFICIENCY: {
+      INDEX: 'section-hourly-efficiency'
     }
   },
   BUNDLE_FLOW: {
