@@ -3,6 +3,7 @@ export interface BarcodePrinter {
   hardware_id?: string;
   printer_name?: string;
   printings?: BarcodePrinting[];
+  ip_address?: string;
 }
 
 export interface BarcodePrinting {

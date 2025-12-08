@@ -5,6 +5,7 @@ import FormDropdown from '../form/dropdown/component';
 import Modal from '@/app/components/modal/component';
 import React, { useContext, useEffect, useState } from 'react';
 import useBarcodePrinting from '@/app/hooks/useBarcodePrinting';
+import { PRINTING_TEMPLATES_OPTIONS } from '@/app/constants/barcode';
 
 interface PrintBarcodeState {
   show?: boolean;
@@ -21,6 +22,7 @@ interface PrintBarcodeProps {
 const PrintBarcode = ({ ids, visible, onHide, model }: PrintBarcodeProps) => {
   const [state, setState] = useState<PrintBarcodeState>({});
   const [selectedPrinter, setSelectedPrinter] = useState<string | null>();
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>();
   const [printerOptions, setPrinterOptions] = useState<SelectItem[]>([]);
   const [loadingPrinters, setLoadingPrinters] = useState<boolean>(false);
   const { showError, showApiError } = useContext(LayoutContext);
@@ -54,7 +56,7 @@ const PrintBarcode = ({ ids, visible, onHide, model }: PrintBarcodeProps) => {
     }
     setState({ ...state, saving: true });
     // @NOTE: Change to user printing
-    await queueBarcode(selectedPrinter?.toString() ?? '', ids, model);
+    await queueBarcode(selectedPrinter?.toString() ?? '', ids, model, selectedTemplate?.toString() ?? '');
     setState({ ...state, saving: false });
   };
 
@@ -67,6 +69,13 @@ const PrintBarcode = ({ ids, visible, onHide, model }: PrintBarcodeProps) => {
         placeholder="Select"
         loading={loadingPrinters}
         options={printerOptions}
+      />
+      <FormDropdown
+        label="Template"
+        value={selectedTemplate}
+        onChange={(option: any) => setSelectedTemplate(option.value)}
+        placeholder="Select"
+        options={PRINTING_TEMPLATES_OPTIONS}
       />
       <p>{ids.length} Barcode(s) selected.</p>
       <div className="flex">

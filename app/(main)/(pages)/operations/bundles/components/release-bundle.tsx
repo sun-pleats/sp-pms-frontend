@@ -18,6 +18,7 @@ import RemoteStyleDropdown from '@/app/components/remote/style-dropdown/componen
 import useBarcodePrinting from '@/app/hooks/useBarcodePrinting';
 import { Message } from 'primereact/message';
 import useUtilityData from '@/app/hooks/useUtilityData';
+import { PRINTING_TEMPLATES_OPTIONS } from '@/app/constants/barcode';
 
 interface SinglePrintBarcodeState {
   show?: boolean;
@@ -50,6 +51,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
   const { queuePrintStyleBundle, fetchPrintersSelectOptions } = useBarcodePrinting();
   const { fetchSectionOptions } = useUtilityData();
   const [defaultSection, setDefaultSection] = useState<number | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>();
 
   const { control, handleSubmit, reset } = useForm<FormData>({
     defaultValues: {
@@ -119,7 +121,8 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
       if (shouldPrint) {
         queuePrintStyleBundle(
           selectedPrinter?.toString() ?? '',
-          fabrics.flatMap((r) => r.id?.toString() ?? '')
+          fabrics.flatMap((r) => r.id?.toString() ?? ''),
+          selectedTemplate?.toString() ?? ''
         );
       }
 
@@ -222,6 +225,14 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
               placeholder="Select"
               filter
               options={printerOptions}
+            />
+
+            <FormDropdown
+              label="Template"
+              value={selectedTemplate}
+              onChange={(option: any) => setSelectedTemplate(option.value)}
+              placeholder="Select"
+              options={PRINTING_TEMPLATES_OPTIONS}
             />
             <Button
               loading={state.loadingSave}

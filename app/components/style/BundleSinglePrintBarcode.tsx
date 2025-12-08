@@ -9,6 +9,7 @@ import useBarcodePrinting from '@/app/hooks/useBarcodePrinting';
 import FormDropdown from '../form/dropdown/component';
 import { SelectItem } from 'primereact/selectitem';
 import { LayoutContext } from '@/layout/context/layoutcontext';
+import { PRINTING_TEMPLATES_OPTIONS } from '@/app/constants/barcode';
 
 interface BundleSinglePrintBarcodeState {
   show?: boolean;
@@ -32,6 +33,8 @@ const BundleSinglePrintBarcode = ({ bundle, visible, onHide }: BundleSinglePrint
   const [barcode, setBarcode] = useState<string>('');
   const [selectedPrinter, setSelectedPrinter] = useState<string | null>();
   const [printerOptions, setPrinterOptions] = useState<SelectItem[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>();
+
   const { showError } = useContext(LayoutContext);
   const { queuePrintStyleBundle, fetchPrintersSelectOptions } = useBarcodePrinting();
 
@@ -88,7 +91,7 @@ const BundleSinglePrintBarcode = ({ bundle, visible, onHide }: BundleSinglePrint
       return;
     }
     setState({ ...state, saving: true });
-    await queuePrintStyleBundle(selectedPrinter?.toString() ?? '', [bundle?.id?.toString() ?? '']);
+    await queuePrintStyleBundle(selectedPrinter?.toString() ?? '', [bundle?.id?.toString() ?? ''], selectedTemplate?.toString() ?? '');
     hide();
     setState({ ...state, saving: false });
   };
@@ -107,6 +110,13 @@ const BundleSinglePrintBarcode = ({ bundle, visible, onHide }: BundleSinglePrint
         onChange={(option: any) => setSelectedPrinter(option.value)}
         placeholder="Select"
         options={printerOptions}
+      />
+      <FormDropdown
+        label="Template"
+        value={selectedTemplate}
+        onChange={(option: any) => setSelectedTemplate(option.value)}
+        placeholder="Select"
+        options={PRINTING_TEMPLATES_OPTIONS}
       />
       <div className="flex align-items-center">
         <div className="ml-auto">

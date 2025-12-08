@@ -29,19 +29,20 @@ export default function useBarcodePrinting() {
   const fetchPrintersSelectOptions = async (): Promise<SelectItem[]> => {
     try {
       const data = await fetchPrinters();
-      return data.map((d) => ({ label: d.printer_name, value: d.id }));
+      return data.map((d) => ({ label: `${d.printer_name} - ${d.ip_address}`, value: d.id }));
     } catch (error) {
       throw error;
     }
   };
 
-  const queueBarcode = async (barcode_printer_id: string, ids: string[], model: string) => {
+  const queueBarcode = async (barcode_printer_id: string, ids: string[], model: string, template: string) => {
     try {
       await BarcodePrintingService.storeQueues({
         barcode_printer_id,
         queues: ids.map((id) => ({
           model_id: id,
-          model
+          model,
+          template
         }))
       });
       showWarning('Successfully added to barcode printing queue.', 'Printing Queue');
@@ -50,9 +51,10 @@ export default function useBarcodePrinting() {
     }
   };
 
-  const queuePrintStyleBundle = (barcode_printer_id: string, ids: string[]) => queueBarcode(barcode_printer_id, ids, PRINTING_MODELS.STYLE_BUNDLE);
-  const queuePrintOperatorProcess = (barcode_printer_id: string, ids: string[]) =>
-    queueBarcode(barcode_printer_id, ids, PRINTING_MODELS.OPERATOR_PROCESS);
+  const queuePrintStyleBundle = (barcode_printer_id: string, ids: string[], template: string) =>
+    queueBarcode(barcode_printer_id, ids, PRINTING_MODELS.STYLE_BUNDLE, template);
+  const queuePrintOperatorProcess = (barcode_printer_id: string, ids: string[], template: string) =>
+    queueBarcode(barcode_printer_id, ids, PRINTING_MODELS.OPERATOR_PROCESS, template);
 
   return {
     queueBarcode,

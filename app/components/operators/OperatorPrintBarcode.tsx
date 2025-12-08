@@ -7,6 +7,7 @@ import FormDropdown from '../form/dropdown/component';
 import { SelectItem } from 'primereact/selectitem';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import useBarcodePrinting from '@/app/hooks/useBarcodePrinting';
+import { PRINTING_TEMPLATES_OPTIONS } from '@/app/constants/barcode';
 
 interface SinglePrintBarcodeState {
   show?: boolean;
@@ -29,6 +30,8 @@ interface BarcodeDetail {
 const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeProps) => {
   const [state, setState] = useState<SinglePrintBarcodeState>({});
   const [selectedPrinter, setSelectedPrinter] = useState<string | null>();
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>();
+
   const [printerOptions, setPrinterOptions] = useState<SelectItem[]>([]);
   const [details, setDetails] = useState<BarcodeDetail[]>([]);
   const [selectedProcesses, setSelectedProcesses] = useState<BarcodeDetail[]>([]);
@@ -85,7 +88,8 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
     // @NOTE: Change to operator printing
     await queuePrintOperatorProcess(
       selectedPrinter?.toString() ?? '',
-      selectedProcesses.flatMap((r) => r.value)
+      selectedProcesses.flatMap((r) => r.value),
+      selectedTemplate?.toString() ?? ''
     );
     setState({ ...state, saving: false });
   };
@@ -117,6 +121,13 @@ const OperatorPrintBarcode = ({ operator, visible, onHide }: SinglePrintBarcodeP
         onChange={(option: any) => setSelectedPrinter(option.value)}
         placeholder="Select"
         options={printerOptions}
+      />
+      <FormDropdown
+        label="Template"
+        value={selectedTemplate}
+        onChange={(option: any) => setSelectedTemplate(option.value)}
+        placeholder="Select"
+        options={PRINTING_TEMPLATES_OPTIONS}
       />
       <div className="flex">
         <div className="ml-auto">
