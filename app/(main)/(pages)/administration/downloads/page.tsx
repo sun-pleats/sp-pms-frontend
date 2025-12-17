@@ -20,6 +20,10 @@ const DownloadsPage = () => {
           <h3 className="text-lg font-semibold">Printer Agent</h3>
           <p>
             <a href="/installers/sunpleats-printing-agent.exe">Download here</a> the printer agent.
+            <ul>
+              <li>.NET Framework v4.8 Requirement</li>
+              <li><a href='https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net481-web-installer'>https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net481-web-installer</a></li>
+            </ul>
           </p>
         </Card>
       </section>
