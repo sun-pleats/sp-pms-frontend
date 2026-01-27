@@ -10,6 +10,7 @@ export const PRINTING_MODELS = {
 
 export const PRINTING_TEMPLATES = {
   QR_CODE_LONG: 'qrcode-long',
+  QR_CODE_LONG_MULTI_PAGE: 'qrcode-long-mp',
   QR_CODE_SHORT: 'qrcode-short'
 };
 
@@ -17,6 +18,10 @@ export const PRINTING_TEMPLATES_OPTIONS: SelectItem[] = [
   {
     label: 'QR Code Long',
     value: PRINTING_TEMPLATES.QR_CODE_LONG
+  },
+  {
+    label: 'QR Code Long Multi Page',
+    value: PRINTING_TEMPLATES.QR_CODE_LONG_MULTI_PAGE
   },
   {
     label: 'QR Code Short',
