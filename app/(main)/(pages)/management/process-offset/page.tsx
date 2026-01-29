@@ -164,6 +164,7 @@ const ProcessOffsetsPage = () => {
         <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
         <Column field="description" header="Description" style={{ minWidth: '12rem' }} />
+        <Column field="barcode" header="Barcode" style={{ minWidth: '12rem' }} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(data: ProcessOffset) => data?.created_by?.name} />
         <Column field="created_at" header="Created At" body={dateBodyTemplate} />
         <Column header="Actions" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} body={actionBodyTemplate} frozen alignFrozen="right"></Column>
