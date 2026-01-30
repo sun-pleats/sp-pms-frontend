@@ -20,6 +20,9 @@ export interface Style {
   status: string;
   buyer?: Buyer;
   section?: Section;
+  created_by?: User;
+  updated_by?: User;
+  batch_ref_no?: string;
 }
 
 export interface StyleItem {

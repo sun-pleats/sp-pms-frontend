@@ -13,7 +13,7 @@ import useUtilityData from '@/app/hooks/useUtilityData';
 import { DefaultFormData } from '@/app/types/form';
 import { StyleService } from '@/app/services/StyleService';
 import { LayoutContext } from '@/layout/context/layoutcontext';
-import { date } from 'yup';
+import { Style } from '@/app/types/styles';
 
 interface EditStylePageProps {
   params?: { id: any };
@@ -26,7 +26,8 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
   const [buyers, setBuyers] = useState<SelectItem[]>([]);
   const [sections, setSections] = useState<SelectItem[]>([]);
   const { isBuyerLoading, fetchBuyerOptions, fetchSectionOptions } = useUtilityData();
-  const [style, setStyle] = useState<DefaultFormData | undefined>();
+  const [style, setStyle] = useState<Style | undefined>();
+  const [formData, setFormData] = useState<DefaultFormData | undefined>();
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
   useEffect(() => {
@@ -45,7 +46,9 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
   const getStyle = useCallback(async () => {
     try {
       setIsFetching(true);
-      setStyle((await StyleService.getStyle(params?.id)).data as DefaultFormData);
+      const { data } = await StyleService.getStyle(params?.id);
+      setStyle(data);
+      setFormData(data as DefaultFormData);
     } catch (error) {
       showApiError(error, "Error fetching style.");
     } finally {
@@ -81,12 +84,13 @@ const EditStylePage = ({ params }: EditStylePageProps) => {
         />
       }
     >
+      {style && style.batch_ref_no && <p>This style was imported under batch reference number: <span className='text-green-500'>{style?.batch_ref_no}</span></p>}
       <div className='grid'>
         <div className='col-12'>
           <div className='p-fluid'>
             <FormStyle
               onSubmit={handleSubmit}
-              value={style}
+              value={formData}
               styleOptions={styleOptions}
               loading={{ buyerField: isBuyerLoading, fields: isFetching }}
               buyerOptions={buyers}

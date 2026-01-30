@@ -61,6 +61,13 @@ export interface StyleReleaseFabricPayload {
   bundles: SaveStyleFabricPayload[];
 }
 
+export interface ImportStyleResponse {
+  batch_ref_no: string;
+  skipped: number;
+  total_upload: number;
+  uploaded_styles: Style[]
+}
+
 export interface SaveStyleFabricPayload {
   roll_number?: number;
   style_planned_fabric_id?: number;

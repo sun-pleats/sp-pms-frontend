@@ -4,6 +4,7 @@ import { Button } from 'primereact/button';
 import { Controller, useForm } from 'react-hook-form';
 import { DefaultFormData } from '@/app/types/form';
 import { FileUploadSelectEvent } from 'primereact/fileupload';
+import { ImportStyleResponse } from '@/app/types/api/styles';
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Style } from '@/app/types/styles';
 import { StyleService } from '@/app/services/StyleService';
@@ -15,6 +16,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 interface UploadStylesState {
   show?: boolean;
+  importState?: ImportStyleResponse;
 }
 
 interface UploadStylesProps {
@@ -40,6 +42,7 @@ const schema = yup.object().shape({
 
 const UploadStyles = ({ style, visible, onHide }: UploadStylesProps) => {
   const [state, setState] = useState<UploadStylesState>({});
+
   const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
@@ -60,17 +63,15 @@ const UploadStyles = ({ style, visible, onHide }: UploadStylesProps) => {
 
 
   const onHideModal = () => {
-    setState({ ...state, show: false });
+    setState({ ...state, show: false, importState: undefined });
     if (onHide) onHide();
   };
 
-  const onSubmit = async (data: DefaultFormData) => {
+  const onSubmit = async (payload: DefaultFormData) => {
     try {
-      await importStyles(data);
+      const { data } = await importStyles(payload);
+      setState({ ...state, importState: data });
       showSuccess('Styles imported successfully save.');
-      setTimeout(() => {
-        onHideModal();
-      }, 2000);
     } catch (error: any) {
       showApiError(error, 'Failed to import styles.');
     }
@@ -96,6 +97,7 @@ const UploadStyles = ({ style, visible, onHide }: UploadStylesProps) => {
         <div className="flex m-5">
           <div className="flex flex-column align-items-center m-auto">
             <p>Please choose a file and make sure you provide the suggested format.</p>
+            <p><small>You have to upload the file provided from JP (DataList).</small></p>
             <div className="mb-4">
               <Controller
                 name="file"
@@ -116,9 +118,26 @@ const UploadStyles = ({ style, visible, onHide }: UploadStylesProps) => {
               />
               {errors.file && <p className="text-red-500 text-sm">{errors.file.message}</p>}
             </div>
-            <p><a href="/formats/style-import-format.csv" target='_blank'>Click here to download</a> the suggested format.</p>
           </div>
         </div>
+        {state.importState &&
+          <>
+            <hr />
+            <div>
+              <h5 className='mb-0 text-green-500'>{state.importState.batch_ref_no}</h5>
+              <small>Batch Reference No.</small>
+              <ul style={{ listStyle: 'none', marginLeft: '10px', padding: 0, cursor: 'pointer' }}>
+                <li title='Total styles from the csv provided.'><i className='pi pi-check text-green-500'></i> Total {state.importState.total_upload}</li>
+                <li title='Styles skipped uploading due to it is already created on the system.'>
+                  <i className='pi pi-exclamation-triangle text-yellow-500'></i>  Styles Skipped {state.importState.skipped}
+                </li>
+                <li title='Total styles uploaded to the system.'><i className='pi pi-upload text-green-500'></i> Uploaded {state.importState.uploaded_styles.length}</li>
+              </ul>
+              <p className='mt-2'><i className='pi pi-check-circle text-green-500'></i> Batch Import Success</p>
+            </div>
+            <hr />
+          </>
+        }
         <div className="flex">
           <div className="ml-auto">
             <Button loading={loading} type='submit' icon="pi pi-upload" severity="info" label="Upload" className="mr-2" />

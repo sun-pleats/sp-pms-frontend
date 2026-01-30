@@ -151,6 +151,17 @@ const StylesPage = () => {
     );
   };
 
+  const bodyCtrlNumber = (rowData: Style) => {
+    return (
+      <div>
+        <span>{rowData.control_number}</span>
+        <div title={`Imported with batch reference no. ${rowData.batch_ref_no}`} className='text-green-500' style={{ fontSize: '10px' }}>
+          {rowData.batch_ref_no}
+        </div>
+      </div>
+    );
+  }
+
   const statusTemplate = (rowData: Style) => {
     return (<StatusBadge status={rowData.status} />);
   };
@@ -208,7 +219,7 @@ const StylesPage = () => {
         rows={rows}
         totalRecords={totalRecords}
       >
-        <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} />
+        <Column field="control_number" header="Control#" style={{ minWidth: '12rem' }} body={bodyCtrlNumber} />
         <Column field="style_number" header="Style#" style={{ minWidth: '12rem' }} />
         <Column header="Buyer" dataType='string' style={{ minWidth: '12rem' }} body={(style: Style) => style?.buyer?.name} />
         <Column field="pleats_name" header="Pleats" bodyStyle={{ width: 'auto', whiteSpace: 'nowrap' }} />

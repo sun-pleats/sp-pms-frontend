@@ -1,6 +1,7 @@
-import { StyleSavePayload, StylePaginatedResponse, StylePlannedFabricsResponse, StyleStoredQuantityResponse } from '../types/api/styles';
-import apiClient from '../api/http-common';
 import { AxiosPromise } from 'axios';
+import { Style } from '../types/styles';
+import { StyleSavePayload, StylePaginatedResponse, StylePlannedFabricsResponse, StyleStoredQuantityResponse, ImportStyleResponse } from '../types/api/styles';
+import apiClient from '../api/http-common';
 
 const BASE_URL = '/api/styles';
 
@@ -11,7 +12,7 @@ export const StyleService = {
   getPlannedFabrics(style_id: string): AxiosPromise<StylePlannedFabricsResponse> {
     return apiClient.get(`${BASE_URL}/planned-fabrics/${style_id}`);
   },
-  getStyle(id: string) {
+  getStyle(id: string): AxiosPromise<Style> {
     return apiClient.get(`${BASE_URL}/${id}`);
   },
   createStyle(payload: StyleSavePayload) {
@@ -23,7 +24,7 @@ export const StyleService = {
   deleteStyle(id: string) {
     return apiClient.delete(`${BASE_URL}/${id}`);
   },
-  import(payload: FormData) {
+  import(payload: FormData): AxiosPromise<ImportStyleResponse> {
     return apiClient.post(`${BASE_URL}/import`, payload, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
