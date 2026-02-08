@@ -51,7 +51,7 @@ const EfficiencyCard = (operatorName: string, outputs: ProductionDailyOutput[]) 
   });
 
   const efficiencies = outputs.map((o) => o.efficiency);
-  const avg = roundToDecimal((efficiencies.reduce((sum, val) => sum + val, 0) || 0) / efficiencies.length, 2);
+  const avg = roundToDecimal(efficiencies.reduce((sum, val) => sum + val, 0) || 0, 2);
 
   return (
     <div className="col-12 md:col-6 lg:col-4">

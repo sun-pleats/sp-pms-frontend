@@ -1,6 +1,12 @@
 import { AxiosPromise } from 'axios';
 import { Style } from '../types/styles';
-import { StyleSavePayload, StylePaginatedResponse, StylePlannedFabricsResponse, StyleStoredQuantityResponse, ImportStyleResponse } from '../types/api/styles';
+import {
+  StyleSavePayload,
+  StylePaginatedResponse,
+  StylePlannedFabricsResponse,
+  StyleStoredQuantityResponse,
+  ImportStyleResponse
+} from '../types/api/styles';
 import apiClient from '../api/http-common';
 
 const BASE_URL = '/api/styles';

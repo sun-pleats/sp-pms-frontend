@@ -80,8 +80,25 @@ export default function useUtilityData() {
     }
   };
 
+  const fetchSectionsQualityController = async (): Promise<Section[]> => {
+    try {
+      setIsSectionLoading(true);
+      const { data } = await UtilityService.sectionsQualityController();
+      return data;
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsSectionLoading(false);
+    }
+  };
+
   const fetchSectionSelectOption = async (): Promise<SelectItem[]> => {
     const data = await fetchSections();
+    return data.map((b: Section) => ({ value: b.id, label: `${b.name} | ${format24Hour(b.shift_start)}` }));
+  };
+
+  const fetchSectionQualityControllerSelectOption = async (): Promise<SelectItem[]> => {
+    const data = await fetchSectionsQualityController();
     return data.map((b: Section) => ({ value: b.id, label: `${b.name} | ${format24Hour(b.shift_start)}` }));
   };
 
@@ -135,6 +152,7 @@ export default function useUtilityData() {
     fetchOperatorOptions,
     fetchBuyerOptions,
     fetchProductionTrackClassifications,
+    fetchSectionQualityControllerSelectOption,
     isOperatorLoading,
     isDepartmentLoading,
     isSectionLoading,

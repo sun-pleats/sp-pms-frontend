@@ -65,7 +65,7 @@ export interface ImportStyleResponse {
   batch_ref_no: string;
   skipped: number;
   total_upload: number;
-  uploaded_styles: Style[]
+  uploaded_styles: Style[];
 }
 
 export interface SaveStyleFabricPayload {

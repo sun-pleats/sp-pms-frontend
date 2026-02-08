@@ -11,6 +11,7 @@ export const useOperatorPage = () => {
       const response = await OperatorService.createOperator({
         name: e.name,
         section_id: e.section_id,
+        deterministic_output: e.deterministic_output,
         process_ids: e.process_ids
       });
       return response;
@@ -26,6 +27,7 @@ export const useOperatorPage = () => {
       const response = await OperatorService.updateOperator(id, {
         name: e.name,
         section_id: e.section_id,
+        deterministic_output: e.deterministic_output,
         process_ids: e.process_ids
       });
       return response;

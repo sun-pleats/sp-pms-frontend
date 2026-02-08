@@ -130,7 +130,7 @@ const DailyProductionOutputsPage = () => {
   return (
     <div className="gradient-bg p-5">
       <div className="card">
-        <PageTile title="Sewing Line Monitoring" icon="pi pi-fw pi-clock" />
+        <PageTile title="Section Monitoring" icon="pi pi-fw pi-clock" />
 
         <div className="flex flex-align-items-center">
           <div className="flex flex-align-items-center mr-2">

@@ -10,6 +10,7 @@ export interface Operator {
   created_by?: User;
   created_at?: string;
   updated_at?: string;
+  deterministic_output?: boolean;
   operator_processes?: {
     id?: number;
     process_id?: number;
@@ -27,6 +28,7 @@ export interface OperatorForm {
   section?: Section;
   operator_processes?: Process[];
   process_ids?: string[]; // Array of process IDs
+  deterministic_output?: boolean;
   created_by?: string;
   created_at?: string;
   updated_at?: string;

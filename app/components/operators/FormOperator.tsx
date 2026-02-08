@@ -7,6 +7,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { SelectItem } from 'primereact/selectitem';
 import FormDropdown from '../form/dropdown/component';
 import FormMultiDropdown from '../form/multi-dropdown/component';
+import { Checkbox } from 'primereact/checkbox';
+import { classNames } from 'primereact/utils';
 
 interface FormOperatorProps {
   value?: OperatorForm;
@@ -23,6 +25,7 @@ interface FormOperatorProps {
 type FormData = {
   name: string;
   section_id: string;
+  deterministic_output?: boolean;
   process_ids?: string[];
 };
 
@@ -41,6 +44,7 @@ const FormOperator = ({ value, onSubmit, children, lines, processesOptions, load
       reset({
         name: value?.name,
         section_id: value?.section_id,
+        deterministic_output: value?.deterministic_output,
         process_ids: value?.operator_processes?.map((p) => p.id) || []
       });
     }
@@ -96,6 +100,21 @@ const FormOperator = ({ value, onSubmit, children, lines, processesOptions, load
           />
         )}
       />
+
+      <div className="flex align-items-center gap-2 my-3">
+        <Controller
+          name="deterministic_output"
+          control={control}
+          render={({ field, fieldState }) => (
+            <>
+              <Checkbox inputId="deterministic_output" onChange={(e) => field.onChange(e.checked)} checked={field.value ?? false} />
+              <label htmlFor="deterministic_output" className={classNames({ 'p-error': fieldState.error?.message })}>
+                Deterministic Output
+              </label>
+            </>
+          )}
+        />
+      </div>
 
       {children}
     </form>

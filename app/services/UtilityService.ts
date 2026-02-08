@@ -22,6 +22,9 @@ class UtilityService {
   sections(): AxiosPromise<Section[]> {
     return apiClient.get(`${BASE_URL}/sections`);
   }
+  sectionsQualityController(): AxiosPromise<Section[]> {
+    return apiClient.get(`${BASE_URL}/sections/quality-controller`);
+  }
   processes(): AxiosPromise<Process[]> {
     return apiClient.get(`${BASE_URL}/processes`);
   }
