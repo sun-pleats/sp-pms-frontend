@@ -45,40 +45,6 @@ const LoginPage = () => {
 
   return (
     <div className={containerClassName}>
-      <div className="fixed left-0 top-0 p-2">
-        <span className="text-900 black-300">Quick Access</span>
-        <div className="flex align-items-center gap-2 mt-2">
-          <Button
-            tooltip="Go to Machine Pleats Target Dashboard"
-            label="Machine Pleats Dashboard"
-            icon="pi pi-chart-line"
-            size="small"
-            outlined
-            rounded
-            onClick={() => router.push('/dashboard')}
-          ></Button>
-
-          <Button
-            tooltip="Go to Line Agent Testing"
-            label="Line Agent Test"
-            icon="pi pi-external-link"
-            size="small"
-            outlined
-            rounded
-            onClick={() => router.push('agent-test')}
-          ></Button>
-
-          <Button
-            tooltip="Go to Kiosk"
-            label="Kiosk"
-            icon="pi pi-desktop"
-            size="small"
-            outlined
-            rounded
-            onClick={() => router.push('/kiosk')}
-          ></Button>
-        </div>
-      </div>
       <div className="flex align-items-center gap-2">
         <img
           src={`/layout/images/logo-${layoutConfig.colorScheme === 'light' ? 'dark' : 'white'}.svg`}
@@ -135,6 +101,32 @@ const LoginPage = () => {
               </p>
               <Button outlined loading={loading} label="Sign In" className="w-full   text-xl" type="submit"></Button>
             </form>
+          </div>
+
+          <hr className="m-0" />
+          <div className="p-3">
+            <span className="text-900 text-gray-500">Quick Access</span>
+            <div className="flex align-items-center gap-2 mt-2">
+              <Button
+                tooltip="Go to Machine Pleats Target Dashboard"
+                label="Machine Pleats Dashboard"
+                icon="pi pi-chart-line"
+                size="small"
+                link
+                onClick={() => router.push('/dashboard')}
+              ></Button>
+
+              <Button
+                tooltip="Go to Line Agent Testing"
+                label="Line Agent Test"
+                icon="pi pi-external-link"
+                size="small"
+                link
+                onClick={() => router.push('agent-test')}
+              ></Button>
+
+              <Button tooltip="Go to Kiosk" label="Kiosk" icon="pi pi-desktop" size="small" link onClick={() => router.push('/kiosk')}></Button>
+            </div>
           </div>
         </div>
       </div>
