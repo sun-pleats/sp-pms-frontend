@@ -135,11 +135,11 @@ const ProductionPage = () => {
             <Link href="/" className="flex align-items-center">
               <img
                 src={`/layout/images/${layoutConfig.colorScheme === 'light' ? 'logo-dark' : 'logo-white'}.svg`}
-                alt="Sun Pleats Logo"
+                alt="SUN-PLEATS CORP. Logo"
                 height="50"
                 className="mr-0 lg:mr-2"
               />
-              <span className="text-900 font-medium text-2xl line-height-3 mr-8">Sunpleats Kiosk</span>
+              <span className="text-900 font-medium text-2xl line-height-3 mr-8">SUN-PLEATS Kiosk</span>
             </Link>
           </div>
         </div>

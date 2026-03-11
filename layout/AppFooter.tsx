@@ -2,6 +2,7 @@
 
 import React, { useContext } from 'react';
 import { LayoutContext } from './context/layoutcontext';
+import { APP_VERSION } from '@/app/constants';
 
 const AppFooter = () => {
   const { layoutConfig } = useContext(LayoutContext);
@@ -9,7 +10,7 @@ const AppFooter = () => {
   return (
     <div className="layout-footer">
       <img src={`/layout/images/logo-${layoutConfig.colorScheme === 'light' ? 'dark' : 'white'}.svg`} alt="Logo" height="20" className="mr-2" />
-      Sunpleats PMS
+      SUN-PLEATS PMS v.{APP_VERSION}
       <span className="font-medium ml-2">by Kevin Loquencio</span>
     </div>
   );

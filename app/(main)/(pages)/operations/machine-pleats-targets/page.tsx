@@ -15,6 +15,7 @@ import FormInputNumber from '@/app/components/form/input-number/component';
 import moment from 'moment';
 import PageHeader from '@/app/components/page-header/component';
 import PageTile from '@/app/components/page-title/component';
+import { useRouter } from 'next/navigation';
 
 const ProductionTargetPage = () => {
   const {
@@ -34,6 +35,8 @@ const ProductionTargetPage = () => {
     fetchingTargets,
     isInitDataLoading
   } = useProductionTargets();
+
+  const router = useRouter();
 
   useEffect(() => {
     initData();
@@ -104,6 +107,18 @@ const ProductionTargetPage = () => {
               title="Duplicate to next day"
             />
             <Button severity="help" onClick={() => fetchTargets()} type="button" size="small" className="mt-2" icon="pi pi-refresh" label="Reload" />
+
+            <Button
+              tooltip="View Dashboard"
+              label="Dashboard"
+              size="small"
+              className="mt-2"
+              tooltipOptions={{ position: 'left' }}
+              icon="pi pi-chart-line"
+              outlined
+              onClick={() => router.push('/dashboard')}
+              rounded
+            ></Button>
           </div>
         </div>
         <div className="w-full">

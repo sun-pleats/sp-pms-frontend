@@ -131,26 +131,34 @@ const KioskPage = () => {
     <>
       <div className="surface-0 flex align-items-center flex-row p-5">
         <div className="flex align-items-center gap-2">
+          <Button tooltip="Back to home" rounded icon="pi pi-home" outlined className="mt-2" onClick={() => router.push('/')}></Button>
+          <Button
+            tooltip="Go to Line Monitor"
+            label="Line Monitor"
+            icon="pi pi-desktop"
+            outlined
+            rounded
+            className="mt-2"
+            onClick={() => router.push('/section-monitor')}
+          ></Button>
           <FormDropdown
             value={kioskFilters.selectedDepartment}
             onChange={(option) => setKioskFilters({ ...kioskFilters, selectedDepartment: option.value })}
-            label="Department"
+            label="Selected Department"
             placeholder="Select department"
             options={departmentOption}
           />
-          <Button label="Home" icon="pi pi-home" className="mt-2" onClick={() => router.push('/')}></Button>
-          <Button label="Line Monitor" icon="pi pi-desktop" className="mt-2" onClick={() => router.push('/section-monitor')}></Button>
         </div>
         <div id="home" className="landing-wrapper overflow-hidden">
           <div className="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static">
             <Link href="/" className="flex align-items-center">
               <img
                 src={`/layout/images/${layoutConfig.colorScheme === 'light' ? 'logo-dark' : 'logo-white'}.svg`}
-                alt="Sun Pleats Logo"
+                alt="SUN-PLEATS CORP. Logo"
                 height="50"
                 className="mr-0 lg:mr-2"
               />
-              <span className="text-900 font-medium text-2xl line-height-3 mr-8">Sunpleats Kiosk</span>
+              <span className="text-900 font-medium text-2xl line-height-3 mr-8">SUN-PLEATS Kiosk</span>
             </Link>
           </div>
         </div>

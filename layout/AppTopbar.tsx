@@ -49,7 +49,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     <div className="layout-topbar">
       <Link href="/" className="layout-topbar-logo">
         <img src={`/layout/images/logo-${layoutConfig.colorScheme !== 'light' ? 'white' : 'dark'}.svg`} alt="logo" />
-        <span>Sunpleats</span>
+        <span>SUN-PLEATS</span>
       </Link>
       <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button" onClick={onMenuToggle}>
         <i className="pi pi-bars" />
@@ -66,13 +66,33 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
           onIcon="pi pi-sun"
           offIcon="pi pi-moon"
           offLabel=""
+          tooltip="Mode"
           onLabel=""
+          tooltipOptions={{ position: 'left' }}
           onChange={onThemeToogle}
           className="p-button-rounded p-button-text p-button-icon-only"
           aria-label="Toggle theme"
         />
 
-        <Button label="Kiosk" onClick={() => router.push('/kiosk')} rounded></Button>
+        <Button
+          tooltip="Line Agent Test"
+          label="Line Test"
+          tooltipOptions={{ position: 'left' }}
+          icon="pi pi-external-link"
+          outlined
+          onClick={() => router.push('/agent-test')}
+          rounded
+        ></Button>
+
+        <Button
+          tooltip="Go to Kiosk"
+          label="Kiosk"
+          tooltipOptions={{ position: 'left' }}
+          icon="pi pi-desktop"
+          outlined
+          onClick={() => router.push('/kiosk')}
+          rounded
+        ></Button>
 
         <ProfileMenu items={menuItems} />
       </div>

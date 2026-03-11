@@ -7,7 +7,7 @@ interface DefaultLayoutProps {
 }
 
 export const metadata: Metadata = {
-  title: 'Sun Pleats',
+  title: 'SUN-PLEATS Corporation',
   description: 'The ultimate collection of design-agnostic, flexible and accessible React UI Components.'
 };
 

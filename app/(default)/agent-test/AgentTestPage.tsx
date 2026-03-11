@@ -1,8 +1,8 @@
 'use client';
 
 import { AGENT_ERROR_RESPONSE } from '@/app/constants/agent';
-import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
+import { ERROR_MESSAGE_GENERIC } from '@/app/constants/messages';
 import { LayoutContext } from '../../../layout/context/layoutcontext';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useRouter } from 'next/navigation';
@@ -49,6 +49,7 @@ const AgentTestPage = () => {
     if (filters.barcode == '' || !filters.barcode) return;
     if (!filters.selectedSection || (filters.selectedSection && filters.selectedSection == '')) {
       showError('No section selected.', 'Required');
+      return;
     }
     setLogState(null);
     setIsLogging(true);
@@ -66,7 +67,8 @@ const AgentTestPage = () => {
           //@ts-ignore
           setMessage(AGENT_ERROR_RESPONSE[result]);
         } else {
-          showError('Unknown error occured. Please contact administrator.', 'Unknown');
+          setLogState(null);
+          showError(ERROR_MESSAGE_GENERIC, 'Unknown');
         }
       })
       .finally(() => {
@@ -98,11 +100,11 @@ const AgentTestPage = () => {
             <Link href="/" className="flex align-items-center">
               <img
                 src={`/layout/images/${layoutConfig.colorScheme === 'light' ? 'logo-dark' : 'logo-white'}.svg`}
-                alt="Sun Pleats Logo"
+                alt="SUN-PLEATS CORP. Logo"
                 height="50"
                 className="mr-0 lg:mr-2"
               />
-              <span className="text-900 font-medium text-2xl line-height-3 mr-8">Sunpleats Line Agent Test</span>
+              <span className="text-900 font-medium text-2xl line-height-3 mr-8">SUN-PLEATS Line Agent Test</span>
             </Link>
           </div>
         </div>
@@ -134,7 +136,7 @@ const AgentTestPage = () => {
               severity="info"
               onClick={() => onEnter(agentFilters.barcode ?? '')}
               tooltipOptions={{ position: 'left' }}
-              tooltip="Back to home"
+              tooltip="Search"
             ></Button>
           </div>
           <p className="text-sm text-gray-400 mt-2">
@@ -143,8 +145,8 @@ const AgentTestPage = () => {
           </p>
           <hr />
           <label className="block mb-1 font-semibold">Response from the server:</label>
-          {logState == 'error' && <Badge value={message} severity="danger"></Badge>}
-          {logState == 'success' && <Badge value={message} severity="success"></Badge>}
+          {logState == 'error' && <h5 className="text-red-500">{message}</h5>}
+          {logState == 'success' && <h5 className="text-green-500">{message}</h5>}
           {isLogging && (
             <div className="col-12 flex justify-content-center align-items-center">
               <ProgressSpinner style={{ width: '50px', height: '50px' }} />
