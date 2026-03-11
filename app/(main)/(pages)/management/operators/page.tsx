@@ -105,7 +105,7 @@ const OperatorsPage = () => {
   };
 
   const processTemplate = (rowData: Operator) => {
-    return rowData.operator_processes?.flatMap((r) => r.process.name)?.join(', ');
+    return rowData.operator_processes?.flatMap((r) => r.process?.name)?.join(', ');
   };
 
   const onActionEditClick = (id: string | number) => {
