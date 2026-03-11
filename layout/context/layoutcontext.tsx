@@ -26,8 +26,8 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
     show('warn', summary, detail);
   };
 
-  const showError = (detail: string): void => {
-    show('error', 'Error', detail);
+  const showError = (detail: string, summary: string = 'Failed'): void => {
+    show('error', summary, detail);
   };
 
   const showApiError = (error?: AxiosError, summary: string = 'Contact administrator') => {

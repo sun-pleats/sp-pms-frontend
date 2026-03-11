@@ -47,7 +47,7 @@ export interface LayoutContextProps {
   showProfileSidebar: () => void;
   showSuccess: (detail: string) => void;
   showWarning: (detail: string, summary?: string) => void;
-  showError: (detail: string) => void;
+  showError: (detail: string, summary?: string) => void;
   showApiError: (error?: AxiosError, summary: string) => void;
   onThemeToogle: () => void;
 }

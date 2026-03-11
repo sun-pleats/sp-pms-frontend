@@ -13,7 +13,7 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 
 const INTERVAL_RELOAD = 60000; // 60 Seconds
 
-const LandingPage = () => {
+const DashboardPage = () => {
   const [isLoggerBarcodeShow, setIsLoggerBarcodeShow] = useState(false);
   const userBarcodeRef = useRef<HTMLInputElement>(null);
   const [scannedBarcode, setScannedBarcode] = useState('');
@@ -120,4 +120,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default DashboardPage;
