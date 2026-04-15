@@ -21,5 +21,8 @@ export const ProcessService = {
   },
   deleteProcess(id: string) {
     return apiClient.delete(`${BASE_URL}/${id}`);
+  },
+  getProcessCodeSuggestion(name: string): AxiosPromise<{ code: string }> {
+    return apiClient.get(`${BASE_URL}/suggest-code/${name}`);
   }
 };

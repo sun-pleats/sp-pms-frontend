@@ -15,6 +15,8 @@ import TableHeader from '@/app/components/table-header/component';
 import PageTile from '@/app/components/page-title/component';
 import CustomDatatable from '@/app/components/datatable/component';
 import useDatatable from '@/app/hooks/useDatatable';
+import { Badge } from 'primereact/badge';
+import { Checkbox } from 'primereact/checkbox';
 
 interface ProcessPageState {
   deleteModalShow?: boolean;
@@ -37,11 +39,24 @@ const ProcessesPage = () => {
     useDatatable();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters({ search: e.target.value });
+    setFilters({ ...filters, search: e.target.value });
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter} searchValue={filters.search ?? ''} onSearchChange={handleSearchChange} />;
+    return (
+      <TableHeader onClear={clearFilter} searchValue={filters.search ?? ''} onSearchChange={handleSearchChange}>
+        <div className="mr-auto">
+          <Checkbox
+            inputId="exclude_report"
+            onChange={(e) => setFilters({ ...filters, exclude_report: e.checked })}
+            checked={filters.exclude_report ?? false}
+          />
+          <label className="ml-2" htmlFor="exclude_report">
+            Show Exclude Report
+          </label>
+        </div>
+      </TableHeader>
+    );
   };
 
   const fetchProcesses = useCallback(async () => {
@@ -57,7 +72,8 @@ const ProcessesPage = () => {
       const params = {
         search: filters.search,
         page: filters.page,
-        per_page: filters.per_page
+        per_page: filters.per_page,
+        exclude_report: filters.exclude_report ? '1' : undefined
       };
 
       const data = await ProcessService.getProcesses(params, { signal: controller.signal });
@@ -135,7 +151,6 @@ const ProcessesPage = () => {
       <PageHeader titles={['Management', 'Processes']}>
         <PageAction actionAdd={() => router.push(ROUTES.PROCESS.CREATE)} actions={[PageActions.ADD]} />
       </PageHeader>
-
       <CustomDatatable
         value={processes}
         header={renderHeader()}
@@ -146,7 +161,23 @@ const ProcessesPage = () => {
         totalRecords={totalRecords}
       >
         <Column field="id" header="ID" />
-        <Column field="code" header="Code" style={{ minWidth: '12rem' }} />
+        <Column
+          field="code"
+          header="Code"
+          style={{ minWidth: '12rem' }}
+          body={(process: Process) => (
+            <>
+              <span>{process.code}</span>
+              {process.exclude_report && (
+                <div className="mt-2" title="This process will be excluded from the total efficiency percentage.">
+                  <small>
+                    <Badge className="bg-red-400" value="Exclude Report"></Badge>
+                  </small>
+                </div>
+              )}
+            </>
+          )}
+        />
         <Column field="name" header="Name" style={{ minWidth: '12rem' }} />
         <Column header="Added By" dataType="string" style={{ minWidth: '12rem' }} body={(process: Process) => process?.created_by?.name} />
         <Column header="Created At" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />

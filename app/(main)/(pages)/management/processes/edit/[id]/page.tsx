@@ -10,6 +10,7 @@ import FormProcess from '@/app/components/processes/FormProcess';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import PageCard from '@/app/components/page-card/component';
 import React, { useContext, useCallback, useEffect, useState } from 'react';
+import { isEmpty } from 'lodash';
 
 interface EditProcessPageProps {
   params?: { id: any };
@@ -17,12 +18,13 @@ interface EditProcessPageProps {
 
 const EditProcessPage = ({ params }: EditProcessPageProps) => {
   const router = useRouter();
-  const { updateProcess, isSaveLoading } = useProcessPage();
+  const { updateProcess, isSaveLoading, getSuggestProcessCode, isSuggesting } = useProcessPage();
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const [process, setProcess] = useState<ProcessForm | undefined>();
 
   const getProcess = useCallback(async () => {
-    setProcess((await ProcessService.getProcess(params?.id)).data as ProcessForm);
+    const { data } = await ProcessService.getProcess(params?.id);
+    setProcess(data as ProcessForm);
   }, [params?.id]);
 
   const handleSubmit = async (data: ProcessForm) => {
@@ -32,6 +34,19 @@ const EditProcessPage = ({ params }: EditProcessPageProps) => {
       setTimeout(() => {
         router.push(ROUTES.PROCESS.INDEX);
       }, 2000);
+    } catch (error: any) {
+      showApiError(error, 'Failed to save process.');
+    }
+  };
+
+  const handleSuggestCode = async (process: ProcessForm) => {
+    try {
+      if (isEmpty(process.name)) return;
+      const { data } = await getSuggestProcessCode(process.name);
+      setProcess({
+        ...process,
+        code: data.code
+      } as ProcessForm);
     } catch (error: any) {
       showApiError(error, 'Failed to save process.');
     }
@@ -50,7 +65,7 @@ const EditProcessPage = ({ params }: EditProcessPageProps) => {
           <div className="grid">
             <div className="col-12">
               <div className="p-fluid">
-                <FormProcess value={process} onSubmit={handleSubmit}>
+                <FormProcess value={process} suggestLoading={isSuggesting} onSuggestClick={handleSuggestCode} onSubmit={handleSubmit}>
                   <div className="flex">
                     <div className="ml-auto">
                       <FormAction

@@ -7,6 +7,7 @@ interface CustomDatatableProps {
   value?: any;
   children?: any;
   loading?: boolean;
+  rowClassName?: any;
   selection?: any;
   onSelectionChange?: (event: any) => void;
   onPage?: (event: DataTableStateEvent) => void;
@@ -24,6 +25,7 @@ const CustomDatatable = ({
   rowGroupMode,
   groupRowsBy,
   loading,
+  rowClassName,
   selection,
   onSelectionChange,
   onPage,
@@ -36,6 +38,7 @@ const CustomDatatable = ({
     <DataTable
       value={value}
       paginator
+      rowClassName={rowClassName}
       paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
       currentPageReportTemplate="{first} to {last} of {totalRecords}"
       groupRowsBy={groupRowsBy}
