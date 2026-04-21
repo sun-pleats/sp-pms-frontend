@@ -1,4 +1,5 @@
 export interface DashboardStats {
+  production_tracks_today?: number;
   in_production?: number;
   created_bundles?: number;
   month_efficiency?: number;

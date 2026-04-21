@@ -9,6 +9,8 @@ import DashboardRecentBundles from '../components/dashboard/DashboardRecentBundl
 import DashboardStatistics from '../components/dashboard/DashboardStatistics';
 import DashboardUnreleasedBundles from '../components/dashboard/DashboardUnreleasedBundles';
 import React from 'react';
+import WarningBlinker from '../components/warning-blinker/component';
+import Link from 'next/link';
 
 const Dashboard = () => {
   const {
@@ -42,6 +44,14 @@ const Dashboard = () => {
 
   return (
     <>
+      {stats.production_tracks_today === 0 ? (
+        <WarningBlinker message={
+          (
+            <span>There are no production tracks for today. Please check the tracks schedules by <Link href="/operations/production-operations">clicking here</Link></span>
+          )
+        } />
+      ) : null}
+
       <div className="grid">
         <DashboardStatistics loading={isFetchingStats} value={stats} />
         <div className="col-12 xl:col-6">
