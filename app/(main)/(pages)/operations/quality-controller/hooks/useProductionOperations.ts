@@ -53,7 +53,7 @@ export const useProductionOperations = () => {
   const [tracksToDelete, setTracksToDelete] = useState<string[]>([]);
   const { showApiError, showSuccess } = useContext(LayoutContext);
   const { fetchProcessOptions, fetchOperators, fetchSectionQualityControllerSelectOption, fetchProductionTrackClassifications } = useUtilityData();
-  const { control, handleSubmit, reset, getValues, formState } = useForm<FormData>({
+  const { control, handleSubmit, reset, getValues, formState, setValue } = useForm<FormData>({
     defaultValues: {
       tracks: []
     }
@@ -278,6 +278,13 @@ export const useProductionOperations = () => {
     update(rowIndex, { ...current, time: process?.time || 0 });
   };
 
+  const computeOperatorTime = (rowIndex: number) => {
+    const current = getValues(`tracks.${rowIndex}`);
+    const time = 3600 / Number(current.target); // Assuming target is in seconds, convert to hours
+    update(rowIndex, { ...current, time });
+    setValue(`tracks.${rowIndex}.time`, time, { shouldDirty: true }); // Mark as dirty to trigger auto-save if needed
+  };
+
   const isIdle = useIdle(60000); // 1 minute idle timeout
 
   useEffect(() => {
@@ -342,6 +349,7 @@ export const useProductionOperations = () => {
     setTrackFilter,
     updateOperatorTime,
     duplicateTracks,
-    onExportProcesSheetClick
+    onExportProcesSheetClick,
+    computeOperatorTime
   };
 };

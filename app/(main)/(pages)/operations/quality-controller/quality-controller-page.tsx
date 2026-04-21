@@ -37,7 +37,8 @@ const QualityControllerPage = () => {
     fetchTracks,
     updateOperatorTime,
     duplicateTracks,
-    onExportProcesSheetClick
+    onExportProcesSheetClick,
+    computeOperatorTime,
   } = useProductionOperations();
 
   useEffect(() => {
@@ -318,7 +319,16 @@ const QualityControllerPage = () => {
             />
             <Column
               field="time"
-              header="Time"
+              header={
+                (<>
+                  <div className="flex align-items-center gap-1">
+                    <span>Time</span>
+                    <Button tooltip='Time is computed based on the target value (Time = 3600/target)' icon="pi pi-info-circle" link />
+                    <br />
+                  </div>
+                  <small className='font-normal text-blue-300'>Value = 3600/Target</small>
+                </>)
+              }
               body={(_row: any, options: { rowIndex: number }) => (
                 <Controller
                   control={control}
@@ -348,7 +358,10 @@ const QualityControllerPage = () => {
                   render={({ field, fieldState }) => (
                     <FormInputNumber
                       value={field.value as number | null}
-                      onValueChange={(e) => field.onChange(e.value ?? null)}
+                      onValueChange={(e) => {
+                        field.onChange(e.value ?? null);
+                        computeOperatorTime(options.rowIndex);
+                      }}
                       placeholder="Qty"
                       inputClassName="w-full"
                       errorMessage={fieldState.error?.message}
