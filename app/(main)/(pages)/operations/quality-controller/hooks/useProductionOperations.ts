@@ -17,6 +17,7 @@ interface TrackFilter {
   date?: any;
   section_id?: any;
   process_ids?: string[];
+  operator_ids?: string[];
 }
 
 export interface FormData extends DefaultFormData {
@@ -187,7 +188,8 @@ export const useProductionOperations = () => {
 
         const { data } = await ProductionTrackService.getTracks(trackFilter.section_id, {
           track_date: moment(trackFilter.date).format('YYYY-MM-DD'),
-          process_ids: trackFilter.process_ids
+          process_ids: trackFilter.process_ids,
+          operator_ids: trackFilter.operator_ids,
         });
 
         setTracks(data);

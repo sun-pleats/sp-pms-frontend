@@ -17,4 +17,5 @@ export interface StoreProductionTrackPayload {
 export interface GetProductionTrackPayload {
   track_date: string;
   process_ids?: any[];
+  operator_ids?: any[];
 }

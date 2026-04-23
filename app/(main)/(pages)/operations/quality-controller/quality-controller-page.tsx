@@ -111,6 +111,15 @@ const QualityControllerPage = () => {
                 filter={true}
                 options={processOptions}
               />
+              <FormMultiDropdown
+                loading={loadings.fetchingProcesses}
+                label="Operators"
+                value={trackFilter.operator_ids}
+                onChange={(option: any) => setTrackFilter({ ...trackFilter, operator_ids: option.value })}
+                placeholder="Select"
+                filter={true}
+                options={operatorsOption}
+              />
               <Button
                 disabled={!trackFilter.section_id}
                 loading={loadings.fetchingOperator}
