@@ -47,46 +47,45 @@ const LogsPage = () => {
   };
 
   const renderHeader = () => {
-    return <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange}>
-      <div className="w-full md:w-20rem">
-        <FormMultiDropdown
-          value={filter.level}
-          onChange={handlePageFilter}
-          filter
-          options={levelOptions}
-          placeholder="Filter Level"
-          className="w-full"
-        />
-      </div>
-    </TableHeader>;
+    return (
+      <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange}>
+        <div className="w-full md:w-20rem">
+          <FormMultiDropdown
+            value={filter.level}
+            onChange={handlePageFilter}
+            filter
+            options={levelOptions}
+            placeholder="Filter Level"
+            className="w-full"
+          />
+        </div>
+      </TableHeader>
+    );
   };
 
-  const fetchLogs = useCallback(
-    async () => {
-      // Abort previous request if exists
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
+  const fetchLogs = useCallback(async () => {
+    // Abort previous request if exists
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
-      setLoading(true);
-      try {
-        const { data } = await LogService.list({ ...filter }, { signal: controller.signal });
-        setLogs(getLogs(data.data));
-      } catch (error: any) {
-        if (error.name !== 'AbortError') {
-          console.error(error);
-        }
-      } finally {
-        // Only set loading to false if this is the latest controller
-        if (abortControllerRef.current === controller) {
-          setLoading(false);
-        }
+    setLoading(true);
+    try {
+      const { data } = await LogService.list({ ...filter }, { signal: controller.signal });
+      setLogs(getLogs(data.data));
+    } catch (error: any) {
+      if (error.name !== 'AbortError') {
+        console.error(error);
       }
-    },
-    [filter.keyword, filter.level]
-  );
+    } finally {
+      // Only set loading to false if this is the latest controller
+      if (abortControllerRef.current === controller) {
+        setLoading(false);
+      }
+    }
+  }, [filter.keyword, filter.level]);
 
   useEffect(() => {
     fetchLogs();
@@ -143,7 +142,6 @@ const LogsPage = () => {
         <Column field="content" header="Content" style={{ minWidth: '12rem' }} />
         <Column header="Log Time" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
       </DataTable>
-
     </>
   );
 };
