@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
+
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { ROUTES } from '@/app/constants/routes';
 import { SelectItem } from 'primereact/selectitem';

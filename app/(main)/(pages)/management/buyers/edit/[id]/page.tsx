@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
+
 import { LayoutContext } from '@/layout/context/layoutcontext';
 import { BuyerForm } from '@/app/types/buyers';
 import { BuyerService } from '@/app/services/BuyerService';

@@ -189,7 +189,7 @@ export const useProductionOperations = () => {
         const { data } = await ProductionTrackService.getTracks(trackFilter.section_id, {
           track_date: moment(trackFilter.date).format('YYYY-MM-DD'),
           process_ids: trackFilter.process_ids,
-          operator_ids: trackFilter.operator_ids,
+          operator_ids: trackFilter.operator_ids
         });
 
         setTracks(data);

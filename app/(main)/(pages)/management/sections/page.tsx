@@ -97,7 +97,7 @@ const SectionsPage = () => {
     return (
       <div className="grid gap-2">
         {rowData.breaktimes?.map((r) => (
-          <Badge title={`${r.time_start}-${r.time_end} -> ${r.type}`} value={`${r.time_start} ${r.type}`} />
+          <Badge key={`badge-break-time-${r.id}`} title={`${r.time_start}-${r.time_end} -> ${r.type}`} value={`${r.time_start} ${r.type}`} />
         ))}
       </div>
     );

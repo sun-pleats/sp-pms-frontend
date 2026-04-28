@@ -7,6 +7,7 @@ interface DefaultLayoutProps {
 }
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
   title: 'SUN-PLEATS Corporation',
   description: 'The ultimate collection of design-agnostic, flexible and accessible React UI Components.'
 };

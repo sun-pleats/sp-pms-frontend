@@ -38,7 +38,7 @@ const QualityControllerPage = () => {
     updateOperatorTime,
     duplicateTracks,
     onExportProcesSheetClick,
-    computeOperatorTime,
+    computeOperatorTime
   } = useProductionOperations();
 
   useEffect(() => {
@@ -329,14 +329,14 @@ const QualityControllerPage = () => {
             <Column
               field="time"
               header={
-                (<>
+                <>
                   <div className="flex align-items-center gap-1">
                     <span>Time</span>
-                    <Button tooltip='Time is computed based on the target value (Time = 3600/target)' icon="pi pi-info-circle" link />
+                    <Button tooltip="Time is computed based on the target value (Time = 3600/target)" icon="pi pi-info-circle" link />
                     <br />
                   </div>
-                  <small className='font-normal text-blue-300'>Value = 3600/Target</small>
-                </>)
+                  <small className="font-normal text-blue-300">Value = 3600/Target</small>
+                </>
               }
               body={(_row: any, options: { rowIndex: number }) => (
                 <Controller

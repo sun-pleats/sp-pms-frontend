@@ -45,11 +45,14 @@ const Dashboard = () => {
   return (
     <>
       {stats.production_tracks_today === 0 ? (
-        <WarningBlinker message={
-          (
-            <span>There are no production tracks for today. Please check the tracks schedules by <Link href="/operations/production-operations">clicking here</Link></span>
-          )
-        } />
+        <WarningBlinker
+          message={
+            <span>
+              There are no production tracks for today. Please check the tracks schedules by{' '}
+              <Link href="/operations/production-operations">clicking here</Link>
+            </span>
+          }
+        />
       ) : null}
 
       <div className="grid">

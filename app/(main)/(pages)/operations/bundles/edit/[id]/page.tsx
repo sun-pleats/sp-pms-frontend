@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { FormReleaseBundle, StyleBundle, StylePlannedFabricSize } from '@/app/types/styles';

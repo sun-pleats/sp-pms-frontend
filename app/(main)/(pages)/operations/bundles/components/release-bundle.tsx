@@ -208,6 +208,7 @@ const ReleaseBundles = ({ visible, onHide }: SinglePrintBarcodeProps) => {
           <div className="m-1"></div>
           {warningQuantities.map((data) => (
             <Message
+              key={`msg-warning-${data.index}`}
               severity="warn"
               text={`Quantity exceed as planned for row ${data.index + 1}. Planned Quantity is ${
                 data.planned_quantity

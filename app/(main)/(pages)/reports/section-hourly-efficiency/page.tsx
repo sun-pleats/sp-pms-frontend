@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { Button } from 'primereact/button';
@@ -108,8 +109,7 @@ const SectionHourlyEfficiencyPage = () => {
     initData();
   }, []);
 
-  const initData = () => {
-    // Fetch sections
+  const initData = useCallback(() => {
     fetchSectionSelectOption()
       .then((data) => {
         setSectionOptions(data);
@@ -117,10 +117,10 @@ const SectionHourlyEfficiencyPage = () => {
       .catch((e) => showApiError(e, 'Failed fetching options.'))
       .finally(() =>
         setTimeout(() => {
-          setLoadings({ fetchingSections: false });
+          setLoadings((prev) => ({ ...prev, fetchingSections: false }));
         }, 1000)
       );
-  };
+  }, [fetchSectionSelectOption, showApiError]);
 
   const handleOnPageChange = (e: any) => {
     setFilter({ ...filter, page: e.page + 1, per_page: e.rows });
@@ -165,7 +165,7 @@ const SectionHourlyEfficiencyPage = () => {
     }
   };
 
-  const hourCellTemplate = (hour: HourKey) => (row: SectionDailyProcessOutput) => {
+  const HourCellTemplate: React.FC<any> = ({ row, hour }) => {
     const target = row[`TARGET_${hour}` as const];
     const output = row[`OUTPUT_${hour}` as const];
     const efficiency = row[`EFFICIENY_${hour}` as const];
@@ -313,7 +313,7 @@ const SectionHourlyEfficiencyPage = () => {
 
         {/* Dynamic hour columns */}
         {hours.map((h, index) => (
-          <Column key={`${h}${index}`} header={h} body={hourCellTemplate(h as HourKey)} />
+          <Column key={`${h}${index}`} header={h} body={(row: SectionDailyProcessOutput) => <HourCellTemplate row={row} hour={h as HourKey} />} />
         ))}
 
         {/* Right-side summary columns – you can compute these in your API or front-end */}
