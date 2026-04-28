@@ -54,6 +54,7 @@ const AppMenu = () => {
       label: 'Administrator',
       items: [
         { label: 'Users', icon: 'pi pi-fw pi-id-card', to: '/administration/users' },
+        { label: 'Logs', icon: 'pi pi-fw pi-history', to: '/administration/logs' },
         { label: 'Line Agent Test', icon: 'pi pi-fw pi-external-link', to: '/agent-test' },
         { label: 'Downloads', icon: 'pi pi-fw pi-download', to: '/administration/downloads' }
       ]
