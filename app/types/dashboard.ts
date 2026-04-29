@@ -1,6 +1,7 @@
 export interface DashboardStats {
   production_tracks_today?: number;
   in_production?: number;
+  has_error_logs?: boolean;
   created_bundles?: number;
   month_efficiency?: number;
   styles_completed?: {

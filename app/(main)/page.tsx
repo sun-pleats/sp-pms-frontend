@@ -1,5 +1,6 @@
 'use client';
 
+import { LOG_LEVELS } from '../constants/logging';
 import { SelectItem } from 'primereact/selectitem';
 import { useDashboard } from './(dashboard)/useDashboard';
 import DashboardEfficiencyOverview from '../components/dashboard/DashboardEfficiencyOverview';
@@ -8,9 +9,9 @@ import DashboardOperatorPerformer from '../components/dashboard/DashboardOperato
 import DashboardRecentBundles from '../components/dashboard/DashboardRecentBundles';
 import DashboardStatistics from '../components/dashboard/DashboardStatistics';
 import DashboardUnreleasedBundles from '../components/dashboard/DashboardUnreleasedBundles';
+import Link from 'next/link';
 import React from 'react';
 import WarningBlinker from '../components/warning-blinker/component';
-import Link from 'next/link';
 
 const Dashboard = () => {
   const {
@@ -50,6 +51,17 @@ const Dashboard = () => {
             <span>
               There are no production tracks for today. Please check the tracks schedules by{' '}
               <Link href="/operations/production-operations">clicking here</Link>
+            </span>
+          }
+        />
+      ) : null}
+
+      {stats.has_error_logs ? (
+        <WarningBlinker
+          color='yellow'
+          message={
+            <span>
+              Error logs have been detected over the last 48 hours. Please <Link href={`/administration/logs?level=${LOG_LEVELS.ERROR}`}>view</Link> logs for details.
             </span>
           }
         />

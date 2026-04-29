@@ -1,57 +1,51 @@
 'use client';
 
+import { Badge } from 'primereact/badge';
 import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import { EMPTY_TABLE_MESSAGE } from '@/app/constants';
+import { formatDateTime, formatRelativeDate } from '@/app/utils';
+import { Log } from '@/app/types/logging';
+import { LOG_LEVELS } from '@/app/constants/logging';
 import { ROUTES } from '@/app/constants/routes';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import CustomDatatable from '@/app/components/datatable/component';
+import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
+import LogService from '@/app/services/LogService';
 import PageAction, { PageActions } from '@/app/components/page-action/component';
 import PageHeader from '@/app/components/page-header/component';
 import React, { useCallback, useEffect, useState } from 'react';
 import TableHeader from '@/app/components/table-header/component';
-import LogService from '@/app/services/LogService';
-import { Log } from '@/app/types/logging';
-import { LOG_LEVELS } from '@/app/constants/logging';
-import { Badge } from 'primereact/badge';
-import { formatDateTime } from '@/app/utils';
-import FormMultiDropdown from '@/app/components/form/multi-dropdown/component';
+import useDatatable from '@/app/hooks/useDatatable';
 
-interface SearchFilter {
-  keyword?: string;
-  level?: string;
-}
 
 const LogsPage = () => {
   const [logs, setLogs] = useState<Log[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState<SearchFilter>({});
   const abortControllerRef = React.useRef<AbortController | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const paramsLevel = searchParams.get('level');
+
+  const { clearFilter, handleOnPageChange, filters, tableLoading, first, rows, setFilters, setTableLoading, setTotalRecords, totalRecords } =
+    useDatatable();
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter({ keyword: e.target.value });
+    setFilters({ keyword: e.target.value });
   };
+
   const levelOptions = Object.keys(LOG_LEVELS).map((key) => ({
     label: key,
     value: LOG_LEVELS[key as keyof typeof LOG_LEVELS]
   }));
 
-  const clearFilter = () => {
-    setFilter({
-      keyword: ''
-    });
-    fetchLogs();
-  };
-
   const handlePageFilter = (e: any) => {
-    setFilter({ ...filter, level: e.value });
+    setFilters({ ...filters, level: e.value });
   };
 
   const renderHeader = () => {
     return (
-      <TableHeader onClear={clearFilter} searchValue={filter.keyword ?? ''} onSearchChange={handleSearchChange}>
+      <TableHeader onClear={clearFilter} searchValue={filters.keyword ?? ''} onSearchChange={handleSearchChange}>
         <div className="w-full md:w-20rem">
           <FormMultiDropdown
-            value={filter.level}
+            value={filters.level}
             onChange={handlePageFilter}
             filter
             options={levelOptions}
@@ -71,9 +65,16 @@ const LogsPage = () => {
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
-    setLoading(true);
+    setTableLoading(true);
     try {
-      const { data } = await LogService.list({ ...filter }, { signal: controller.signal });
+      const params = {
+        search: filters.search,
+        page: filters.page,
+        per_page: filters.per_page,
+        level: filters.level,
+      };
+      const { data } = await LogService.list(params, { signal: controller.signal });
+      setTotalRecords(data.total ?? 0);
       setLogs(getLogs(data.data));
     } catch (error: any) {
       if (error.name !== 'AbortError') {
@@ -82,14 +83,20 @@ const LogsPage = () => {
     } finally {
       // Only set loading to false if this is the latest controller
       if (abortControllerRef.current === controller) {
-        setLoading(false);
+        setTableLoading(false);
       }
     }
-  }, [filter.keyword, filter.level]);
+  }, [filters]);
 
   useEffect(() => {
     fetchLogs();
   }, [fetchLogs]);
+
+  useEffect(() => {
+    if (paramsLevel) {
+      setFilters({ ...filters, level: [paramsLevel] });
+    }
+  }, [paramsLevel])
 
   const getLogs = (data: Log[]) => {
     return [...(data || [])].map((d) => {
@@ -98,7 +105,7 @@ const LogsPage = () => {
   };
 
   const dateBodyTemplate = (rowData: Log) => {
-    return formatDateTime(new Date(rowData.created_at ?? ''));
+    return <span title={formatDateTime(new Date(rowData.created_at ?? ''))} className='text-grey-500 text-small'>{formatRelativeDate(new Date(rowData.created_at ?? ''))}</span>;
   };
 
   const levelTemplate = (rowData: Log) => {
@@ -123,25 +130,23 @@ const LogsPage = () => {
       <PageHeader titles={['Administration', 'Logs']}>
         <PageAction actionAdd={() => router.push(ROUTES.USERS.CREATE)} actions={[PageActions.ADD]} />
       </PageHeader>
-      <DataTable
+
+      <CustomDatatable
         value={logs}
-        paginator
-        className="custom-table p-datatable-gridlines"
-        showGridlines
-        rows={10}
-        dataKey="id"
-        filterDisplay="menu"
-        loading={loading}
-        emptyMessage={EMPTY_TABLE_MESSAGE}
+        loading={tableLoading}
+        onPage={handleOnPageChange}
         header={renderHeader()}
-        scrollable
+        first={first}
+        rows={rows}
+        totalRecords={totalRecords}
       >
         <Column field="id" header="ID" style={{ minWidth: '12rem' }} />
         <Column field="source" header="Source" style={{ minWidth: '12rem' }} />
         <Column field="level" header="Level" style={{ minWidth: '12rem' }} body={levelTemplate} />
         <Column field="content" header="Content" style={{ minWidth: '12rem' }} />
         <Column header="Log Time" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} />
-      </DataTable>
+      </CustomDatatable>
+
     </>
   );
 };

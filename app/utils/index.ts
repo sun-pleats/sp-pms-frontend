@@ -76,3 +76,40 @@ export function roundToDecimal(num: number, decimals: number) {
 
   return Number(num.toFixed(decimals));
 }
+
+
+
+export function formatRelativeDate(dateInput: any): string {
+  const now = new Date();
+  const date = new Date(dateInput);
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  // 1. Seconds ago
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds} seconds ago`;
+  }
+
+  // 2. A min ago (or X mins ago)
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) {
+    return diffInMinutes === 1 ? "a min ago" : `${diffInMinutes} mins ago`;
+  }
+
+  // 3. X hours ago
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) {
+    return diffInHours === 1 ? "1 hour ago" : `${diffInHours} hours ago`;
+  }
+
+  // 4. Fallback: June 1 2025 03:00PM
+  const options: Intl.DateTimeFormatOptions = {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  };
+
+  return date.toLocaleString('en-US', options).replace(',', '');
+}
